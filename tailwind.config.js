@@ -9,7 +9,11 @@ export default {
   ],
   theme: {
     extend: {
-      
+      colors: {
+      "primary-bg-color": "#ece8e5",
+      "primary-theme": "#f8cb3c",
+      "secondary-theme": "#515151",
+    }
     },
   },
   plugins: [],
