@@ -1,12 +1,11 @@
 import React from 'react'
-import { PageHeader } from '../../components'
 
 const ShopPage = () => {
-  return (
-    <>
-      <PageHeader />
-    </>
-  )
+    return (
+        <>
+            <section className='min-h-svh'>asdsad</section>
+        </>
+    )
 }
 
 export default ShopPage

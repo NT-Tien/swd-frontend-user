@@ -4,66 +4,65 @@ import { Link, useMatch, useResolvedPath } from 'react-router-dom'
 import { clsx } from 'clsx'
 import gsap from 'gsap'
 
-const CustomLink = ({ children, to }) => {
+const CustomLink = ({ children, to, className = 'font-sans font-light ', textColor = 'dark', underlineWidth = 'h-[2px]' }) => {
     const resolvedPath = useResolvedPath(to)
     const isActive = useMatch({ path: resolvedPath.pathname, end: true })
 
-    const linkRef = useRef()
-    const spanRef = useRef()
-    const outerSpanRef = useRef()
+    
+    const link = 'h-fit w-fit cursor-pointer tracking-tight '
+    const linkActive = 'text-primary-theme italic'
+    let linkNormal = 'text-text-light-color'
+    let underlineColor = 'bg-text-light-color'
+    
+    if(textColor === 'light'){
+        linkNormal = ' text-white'
+        underlineColor = 'bg-white'
+    } 
 
-    useGSAP((context, contextSafe) => {
-        const link = linkRef.current
-        const span = spanRef.current
-        const outerSpan = outerSpanRef.current
+    // useGSAP((context, contextSafe) => {
+    //     const link = linkRef.current
+    //     const span = spanRef.current
+    //     const outerSpan = outerSpanRef.current
 
-        const handleMouseEnter = contextSafe(() => {
-            outerSpan.classList.remove('justify-end')
-            gsap.to(span, {
-                width: '100%',
-                duration: 0.25,
-                ease: 'power2.out',
-            })
-        })
+    //     const handleMouseEnter = contextSafe(() => {
+    //         outerSpan.classList.remove('justify-end')
+    //         gsap.to(span, {
+    //             width: '100%',
+    //             duration: 0.25,
+    //             ease: 'power2.out',
+    //         })
+    //     })
 
-        const handleMouseLeave = contextSafe(() => {
-            outerSpan.classList.add('justify-end')
-            gsap.to(span, {
-                width: '0%',
-                duration: 0.25,
-                ease: 'power2.out',
-            })
-        })
+    //     const handleMouseLeave = contextSafe(() => {
+    //         outerSpan.classList.add('justify-end')
+    //         gsap.to(span, {
+    //             width: '0%',
+    //             duration: 0.25,
+    //             ease: 'power2.out',
+    //         })
+    //     })
 
-        link.addEventListener('mouseenter', handleMouseEnter)
-        link.addEventListener('mouseleave', handleMouseLeave)
+    //     link.addEventListener('mouseenter', handleMouseEnter)
+    //     link.addEventListener('mouseleave', handleMouseLeave)
 
-        return () => {
-            link.removeEventListener('mouseenter', handleMouseEnter)
-            link.removeEventListener('mouseleave', handleMouseLeave)
-        }
-    })
+    //     return () => {
+    //         link.removeEventListener('mouseenter', handleMouseEnter)
+    //         link.removeEventListener('mouseleave', handleMouseLeave)
+    //     }
+    // })
 
-    const link =
-        'h-fit w-fit cursor-pointer tracking-tight '
-    const linkActive = 'text-primary-theme '
-    const linkNormal = 'text-text-light-color'
 
     return (
         <Link
-            ref={linkRef}
             className={clsx(
-                `${link} font-sans font-light`,
+                `${link} ${className} group `,
                 isActive ? linkActive : linkNormal
             )}
             to={to}
         >
             <span>{children}</span>
-            <span ref={outerSpanRef} className="flex justify-end">
-                <span
-                    ref={spanRef}
-                    className="flex w-0 h-[2px] rounded bg-secondary-theme"
-                ></span>
+            <span className="flex justify-end group-hover:justify-start">
+                <span className={`flex ${underlineWidth} w-0 rounded ${underlineColor} transition-all duration-[250ms] group-hover:w-full`}></span>
             </span>
         </Link>
     )

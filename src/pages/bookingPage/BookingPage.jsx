@@ -1,13 +1,13 @@
 import React from 'react'
 
-const AboutUsPage = () => {
+const BookingPage = () => {
   return (
     <>
     <section>
-      asdsad
+      asdasd
     </section>
     </>
   )
 }
 
-export default AboutUsPage
+export default BookingPage

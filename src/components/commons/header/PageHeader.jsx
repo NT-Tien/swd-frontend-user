@@ -8,8 +8,10 @@ import { gsap } from 'gsap'
 import { useGSAP } from '@gsap/react'
 import { TextPlugin } from 'gsap/TextPlugin'
 import ExpandedMenu from './ExpandedMenu'
+import { CustomEase } from 'gsap/all'
 
 gsap.registerPlugin(TextPlugin)
+gsap.registerPlugin(CustomEase) 
 
 const PageHeader = () => {
     // state
@@ -28,8 +30,6 @@ const PageHeader = () => {
 
     // useeffect
 
-  
-
     useGSAP(() => {
         expandedMenuAnimationRef.current = gsap.timeline({
             paused: true,
@@ -37,14 +37,17 @@ const PageHeader = () => {
         expandedMenuAnimationRef.current
             .to(headerRef.current, {
                 height: '100vh',
-                ease: 'power3.inOut',
+                ease: CustomEase.create(
+                    'custom',
+                    'M0,0 C0.147,0.037 0.247,0.014 0.326,0.09 0.402,0.164 0.46,0.356 0.502,0.504 0.551,0.68 0.597,0.813 0.654,0.882 0.728,0.971 0.859,0.979 1,1 '
+                ),
                 duration: 1,
             })
             .to(
                 menuRef.current,
                 {
                     display: 'flex',
-                    opacity:1,
+                    opacity: 1,
                     duration: 0,
                 },
                 '<'
@@ -52,17 +55,24 @@ const PageHeader = () => {
             .to(
                 menuRef.current,
                 {
-                    height: '50vh',
-                    duration: 0.8,
-                    ease: 'power3.inOut',
+                    height: '30vh',
+                    duration: 0.7,
+                    ease: CustomEase.create(
+                        'custom',
+                        'M0,0 C0.147,0.037 0.247,0.014 0.326,0.09 0.402,0.164 0.46,0.356 0.502,0.504 0.551,0.68 0.597,0.813 0.654,0.882 0.728,0.971 0.859,0.979 1,1 '
+                    ),
                 },
                 '<'
             )
             .to(
                 backdropRef.current,
                 {
-                    height: '50vh',
-                    ease: 'power3.inOut',
+                    height: '70vh',
+                    delay: 0.25,
+                    ease: CustomEase.create(
+                        'custom',
+                        'M0,0 C0.147,0.037 0.247,0.014 0.326,0.09 0.402,0.164 0.46,0.356 0.502,0.504 0.551,0.68 0.597,0.813 0.654,0.882 0.728,0.971 0.859,0.979 1,1 '
+                    ),
                 },
                 '<'
             )
@@ -115,27 +125,30 @@ const PageHeader = () => {
             )
     })
 
-    // functions
-
-    const ToggleMenuOpened = () => {
-        setMenuOpened((prev) => !prev)
-        if (!menuOpened) {
+    useEffect(()=>{
+        if (menuOpened) {
             expandedMenuAnimationRef.current.play()
             menuButtonAnimationRef.current.play()
         } else {
             expandedMenuAnimationRef.current.reverse()
             menuButtonAnimationRef.current.reverse()
         }
+    },[menuOpened])
+
+    // functions
+
+    const ToggleMenuOpened = () => {
+        setMenuOpened((prev) => !prev)
     }
 
     return (
         <>
             <div
                 ref={headerRef}
-                className="absolute top-0 z-40 flex-col w-full flex-center h-14 "
+                className="fixed top-0 z-40 flex-col w-full flex-center h-14 "
             >
                 {/* top flex container */}
-                <div className="absolute top-0 left-0 z-40 w-full gap-4 px-10 border-b border-black border-opacity-20 bg-primary-bg-color">
+                <div className="absolute top-0 left-0 z-40 w-full gap-4 px-20 border-b border-secondary-theme border-opacity-20 bg-primary-bg-color">
                     <div className="flex items-center justify-between h-14">
                         <div className="flex-center">
                             <h1 className="text-xl font-semibold text-text-light-menu-color">
@@ -145,7 +158,7 @@ const PageHeader = () => {
 
                         <button
                             onClick={() => ToggleMenuOpened()}
-                            className="select-none  flex-center h-3/4 text-text-light-menu-color"
+                            className="select-none flex-center h-3/4 text-text-light-menu-color"
                         >
                             <div className="flex flex-col gap-0">
                                 <span
@@ -164,7 +177,12 @@ const PageHeader = () => {
                                 </span>
                             </div>
 
-                            <span ref={menuButtonRef} className='text-lg min-w-14'>Menu</span>
+                            <span
+                                ref={menuButtonRef}
+                                className="text-lg min-w-14"
+                            >
+                                Menu
+                            </span>
                         </button>
 
                         <div className="gap-6 flex-center">
@@ -175,7 +193,7 @@ const PageHeader = () => {
                     </div>
 
                     {/* menus */}
-                    <ExpandedMenu toggle={menuOpened} ref={menuRef} />
+                    <ExpandedMenu toggleFunction={ToggleMenuOpened} toggle={menuOpened} ref={menuRef} />
                     {/* */}
                 </div>
 
@@ -184,7 +202,7 @@ const PageHeader = () => {
                 <div
                     ref={backdropRef}
                     onClick={ToggleMenuOpened}
-                    className="absolute bottom-0 z-30 h-0 w-full bg-[#1b181699] bg-opacity-55 backdrop-blur-sm"
+                    className="absolute bottom-0 z-30 w-full h-0 bg-neutral-800 bg-opacity-55 backdrop-blur-sm"
                 />
             </div>
 

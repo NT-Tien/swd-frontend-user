@@ -6,9 +6,13 @@ html,
 body {
 	height: 100%;
 	margin: 0;
-	overflow: hidden;
 	position: relative;
-	@apply font-mono
+	@apply font-mono bg-primary-bg-color
+}
+
+body {
+	overflow-y: scroll;
+
 }
 
 div#root {

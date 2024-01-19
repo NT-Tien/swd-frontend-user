@@ -9,7 +9,7 @@ const GearIcon = ({ style }) => {
             viewBox="0 0 24 24"
             strokeWidth={1.5}
             stroke="currentColor"
-            className={`${style} ${ICON_PRE_STYLE}`}
+            className={`${ICON_PRE_STYLE} ${style} `}
         >
             <path
                 strokeLinecap="round"

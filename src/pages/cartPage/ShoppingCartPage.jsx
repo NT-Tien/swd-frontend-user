@@ -1,10 +1,11 @@
 import React from 'react'
-import { PageHeader } from '../../components'
 
 const ShoppingCartPage = () => {
   return (
     <>
-      <PageHeader />
+    <section>
+      asdasd
+    </section>
     </>
   )
 }

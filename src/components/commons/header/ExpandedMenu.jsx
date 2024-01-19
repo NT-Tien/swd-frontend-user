@@ -3,8 +3,9 @@ import CustomLink from '../CustomLink'
 import { useGSAP } from '@gsap/react'
 import gsap from 'gsap'
 import MultipleUrlsPhoto from '../photo/MultipleUrlsPhoto'
+import MainActionLink from '../buttons/MainActionLink'
 
-const ExpandedMenu = forwardRef(({ toggle }, ref) => {
+const ExpandedMenu = forwardRef(({ toggle, toggleFunction }, ref) => {
     const menuList = [
         {
             name: 'HOME',
@@ -15,12 +16,17 @@ const ExpandedMenu = forwardRef(({ toggle }, ref) => {
             to: '/shop',
         },
         {
-            name: 'ABOUT US',
-            to: '/about-us',
+            name: 'BOOKING',
+            to: '/booking',
         },
         {
             name: 'CONTACT',
             to: '/contact',
+        },
+
+        {
+            name: 'ABOUT US',
+            to: '/about-us',
         },
     ]
 
@@ -47,20 +53,25 @@ const ExpandedMenu = forwardRef(({ toggle }, ref) => {
 
     //  func
 
+    const handleToggleMenu = () => {
+        if (toggleFunction) {
+            toggleFunction()
+        }
+    }
+
     return (
         <section
             ref={ref}
-            className="z-30 justify-between hidden w-full h-0 overflow-hidden opacity-0"
+            className="z-30 items-center justify-center hidden w-full h-0 overflow-hidden opacity-0"
         >
             <div
                 ref={linkRef}
-                className="flex flex-wrap w-3/5 pt-20 text-4xl gap-x-12 md:text-7xl"
+                className="flex flex-wrap w-full text-4xl gap-x-12"
             >
                 {menuList.map((link, index) => (
-                    <CustomLink key={index} to={link.to}>
-                        {' '}
-                        {link.name}{' '}
-                    </CustomLink>
+                    <div onClick={handleToggleMenu} key={index}>
+                        <CustomLink to={link.to}> {link.name} </CustomLink>
+                    </div>
                 ))}
             </div>
         </section>

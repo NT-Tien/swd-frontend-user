@@ -10,9 +10,10 @@ export default {
     theme: {
         extend: {
             colors: {
-                'primary-bg-color': '#ece8e5',
-                'primary-theme': '#ffae00',
+                'primary-bg-color': '#f4f0ea',
+                'primary-theme': '#ffa500',
                 'secondary-theme': '#4d3d30',
+                'secondary-bg-color': '#e8e0d4',
                 'text-light-menu-color': '#4d3d30',
                 'text-light-color': '#1b1816'
             },
