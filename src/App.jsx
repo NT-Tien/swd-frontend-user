@@ -14,10 +14,9 @@ import {
 } from './pages'
 
 function App() {
-    const [enabled, setEnabled] = useState(true)
 
     return (
-        <main className="relative app">
+        <main className="relative min-w-full min-h-full overflow-hidden app ">
             <Routes>
                 <Route path="/" element={<UserLayout />}>
                     <Route index element={<HomePage />} />

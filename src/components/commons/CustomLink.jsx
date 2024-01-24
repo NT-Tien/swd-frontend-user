@@ -4,20 +4,13 @@ import { Link, useMatch, useResolvedPath } from 'react-router-dom'
 import { clsx } from 'clsx'
 import gsap from 'gsap'
 
-const CustomLink = ({ children, to, className = 'font-sans font-light ', textColor = 'dark', underlineWidth = 'h-[2px]' }) => {
+const CustomLink = ({active = true, children, to, className = 'font-light ', textColor = 'text-text-light-color', underlineWidth = 'h-[2px]', underlineColor = 'bg-text-light-color'}) => {
     const resolvedPath = useResolvedPath(to)
     const isActive = useMatch({ path: resolvedPath.pathname, end: true })
 
     
-    const link = 'h-fit w-fit cursor-pointer tracking-tight '
+    const link = 'h-fit w-fit cursor-pointer '
     const linkActive = 'text-primary-theme italic'
-    let linkNormal = 'text-text-light-color'
-    let underlineColor = 'bg-text-light-color'
-    
-    if(textColor === 'light'){
-        linkNormal = ' text-white'
-        underlineColor = 'bg-white'
-    } 
 
     // useGSAP((context, contextSafe) => {
     //     const link = linkRef.current
@@ -55,8 +48,8 @@ const CustomLink = ({ children, to, className = 'font-sans font-light ', textCol
     return (
         <Link
             className={clsx(
-                `${link} ${className} group `,
-                isActive ? linkActive : linkNormal
+                `${className} ${link}  group `,
+                 active && (isActive ? linkActive : textColor)
             )}
             to={to}
         >

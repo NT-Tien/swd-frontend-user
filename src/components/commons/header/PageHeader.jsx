@@ -9,13 +9,17 @@ import { useGSAP } from '@gsap/react'
 import { TextPlugin } from 'gsap/TextPlugin'
 import ExpandedMenu from './ExpandedMenu'
 import { CustomEase } from 'gsap/all'
+import CartModal from '../../modals/CartModal'
+import SettingModal from '../../modals/SettingModal'
+import { Link } from 'react-router-dom'
 
 gsap.registerPlugin(TextPlugin)
-gsap.registerPlugin(CustomEase) 
+gsap.registerPlugin(CustomEase)
 
 const PageHeader = () => {
     // state
     const [menuOpened, setMenuOpened] = useState(false)
+    const [cartOpened, setCartOpened] = useState(false)
 
     // ref
 
@@ -125,7 +129,7 @@ const PageHeader = () => {
             )
     })
 
-    useEffect(()=>{
+    useEffect(() => {
         if (menuOpened) {
             expandedMenuAnimationRef.current.play()
             menuButtonAnimationRef.current.play()
@@ -133,7 +137,7 @@ const PageHeader = () => {
             expandedMenuAnimationRef.current.reverse()
             menuButtonAnimationRef.current.reverse()
         }
-    },[menuOpened])
+    }, [menuOpened])
 
     // functions
 
@@ -151,9 +155,11 @@ const PageHeader = () => {
                 <div className="absolute top-0 left-0 z-40 w-full gap-4 px-20 border-b border-secondary-theme border-opacity-20 bg-primary-bg-color">
                     <div className="flex items-center justify-between h-14">
                         <div className="flex-center">
-                            <h1 className="text-xl font-semibold text-text-light-menu-color">
-                                eFURNITURE
-                            </h1>
+                            <Link to='/'>
+                                <h1 className="text-xl font-semibold text-text-light-menu-color">
+                                    eFURNITURE
+                                </h1>
+                            </Link>
                         </div>
 
                         <button
@@ -187,13 +193,23 @@ const PageHeader = () => {
 
                         <div className="gap-6 flex-center">
                             <MagnifyingGlassIcon />
-                            <GearIcon />
-                            <ShoppingCartIcon />
+
+                            <SettingModal />
+                            <button
+                                type="button"
+                                onClick={() => setCartOpened(true)}
+                            >
+                                <ShoppingCartIcon />
+                            </button>
                         </div>
                     </div>
 
                     {/* menus */}
-                    <ExpandedMenu toggleFunction={ToggleMenuOpened} toggle={menuOpened} ref={menuRef} />
+                    <ExpandedMenu
+                        toggleFunction={ToggleMenuOpened}
+                        toggle={menuOpened}
+                        ref={menuRef}
+                    />
                     {/* */}
                 </div>
 
@@ -208,6 +224,11 @@ const PageHeader = () => {
 
             {/* padding to leave space */}
             <div className="p-7"></div>
+
+            <CartModal
+                isOpen={cartOpened}
+                closeModalFunction={() => setCartOpened(false)}
+            />
         </>
     )
 }

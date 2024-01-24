@@ -6,8 +6,10 @@ html,
 body {
 	height: 100%;
 	margin: 0;
+	overflow: auto;
 	position: relative;
-	@apply font-mono bg-primary-bg-color
+	font-family: 'Roboto Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+	@apply bg-primary-bg-color
 }
 
 body {
@@ -21,4 +23,8 @@ div#root {
 
 .flex-center {
 	@apply flex items-center justify-center;
+}
+
+.filter-open {
+	@apply rounded-t-3xl rounded-b-md
 }

@@ -10,7 +10,7 @@ const HomePage = () => {
     const productLoop = [1, 2, 3, 4]
 
     const collectionCardStyle =
-        'relative overflow-hidden border-8 rounded border-secondary-bg-color hover:shadow-lg transition-all duration-500 group'
+        'relative overflow-hidden border-[0.75rem] rounded border-secondary-bg-color hover:shadow-lg transition-all duration-500 group'
 
 
     return (
@@ -65,7 +65,9 @@ const HomePage = () => {
                             />
                             <div className="absolute bottom-0 z-10 flex items-center w-full px-5 h-1/6 bg-opacity-20 bg-gradient-to-t from-neutral-600 ">
                                 <CustomLink
-                                    className="font-mono text-2xl"
+                                    active={false}
+                                    className="text-2xl text-secondary-bg-color text-stroke-shadow"
+                                    underlineColor='bg-secondary-bg-color'
                                     to="/error"
                                 >
                                     Chairs
@@ -79,9 +81,11 @@ const HomePage = () => {
                                 src="./src/assets/pictures/table.jpg"
                                 className="object-cover h-full"
                             />
-                            <div className="absolute bottom-0 z-10 flex items-center w-full px-5 h-1/6 bg-opacity-20 bg-gradient-to-t from-neutral-600">
+                            <div className="absolute bottom-0 z-10 flex items-center w-full px-5 h-1/6 bg-opacity-30 bg-gradient-to-t from-neutral-800">
                                 <CustomLink
-                                    className="font-mono text-2xl"
+                                    active={false}
+                                    className="text-2xl text-secondary-bg-color text-stroke-shadow"
+                                    underlineColor='bg-secondary-bg-color'
                                     to="/error"
                                 >
                                     Tables
@@ -93,9 +97,11 @@ const HomePage = () => {
                                 src="./src/assets/pictures/sofa-1.jpg"
                                 className="absolute object-cover w-full -bottom-5"
                             />
-                            <div className="absolute bottom-0 z-10 flex items-center w-full px-5 h-1/6 bg-opacity-20 bg-gradient-to-t from-neutral-600">
+                            <div className="absolute bottom-0 z-10 flex items-center w-full px-5 h-1/6 bg-opacity-30 bg-gradient-to-t from-neutral-600">
                                 <CustomLink
-                                    className="font-mono text-2xl"
+                                    active={false}
+                                    className="text-2xl text-secondary-bg-color text-stroke-shadow"
+                                    underlineColor='bg-secondary-bg-color'
                                     to="/error"
                                 >
                                     Sofas
@@ -108,9 +114,11 @@ const HomePage = () => {
                                 src="./src/assets/pictures/shelf-large.jpg"
                                 className="absolute object-cover w-full"
                             />
-                            <div className="absolute bottom-0 z-10 flex items-center w-full px-5 h-1/6 bg-opacity-20 bg-gradient-to-t from-neutral-600">
+                            <div className="absolute bottom-0 z-10 flex items-center w-full px-5 h-1/6 bg-opacity-30 bg-gradient-to-t from-neutral-600">
                                 <CustomLink
-                                    className="font-mono text-2xl"
+                                    active={false}
+                                    className="text-2xl text-secondary-bg-color text-stroke-shadow"
+                                    underlineColor='bg-secondary-bg-color'
                                     to="/error"
                                 >
                                     Shelves
@@ -124,9 +132,11 @@ const HomePage = () => {
                                 src="./src/assets/pictures/lamp-2-front.png"
                                 className="absolute bottom-0"
                             />
-                            <div className="absolute bottom-0 z-10 flex items-center w-full px-5 h-1/6 bg-opacity-20 bg-gradient-to-t from-neutral-600">
+                            <div className="absolute bottom-0 z-10 flex items-center w-full px-5 h-1/6 bg-opacity-30 bg-gradient-to-t from-neutral-700">
                                 <CustomLink
-                                    className="font-mono text-2xl"
+                                    active={false}
+                                    className="text-2xl text-secondary-bg-color text-stroke-shadow"
+                                    underlineColor='bg-secondary-bg-color'
                                     to="/error"
                                 >
                                     Lamps
@@ -140,9 +150,11 @@ const HomePage = () => {
                                 src="./src/assets/pictures/flow-pot-on-stool.jpg"
                                 className="absolute bottom-0 object-cover w-full"
                             />
-                            <div className="absolute bottom-0 z-10 flex items-center w-full px-5 h-1/6 bg-opacity-20 bg-gradient-to-t from-neutral-600">
+                            <div className="absolute bottom-0 z-10 flex items-center w-full px-5 h-1/6 bg-opacity-30 bg-gradient-to-t from-neutral-700">
                                 <CustomLink
-                                    className="font-mono text-2xl"
+                                    active={false}
+                                    className="text-2xl text-secondary-bg-color text-stroke-shadow"
+                                    underlineColor='bg-secondary-bg-color'
                                     to="/error"
                                 >
                                     Accessories
@@ -159,9 +171,9 @@ const HomePage = () => {
                     <p className="text-lg uppercase">
                         &#11834; Our Products &#11834;
                     </p>
-                    <div className="grid items-center w-full grid-cols-4 gap-5 py-4">
+                    <div className="grid items-center w-full grid-cols-1 gap-5 py-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
                         {productLoop.map((product, index) => (
-                            <div key={index}>
+                            <div key={index} className='flex-center'>
                                 <ProductCard name='Chair' price='$100'/>
                             </div>
                         ))}

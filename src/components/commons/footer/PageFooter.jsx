@@ -19,6 +19,7 @@ const PageFooter = () => {
                     <CustomLink
                         textColor="light"
                         underlineWidth="h-px"
+                        underlineColor='bg-white'
                         to="/shop"
                     >
                         Products
@@ -26,13 +27,15 @@ const PageFooter = () => {
                     <CustomLink
                         textColor="light"
                         underlineWidth="h-px"
-                        to="/aboutus"
+                        underlineColor='bg-white'
+                        to="/about-us"
                     >
                         About us
                     </CustomLink>
                     <CustomLink
                         textColor="light"
                         underlineWidth="h-px"
+                        underlineColor='bg-white'
                         to="/contact"
                     >
                         Contact us

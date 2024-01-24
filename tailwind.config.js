@@ -23,6 +23,7 @@ export default {
 
                 md: '768px',
             },
+           
         },
     },
     plugins: [],
