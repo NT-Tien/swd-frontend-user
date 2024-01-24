@@ -29,7 +29,7 @@ const HomePage = () => {
                                 <p>Dream home</p>
                             </div>
                             <div className="text-xl uppercase">
-                                <p>Discover a world of elegance</p>
+                                <p>Discover a world of elegance </p>
                                 <p>Elevate your living spaces</p>
                                 <p>Radiate style and personality</p>
                             </div>
