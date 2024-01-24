@@ -33,7 +33,7 @@ const ShopPage = () => {
                 <div className="flex flex-col col-span-1">
                     <h1>Category</h1>
                     <div>
-                        <p>asdasdsd</p>
+                        <p>asdasdsdsdasd</p>
                         <p>asdasdsd</p>
                         <p>asdasdsd</p>
                     </div>
