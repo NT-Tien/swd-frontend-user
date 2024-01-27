@@ -1,6 +1,7 @@
 import { Menu, Transition } from '@headlessui/react'
 import clsx from 'clsx'
 import React, { Fragment } from 'react'
+import { ChevronDown } from '../../assets'
 
 const DropdownSelection = () => {
     return (
@@ -10,11 +11,11 @@ const DropdownSelection = () => {
                     <Menu.Button
                         as="button"
                         className={clsx(
-                            'w-full rounded-full border border-secondary-theme bg-transparent p-3 px-5 text-sm font-medium text-black hover:bg-black/5 focus:outline-none focus-visible:ring-2 focus-visible:ring-secondary-theme/75',
-                            active ? 'filter-open' : ''
+                            'flex-center w-full gap-2 rounded-full border border-secondary-theme bg-transparent p-3 px-4 text-sm font-medium text-black transition-all duration-300 hover:bg-black/10 focus:outline-none focus-visible:ring-2 focus-visible:ring-secondary-theme/75'
                         )}
                     >
                         Options
+                        <ChevronDown />
                     </Menu.Button>
                 </div>
                 <Transition
@@ -26,18 +27,18 @@ const DropdownSelection = () => {
                     leaveFrom="transform opacity-100 scale-100"
                     leaveTo="transform opacity-0 scale-95"
                 >
-                    <Menu.Items className="absolute right-0 w-56 origin-top-right bg-white divide-y divide-gray-100 rounded-md shadow-lg ring-1 ring-black/5 focus:outline-none">
-                        <div className="px-1 py-1 ">
+                    <Menu.Items className="absolute right-0 w-56 mt-2 origin-top-right border divide-y divide-gray-100 rounded-md shadow-lg border-secondary-theme/50 bg-primary-bg-color ring-1 ring-black/5 focus:outline-none">
+                        <div className="p-1 ">
                             <Menu.Item>
                                 {({ active }) => (
                                     <button
                                         className={`${
                                             active
-                                                ? 'bg-violet-500 text-white'
+                                                ? 'bg-secondary-theme/60 text-neutral-100'
                                                 : 'text-gray-900'
-                                        } group flex w-full items-center rounded-md px-2 py-2 text-sm`}
+                                        } group flex w-full items-center rounded-md px-2 py-2 text-sm transition-colors`}
                                     >
-                                        Edit
+                                        Newest to Oldest
                                     </button>
                                 )}
                             </Menu.Item>
@@ -46,26 +47,11 @@ const DropdownSelection = () => {
                                     <button
                                         className={`${
                                             active
-                                                ? 'bg-violet-500 text-white'
+                                                ? 'bg-secondary-theme/60 text-neutral-100'
                                                 : 'text-gray-900'
-                                        } group flex w-full items-center rounded-md px-2 py-2 text-sm`}
+                                        } group flex w-full items-center rounded-md px-2 py-2 text-sm transition-colors`}
                                     >
-                                        Duplicate
-                                    </button>
-                                )}
-                            </Menu.Item>
-                        </div>
-                        <div className="px-1 py-1">
-                            <Menu.Item>
-                                {({ active }) => (
-                                    <button
-                                        className={`${
-                                            active
-                                                ? 'bg-violet-500 text-white'
-                                                : 'text-gray-900'
-                                        } group flex w-full items-center rounded-md px-2 py-2 text-sm`}
-                                    >
-                                        Archive
+                                        Oldest to Newest
                                     </button>
                                 )}
                             </Menu.Item>
@@ -74,26 +60,50 @@ const DropdownSelection = () => {
                                     <button
                                         className={`${
                                             active
-                                                ? 'bg-violet-500 text-white'
+                                                ? 'bg-secondary-theme/60 text-neutral-100'
                                                 : 'text-gray-900'
-                                        } group flex w-full items-center rounded-md px-2 py-2 text-sm`}
+                                        } group flex w-full items-center rounded-md px-2 py-2 text-sm transition-colors`}
                                     >
-                                        Move
+                                        Lowest Price First
                                     </button>
                                 )}
                             </Menu.Item>
-                        </div>
-                        <div className="px-1 py-1">
                             <Menu.Item>
                                 {({ active }) => (
                                     <button
                                         className={`${
                                             active
-                                                ? 'bg-violet-500 text-white'
+                                                ? 'bg-secondary-theme/60 text-neutral-100'
                                                 : 'text-gray-900'
-                                        } group flex w-full items-center rounded-md px-2 py-2 text-sm`}
+                                        } group flex w-full items-center rounded-md px-2 py-2 text-sm transition-colors`}
                                     >
-                                        Delete
+                                        Highest Price First
+                                    </button>
+                                )}
+                            </Menu.Item>
+                            <Menu.Item>
+                                {({ active }) => (
+                                    <button
+                                        className={`${
+                                            active
+                                                ? 'bg-secondary-theme/60 text-neutral-100'
+                                                : 'text-gray-900'
+                                        } group flex w-full items-center rounded-md px-2 py-2 text-sm transition-colors`}
+                                    >
+                                        A-Z
+                                    </button>
+                                )}
+                            </Menu.Item>
+                            <Menu.Item>
+                                {({ active }) => (
+                                    <button
+                                        className={`${
+                                            active
+                                                ? 'bg-secondary-theme/60 text-neutral-100'
+                                                : 'text-gray-900'
+                                        } group flex w-full items-center rounded-md px-2 py-2 text-sm transition-colors`}
+                                    >
+                                        Z-A
                                     </button>
                                 )}
                             </Menu.Item>

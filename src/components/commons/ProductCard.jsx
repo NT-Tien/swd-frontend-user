@@ -8,7 +8,7 @@ const ProductCard = ({
 }) => {
     return (
         <div
-            className={`${className} rounded-sm relative flex aspect-[5/7] h-fit w-80 max-w-96 flex-col items-center justify-between overflow-hidden bg-secondary-bg-color transition-all duration-300 hover:shadow-xl`}
+            className={`${className} rounded-sm relative flex aspect-[5/7] h-fit w-80 min-w-max max-w-96 flex-col items-center justify-between overflow-hidden bg-secondary-bg-color transition-all duration-300 hover:shadow-xl`}
         >
             <div className="relative w-full h-full ">
                 <img
