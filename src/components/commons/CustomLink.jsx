@@ -1,10 +1,8 @@
-import { useGSAP } from '@gsap/react'
 import React, { useRef } from 'react'
 import { Link, useMatch, useResolvedPath } from 'react-router-dom'
 import { clsx } from 'clsx'
-import gsap from 'gsap'
 
-const CustomLink = ({active = true, children, to, className = 'font-light ', textColor = 'text-text-light-color', underlineWidth = 'h-[2px]', underlineColor = 'bg-text-light-color'}) => {
+const CustomLink = ({onClick, active = true, children, to, className = 'font-light ', textColor = 'text-text-light-color', underlineWidth = 'h-[2px]', underlineColor = 'bg-text-light-color'}) => {
     const resolvedPath = useResolvedPath(to)
     const isActive = useMatch({ path: resolvedPath.pathname, end: true })
 
@@ -12,37 +10,11 @@ const CustomLink = ({active = true, children, to, className = 'font-light ', tex
     const link = 'h-fit w-fit cursor-pointer '
     const linkActive = 'text-primary-theme italic'
 
-    // useGSAP((context, contextSafe) => {
-    //     const link = linkRef.current
-    //     const span = spanRef.current
-    //     const outerSpan = outerSpanRef.current
-
-    //     const handleMouseEnter = contextSafe(() => {
-    //         outerSpan.classList.remove('justify-end')
-    //         gsap.to(span, {
-    //             width: '100%',
-    //             duration: 0.25,
-    //             ease: 'power2.out',
-    //         })
-    //     })
-
-    //     const handleMouseLeave = contextSafe(() => {
-    //         outerSpan.classList.add('justify-end')
-    //         gsap.to(span, {
-    //             width: '0%',
-    //             duration: 0.25,
-    //             ease: 'power2.out',
-    //         })
-    //     })
-
-    //     link.addEventListener('mouseenter', handleMouseEnter)
-    //     link.addEventListener('mouseleave', handleMouseLeave)
-
-    //     return () => {
-    //         link.removeEventListener('mouseenter', handleMouseEnter)
-    //         link.removeEventListener('mouseleave', handleMouseLeave)
-    //     }
-    // })
+    const handleOnClick = () => {
+        if(onClick) {
+            onClick()
+        }
+    }
 
 
     return (
@@ -52,6 +24,7 @@ const CustomLink = ({active = true, children, to, className = 'font-light ', tex
                  active && (isActive ? linkActive : textColor)
             )}
             to={to}
+            onClick={handleOnClick}
         >
             <span>{children}</span>
             <span className="flex justify-end group-hover:justify-start">

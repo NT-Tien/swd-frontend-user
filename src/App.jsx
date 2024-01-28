@@ -4,16 +4,18 @@ import { Route, Routes } from 'react-router-dom'
 import {
     AboutUsPage,
     BookingPage,
+    CheckOutPage,
     ContactPage,
     HomePage,
+    LoginPage,
     NotFound,
     ShopPage,
     ShoppingCartPage,
+    SignupPage,
     UserLayout,
 } from './pages'
 
 function App() {
-
     return (
         <main className="relative min-w-full min-h-full overflow-hidden app ">
             <Routes>
@@ -24,6 +26,9 @@ function App() {
                     <Route path="/contact" element={<ContactPage />} />
                     <Route path="/about-us" element={<AboutUsPage />} />
                     <Route path="/booking" element={<BookingPage />} />
+                    <Route path="/login" element={<LoginPage />} />
+                    <Route path="/signup" element={<SignupPage />} />
+                    <Route path='/checkout' element={<CheckOutPage />}/>
                 </Route>
 
                 <Route path="/*" element={<NotFound />} />

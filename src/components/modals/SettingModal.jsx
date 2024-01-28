@@ -1,13 +1,16 @@
-import React, { Fragment } from 'react'
+import React, { Fragment, useEffect } from 'react'
+
 import { Popover, Transition } from '@headlessui/react'
-import { GearIcon } from '../../assets'
+import {  UserIcon } from '../../assets'
 import CustomLink from '../commons/CustomLink'
 
 const SettingModal = () => {
+    
+
     return (
-        <Popover className="">
+        <Popover >
             <Popover.Button className="relative flex-center">
-                <GearIcon />
+                <UserIcon />
             </Popover.Button>
 
             <Transition
@@ -19,20 +22,38 @@ const SettingModal = () => {
                 leaveFrom="opacity-100 translate-y-0"
                 leaveTo="opacity-0 translate-y-1"
             >
-                <Popover.Panel className="absolute z-10 top-14 ">
-                    <div className="flex flex-col items-start justify-center px-6 py-3 text-lg border shadow-lg bg-primary-bg-color border-secondary-theme">
-                        <CustomLink className='font-normal' active={false} underlineWidth="h-[1px]" to="#">
+                <Popover.Panel className="absolute right-0 z-10 top-14">
+                    <div className="flex flex-col items-start justify-center px-6 py-3 text-lg border shadow-lg border-secondary-theme bg-primary-bg-color">
+                        <CustomLink
+                            className="font-normal"
+                                underlineWidth="h-[1px]"
+                            to="/login"
+                        >
                             Log in
                         </CustomLink>
-                        <CustomLink className='font-normal' active={false} underlineWidth="h-[1px]" to="#">
-                            Sign in
+                        <CustomLink
+                            className="font-normal"
+                            underlineWidth="h-[1px]"
+                            to="/signup"
+                        >
+                            Sign up
                         </CustomLink>
 
-                        <CustomLink className='font-normal' active={false} underlineWidth="h-[1px]" to="#">
+                        <CustomLink
+                            className="font-normal"
+                            active={false}
+                            underlineWidth="h-[1px]"
+                            to="#"
+                        >
                             Check out
                         </CustomLink>
 
-                        <CustomLink className='font-normal' active={false} underlineWidth="h-[1px]" to="#">
+                        <CustomLink
+                            className="font-normal"
+                            active={false}
+                            underlineWidth="h-[1px]"
+                            to="#"
+                        >
                             Wish list
                         </CustomLink>
                     </div>

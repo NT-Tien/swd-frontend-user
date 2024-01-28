@@ -6,3 +6,7 @@ export {default as ContactPage} from './contactPage/ContactPage';
 export {default as BookingPage} from './bookingPage/BookingPage';
 export {default as UserLayout} from './UserLayout'
 export {default as HomePage} from './homepage/Homepage'
+export {default as LoginPage} from './auth/LoginPage'
+export {default as SignupPage} from './auth/SignupPage'
+export {default as CheckOutPage} from './checkOutPage/CheckOutPage'
+export {default as ProductDetailsPage} from './productDetailsPage/ProductDetailsPage'

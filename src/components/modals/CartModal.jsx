@@ -53,7 +53,7 @@ const CartModal = ({ isOpen, closeModalFunction  }) => {
                   </div>
 
                   <div className="mt-4 flex-center">
-                    <MainActionLink to='/'>continue shopping</MainActionLink>
+                    <MainActionLink onClick={closeModalFunction} to='/shop'>continue shopping</MainActionLink>
                   </div>
                 </Dialog.Panel>
               </Transition.Child>

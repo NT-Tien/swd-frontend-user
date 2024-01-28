@@ -1,9 +1,7 @@
-import React, { forwardRef, useRef, useState } from 'react'
+import React, { forwardRef, useRef } from 'react'
 import CustomLink from '../CustomLink'
 import { useGSAP } from '@gsap/react'
 import gsap from 'gsap'
-import MultipleUrlsPhoto from '../photo/MultipleUrlsPhoto'
-import MainActionLink from '../buttons/MainActionLink'
 
 const ExpandedMenu = forwardRef(({ toggle, toggleFunction }, ref) => {
     const menuList = [

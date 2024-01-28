@@ -12,7 +12,6 @@ const HomePage = () => {
     const collectionCardStyle =
         'relative overflow-hidden border-[0.75rem] rounded border-secondary-bg-color hover:shadow-lg transition-all duration-500 group'
 
-
     return (
         <>
             <section className="flex flex-col w-full h-full gap-10 overflow-hidden bg-primary-bg-color">
@@ -22,27 +21,25 @@ const HomePage = () => {
 
                     <LandingPageImages />
 
-                    <div className="absolute top-0 left-0 flex flex-col justify-around w-full h-full px-20 pt-10 text-white bg-secondary-theme bg-opacity-35">
-                        <div className="flex flex-col w-1/2 gap-7">
-                            <div className="font-light text-7xl">
-                                <p>Discover your </p>
-                                <p>Dream home</p>
-                            </div>
-                            <div className="text-xl uppercase">
-                                <p>Discover a world of elegance </p>
-                                <p>Elevate your living spaces</p>
-                                <p>Radiate style and personality</p>
-                            </div>
-                            <div className="w">
-                                <MainActionLink
-                                    to="/shop"
-                                    textColor="text-white"
-                                    borderColor="border-white"
-                                    arrowColor="text-secondary-theme bg-white font-thin"
-                                >
-                                    explore collection
-                                </MainActionLink>
-                            </div>
+                    <div className="absolute top-0 left-0 flex flex-col justify-center w-full h-full px-20 pt-10 text-white gap-7 bg-secondary-theme bg-opacity-35">
+                        <div className="font-light text-7xl">
+                            <p>Discover your </p>
+                            <p>Dream home</p>
+                        </div>
+                        <div className="text-xl uppercase">
+                            <p>Discover a world of elegance </p>
+                            <p>Elevate your living spaces</p>
+                            <p>Radiate style and personality</p>
+                        </div>
+                        <div className="w">
+                            <MainActionLink
+                                to="/shop"
+                                textColor="text-white"
+                                className="border-white"
+                                arrowColor="text-secondary-theme bg-white font-thin"
+                            >
+                                explore collection
+                            </MainActionLink>
                         </div>
                     </div>
                 </div>
@@ -66,8 +63,8 @@ const HomePage = () => {
                             <div className="absolute bottom-0 z-10 flex items-center w-full px-5 h-1/6 bg-opacity-20 bg-gradient-to-t from-neutral-600 ">
                                 <CustomLink
                                     active={false}
-                                    className="text-2xl text-secondary-bg-color text-stroke-shadow"
-                                    underlineColor='bg-secondary-bg-color'
+                                    className="text-2xl text-stroke-shadow text-secondary-bg-color"
+                                    underlineColor="bg-secondary-bg-color"
                                     to="/error"
                                 >
                                     Chairs
@@ -84,8 +81,8 @@ const HomePage = () => {
                             <div className="absolute bottom-0 z-10 flex items-center w-full px-5 h-1/6 bg-opacity-30 bg-gradient-to-t from-neutral-800">
                                 <CustomLink
                                     active={false}
-                                    className="text-2xl text-secondary-bg-color text-stroke-shadow"
-                                    underlineColor='bg-secondary-bg-color'
+                                    className="text-2xl text-stroke-shadow text-secondary-bg-color"
+                                    underlineColor="bg-secondary-bg-color"
                                     to="/error"
                                 >
                                     Tables
@@ -100,8 +97,8 @@ const HomePage = () => {
                             <div className="absolute bottom-0 z-10 flex items-center w-full px-5 h-1/6 bg-opacity-30 bg-gradient-to-t from-neutral-600">
                                 <CustomLink
                                     active={false}
-                                    className="text-2xl text-secondary-bg-color text-stroke-shadow"
-                                    underlineColor='bg-secondary-bg-color'
+                                    className="text-2xl text-stroke-shadow text-secondary-bg-color"
+                                    underlineColor="bg-secondary-bg-color"
                                     to="/error"
                                 >
                                     Sofas
@@ -117,8 +114,8 @@ const HomePage = () => {
                             <div className="absolute bottom-0 z-10 flex items-center w-full px-5 h-1/6 bg-opacity-30 bg-gradient-to-t from-neutral-600">
                                 <CustomLink
                                     active={false}
-                                    className="text-2xl text-secondary-bg-color text-stroke-shadow"
-                                    underlineColor='bg-secondary-bg-color'
+                                    className="text-2xl text-stroke-shadow text-secondary-bg-color"
+                                    underlineColor="bg-secondary-bg-color"
                                     to="/error"
                                 >
                                     Shelves
@@ -135,8 +132,8 @@ const HomePage = () => {
                             <div className="absolute bottom-0 z-10 flex items-center w-full px-5 h-1/6 bg-opacity-30 bg-gradient-to-t from-neutral-700">
                                 <CustomLink
                                     active={false}
-                                    className="text-2xl text-secondary-bg-color text-stroke-shadow"
-                                    underlineColor='bg-secondary-bg-color'
+                                    className="text-2xl text-stroke-shadow text-secondary-bg-color"
+                                    underlineColor="bg-secondary-bg-color"
                                     to="/error"
                                 >
                                     Lamps
@@ -153,8 +150,8 @@ const HomePage = () => {
                             <div className="absolute bottom-0 z-10 flex items-center w-full px-5 h-1/6 bg-opacity-30 bg-gradient-to-t from-neutral-700">
                                 <CustomLink
                                     active={false}
-                                    className="text-2xl text-secondary-bg-color text-stroke-shadow"
-                                    underlineColor='bg-secondary-bg-color'
+                                    className="text-2xl text-stroke-shadow text-secondary-bg-color"
+                                    underlineColor="bg-secondary-bg-color"
                                     to="/error"
                                 >
                                     Accessories
@@ -173,12 +170,12 @@ const HomePage = () => {
                     </p>
                     <div className="grid items-center w-full grid-cols-1 gap-5 py-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
                         {productLoop.map((product, index) => (
-                            <div key={index} className='flex-center'>
-                                <ProductCard name='Chair' price='$100'/>
+                            <div key={index} className="flex-center">
+                                <ProductCard name="Chair" price="$100" />
                             </div>
                         ))}
                     </div>
-                    <MainActionLink to='/shop' >Shop with us</MainActionLink>
+                    <MainActionLink to="/shop">Shop with us</MainActionLink>
                 </div>
             </section>
         </>

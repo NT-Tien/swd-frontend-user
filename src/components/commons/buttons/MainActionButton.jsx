@@ -1,29 +1,26 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
 import { ArrowRightIcon } from '../../../assets'
-import './style.css'
 
-const MainActionLink = ({
+const MainActionButton = ({
     children,
     isSuffixArrow = true,
-    to,
-    onClick,
+    type = 'button',
     className = '',
+    onClick,
     textColor = 'text-secondary-theme',
     arrowColor = 'text-white bg-secondary-theme',
 }) => {
-
     const handleOnClick = () => {
         if (onClick) onClick()
     }
 
     return (
-        <Link
-            to={to}
+        <button
             onClick={handleOnClick}
-            className={`gap-2 border p-2 ${className} flex-center group max-w-max rounded-full border-gray-800`}
+            type={type}
+            className={`gap-2 border p-2 ${className} group flex items-center justify-between rounded-full border-gray-800`}
         >
-            <span className="relative pl-2 overflow-hidden leading-none uppercase flex-center h-fit">
+            <span className="relative w-full pl-2 overflow-hidden leading-none uppercase flex-center h-fit">
                 <span
                     className={`flex-center flex-col transition-transform duration-[400ms] ease-in-out group-hover:-translate-y-full ${textColor}`}
                 >
@@ -45,8 +42,8 @@ const MainActionLink = ({
             ) : (
                 ''
             )}
-        </Link>
+        </button>
     )
 }
 
-export default MainActionLink
+export default MainActionButton

@@ -4,7 +4,7 @@ import CustomLink from '../CustomLink'
 
 const PageFooter = () => {
     return (
-        <div className="grid grid-cols-5 gap-5 px-20 py-6 mt-10 text-white bg-secondary-theme">
+        <div className="grid grid-cols-5 gap-5 px-[5svw] py-6 mt-10 text-white bg-secondary-theme">
             <div className="flex flex-col col-span-2 gap-2 border-r border-opacity-50 border-neutral-50">
                 <h1 className="text-lg uppercase">Contact Us</h1>
                 <p>

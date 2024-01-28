@@ -1,5 +1,20 @@
-
 .text-stroke-shadow {
     text-shadow:
-    -1px -1px 0 black, 1px -1px 0 black, -1px 1px 0 black, 1px 1px 0 black;
+        -1px -1px 0 black,
+        1px -1px 0 black,
+        -1px 1px 0 black,
+        1px 1px 0 black;
 }
+
+.divider::before,
+.divider::after {
+    flex: 1;
+    content: '';
+    margin: 0.5rem;
+    @apply bg-secondary-theme/50 py-px
+}
+
+.divider {
+    display: flex;
+    align-items: center;
+  }
