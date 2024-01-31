@@ -13,14 +13,13 @@
     "@gsap/react": "^2.0.2",
     "@headlessui/react": "^1.7.18",
     "@heroicons/react": "^2.1.1",
-    "@reduxjs/toolkit": "^2.0.1",
     "@splidejs/react-splide": "^0.7.12",
     "clsx": "^2.1.0",
     "firebase": "^10.7.2",
     "gsap": "^3.12.4",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-redux": "^9.0.4",
+    "react-query": "^3.39.3",
     "react-router-dom": "^6.21.1"
   },
   "devDependencies": {

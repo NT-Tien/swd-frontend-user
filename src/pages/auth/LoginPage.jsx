@@ -1,9 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth'
 import { useNavigate } from 'react-router-dom'
-import { useDispatch, useSelector } from 'react-redux'
 import { auth } from '../../config/firebase'
-import { setUser } from '../../state/users/userSlice'
 import { GoogleIcon } from '../../assets'
 import EyeIcon from '../../assets/EyeIcon'
 import EyeSlashIcon from '../../assets/EyeSlashIcon'
@@ -14,8 +12,6 @@ import { horizontalLoop } from '../../utils/GSAPUtils'
 
 const LoginPage = () => {
     const navigate = useNavigate()
-    const dispatch = useDispatch()
-    const user = useSelector((state) => state.user)
 
     // state
 
@@ -35,7 +31,6 @@ const LoginPage = () => {
                 const uid = result.user.uid
                 const email = result.user.email
 
-                dispatch(setUser({ name, uid, avatarUrl, email }))
 
                 console.log('usersignin', result)
                 console.log('userredux', user)
@@ -103,7 +98,7 @@ const LoginPage = () => {
                 ref={textLoopRef}
                 className="absolute inset-0 z-0 flex flex-col text-secondary-theme"
             >
-                <div className=" flex h-fit w-fit gap-20 text-nowrap text-[50svh] uppercase ">
+                <div className="select-none flex h-fit w-fit gap-20 text-nowrap text-[50svh] uppercase ">
                     <span
                         className="textUpper leading-none [word-spacing:-100px]
 "

@@ -59,7 +59,7 @@ const SignupPage = () => {
                 ref={textLoopRef}
                 className="absolute inset-0 z-0 flex flex-col text-secondary-theme"
             >
-                <div className=" flex h-fit w-fit gap-20 text-nowrap text-[50svh] uppercase ">
+                <div className="select-none flex h-fit w-fit gap-20 text-nowrap text-[50svh] uppercase ">
                     <span className="textUpper leading-none [word-spacing:-100px]">
                         sign up
                     </span>

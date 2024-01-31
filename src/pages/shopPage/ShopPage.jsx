@@ -23,7 +23,6 @@ const ShopPage = () => {
                         </ActionButton>
                     </div>
                     <div className="flex justify-center col-span-1">
-                        asdasdsd
                     </div>
                     <div className="z-10 flex justify-end col-span-1">
                         <DropdownSelection />
