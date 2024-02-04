@@ -31,13 +31,15 @@ const SignupPage = () => {
             const loop1 = horizontalLoop('.textUpper', {
                 paused: false,
                 repeat: -1,
-                speed: 0.4,
+                speed: 0.5,
+                paddingRight: 20,
             })
             const loop2 = horizontalLoop('.textLower', {
                 paused: false,
-                repeat: -1,
-                speed: 1,
+                repeat:  -1,
+                speed: 0.5,
                 paddingRight: 20,
+                reversed: true,
             })
         },
         { scope: textLoopRef }
@@ -67,7 +69,7 @@ const SignupPage = () => {
                         sign up
                     </span>
                 </div>
-                <div className=" flex  h-fit w-fit gap-20 text-nowrap text-[50svh] uppercase ">
+                <div className="select-none flex  h-fit w-fit gap-20 text-nowrap text-[50svh] uppercase ">
                     <span className="textLower leading-none [word-spacing:-100px]">
                         sign up
                     </span>

@@ -1,7 +1,7 @@
 import React from 'react'
 
 const ProductCard = ({
-    imgUrl = './src/assets/pictures/chair-6-side.png',
+    imgUrl,
     price,
     name,
     className,
@@ -13,6 +13,7 @@ const ProductCard = ({
             <div className="relative w-full h-full ">
                 <img
                     src={imgUrl}
+                    alt={name}
                     className="absolute bottom-0 object-cover w-full h-auto"
                 />
             </div>

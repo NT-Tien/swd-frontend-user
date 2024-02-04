@@ -15,7 +15,7 @@ export default {
                 'secondary-theme': '#4d3d30',
                 'secondary-bg-color': '#e8e0d4',
                 'text-light-menu-color': '#4d3d30',
-                'text-light-color': '#1b1816'
+                'text-light-color': '#1b1816',
             },
             screens: {
                 xs: '320px',
@@ -23,7 +23,9 @@ export default {
 
                 md: '768px',
             },
-           
+            backgroundImage: {
+                'about-us': "url('./src/assets/pictures/about-us-bg.jpg')",
+            },
         },
     },
     plugins: [],

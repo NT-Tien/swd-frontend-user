@@ -17,23 +17,26 @@ import {
 
 function App() {
     return (
-        <main className="relative min-w-full min-h-full overflow-hidden app ">
-            <Routes>
-                <Route path="/" element={<UserLayout />}>
-                    <Route index element={<HomePage />} />
-                    <Route path="/shop" element={<ShopPage />} />
-                    <Route path="/cart" element={<ShoppingCartPage />} />
-                    <Route path="/contact" element={<ContactPage />} />
-                    <Route path="/about-us" element={<AboutUsPage />} />
-                    <Route path="/booking" element={<BookingPage />} />
-                    <Route path="/login" element={<LoginPage />} />
-                    <Route path="/signup" element={<SignupPage />} />
-                    <Route path='/checkout' element={<CheckOutPage />}/>
-                </Route>
+        <>
+            
+            <main className="relative min-w-full min-h-full overflow-hidden app ">
+                <Routes>
+                    <Route path="/" element={<UserLayout />}>
+                        <Route index element={<HomePage />} />
+                        <Route path="/shop" element={<ShopPage />} />
+                        <Route path="/cart" element={<ShoppingCartPage />} />
+                        <Route path="/contact" element={<ContactPage />} />
+                        <Route path="/about-us" element={<AboutUsPage />} />
+                        <Route path="/booking" element={<BookingPage />} />
+                        <Route path="/login" element={<LoginPage />} />
+                        <Route path="/signup" element={<SignupPage />} />
+                        <Route path="/checkout" element={<CheckOutPage />} />
+                    </Route>
 
-                <Route path="/*" element={<NotFound />} />
-            </Routes>
-        </main>
+                    <Route path="/*" element={<NotFound />} />
+                </Routes>
+            </main>
+        </>
     )
 }
 

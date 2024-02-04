@@ -30,10 +30,11 @@ const LoginPage = () => {
                 const avatarUrl = result.user.photoURL
                 const uid = result.user.uid
                 const email = result.user.email
-
+                const token = result.user.accessToken
 
                 console.log('usersignin', result)
-                console.log('userredux', user)
+                console.log('usersignin2', token)
+
 
                 navigate('/', { replace: true })
                 return
@@ -59,21 +60,19 @@ const LoginPage = () => {
             const loop1 = horizontalLoop('.textUpper', {
                 paused: false,
                 repeat: -1,
-                speed: 0.4,
+                speed: 0.5,
+                paddingRight: 20,
             })
             const loop2 = horizontalLoop('.textLower', {
                 paused: false,
-                repeat: -1,
-                speed: 1,
+                repeat:  -1,
+                speed: 0.5,
                 paddingRight: 20,
+                reversed: true,
             })
         },
         { scope: textLoopRef }
     )
-
-    useEffect(() => {
-        console.log('userredux', user)
-    }, [user])
 
     // onClick={signInWithGoogle}
 
@@ -109,7 +108,7 @@ const LoginPage = () => {
                         Log in
                     </span>
                 </div>
-                <div className=" flex  h-fit w-fit gap-20 text-nowrap text-[50svh] uppercase ">
+                <div className=" flex  h-fit w-fit gap-20 select-none text-nowrap text-[50svh] uppercase ">
                     <span className="textLower leading-none [word-spacing:-100px]">
                         Log in
                     </span>
