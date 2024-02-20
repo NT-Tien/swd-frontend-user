@@ -34,8 +34,8 @@ const HomePage = () => {
                         <div className="w">
                             <MainActionLink
                                 to="/shop"
-                                textColor="text-white"
-                                className="border-white"
+                                textColor="text-secondary"
+                                className="border-secondary-theme bg-secondary-theme"
                                 arrowColor="text-secondary-theme bg-white font-thin"
                             >
                                 explore collection
@@ -57,7 +57,7 @@ const HomePage = () => {
                         >
                             <img
                                 loading="lazy"
-                                src="./src/assets/pictures/pink-chair.jpg"
+                                src={"./src/assets/pictures/pink-chair.jpg"}
                                 className="absolute bottom-0"
                             />
                             <div className="absolute bottom-0 z-10 flex items-center w-full px-5 h-1/6 bg-opacity-20 bg-gradient-to-t from-neutral-600 ">
@@ -75,7 +75,7 @@ const HomePage = () => {
                             className={`${collectionCardStyle} col-span-1 aspect-square`}
                         >
                             <img
-                                src="./src/assets/pictures/table.jpg"
+                                src={"./src/assets/pictures/table.jpg"}
                                 className="object-cover h-full"
                             />
                             <div className="absolute bottom-0 z-10 flex items-center w-full px-5 h-1/6 bg-opacity-30 bg-gradient-to-t from-neutral-800">
@@ -91,7 +91,7 @@ const HomePage = () => {
                         </div>
                         <div className={`${collectionCardStyle} col-span-2`}>
                             <img
-                                src="./src/assets/pictures/sofa-1.jpg"
+                                src={"./src/assets/pictures/sofa-1.jpg"}
                                 className="absolute object-cover w-full -bottom-5"
                             />
                             <div className="absolute bottom-0 z-10 flex items-center w-full px-5 h-1/6 bg-opacity-30 bg-gradient-to-t from-neutral-600">
@@ -108,7 +108,7 @@ const HomePage = () => {
                         <div className={`${collectionCardStyle} col-span-2`}>
                             <img
                                 loading="lazy"
-                                src="./src/assets/pictures/shelf-large.jpg"
+                                src={"./src/assets/pictures/shelf-large.jpg"}
                                 className="absolute object-cover w-full"
                             />
                             <div className="absolute bottom-0 z-10 flex items-center w-full px-5 h-1/6 bg-opacity-30 bg-gradient-to-t from-neutral-600">
@@ -126,7 +126,7 @@ const HomePage = () => {
                             className={`${collectionCardStyle} col-span-1 aspect-square`}
                         >
                             <img
-                                src="./src/assets/pictures/lamp-2-front.png"
+                                src={"./src/assets/pictures/lamp-2-front.png"}
                                 className="absolute bottom-0"
                             />
                             <div className="absolute bottom-0 z-10 flex items-center w-full px-5 h-1/6 bg-opacity-30 bg-gradient-to-t from-neutral-700">
@@ -144,7 +144,7 @@ const HomePage = () => {
                             className={`${collectionCardStyle} col-span-1 aspect-square`}
                         >
                             <img
-                                src="./src/assets/pictures/flow-pot-on-stool.jpg"
+                                src={"./src/assets/pictures/flow-pot-on-stool.jpg"}
                                 className="absolute bottom-0 object-cover w-full"
                             />
                             <div className="absolute bottom-0 z-10 flex items-center w-full px-5 h-1/6 bg-opacity-30 bg-gradient-to-t from-neutral-700">
@@ -171,7 +171,7 @@ const HomePage = () => {
                     <div className="grid items-center w-full grid-cols-1 gap-5 py-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
                         {productLoop.map((product, index) => (
                             <div key={index} className="flex-center">
-                                <ProductCard name="Chair" price="$100" />
+                                <ProductCard path='/productDetails/1' name="Chair" price="$100" imgUrl={"./src/assets/pictures/chair-6-side.png"}/>
                             </div>
                         ))}
                     </div>

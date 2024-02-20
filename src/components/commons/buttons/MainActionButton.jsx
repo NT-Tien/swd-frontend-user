@@ -10,17 +10,18 @@ const MainActionButton = ({
     textColor = 'text-secondary-theme',
     arrowColor = 'text-white bg-secondary-theme',
 }) => {
-    const handleOnClick = () => {
+    const handleOnClick = (e) => {
+        e.stopPropagation()
         if (onClick) onClick()
     }
 
     return (
         <button
-            onClick={handleOnClick}
+            onClick={(e)=>handleOnClick(e)}
             type={type}
             className={`gap-2 border p-2 ${className} group flex items-center justify-between rounded-full border-gray-800`}
         >
-            <span className="relative w-full pl-2 overflow-hidden leading-none uppercase flex-center h-fit">
+            <span className="relative w-full px-2 overflow-hidden leading-none uppercase flex-center h-fit">
                 <span
                     className={`flex-center flex-col transition-transform duration-[400ms] ease-in-out group-hover:-translate-y-full ${textColor}`}
                 >

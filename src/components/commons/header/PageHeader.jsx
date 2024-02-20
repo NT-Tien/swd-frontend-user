@@ -1,6 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react'
 import {
-    GearIcon,
     MagnifyingGlassIcon,
     ShoppingCartIcon,
 } from '../../../assets'
@@ -11,12 +10,19 @@ import ExpandedMenu from './ExpandedMenu'
 import { CustomEase } from 'gsap/all'
 import CartModal from '../../modals/CartModal'
 import SettingModal from '../../modals/SettingModal'
+import { useLocation } from 'react-router-dom';
 import { Link } from 'react-router-dom'
 
 gsap.registerPlugin(TextPlugin)
 gsap.registerPlugin(CustomEase)
 
 const PageHeader = () => {
+    const { pathname } = useLocation()
+
+    useEffect(() => {
+        setMenuOpened(false)
+    }, [pathname])
+
     // state
     const [menuOpened, setMenuOpened] = useState(false)
     const [cartOpened, setCartOpened] = useState(false)
@@ -152,10 +158,10 @@ const PageHeader = () => {
                 className="fixed top-0 z-40 flex-col w-full flex-center h-14 "
             >
                 {/* top flex container */}
-                <div className="absolute top-0 left-0 z-40 w-full gap-4 px-[5svw] border-b border-secondary-theme border-opacity-20 bg-primary-bg-color">
+                <div className="absolute left-0 top-0 z-40 w-full gap-4 border-b border-secondary-theme border-opacity-20 bg-primary-bg-color px-[5svw]">
                     <div className="flex items-center justify-between h-14">
                         <div className="items-center justify-center hidden md:flex">
-                            <Link to='/'>
+                            <Link to="/">
                                 <h1 className="text-xl font-semibold text-text-light-menu-color">
                                     eFURNITURE
                                 </h1>
@@ -163,7 +169,7 @@ const PageHeader = () => {
                         </div>
 
                         <button
-                            onClick={() => ToggleMenuOpened()}
+                            onClick={ToggleMenuOpened}
                             className="select-none flex-center h-3/4 text-text-light-menu-color"
                         >
                             <div className="flex flex-col gap-0">
@@ -206,7 +212,7 @@ const PageHeader = () => {
 
                     {/* menus */}
                     <ExpandedMenu
-                        toggleFunction={ToggleMenuOpened}
+                        toggleFunction={() => setMenuOpened(false)}
                         toggle={menuOpened}
                         ref={menuRef}
                     />
@@ -217,7 +223,7 @@ const PageHeader = () => {
 
                 <div
                     ref={backdropRef}
-                    onClick={ToggleMenuOpened}
+                    onClick={() => setMenuOpened(false)}
                     className="absolute bottom-0 z-30 w-full h-0 bg-neutral-800 bg-opacity-55 backdrop-blur-sm"
                 />
             </div>

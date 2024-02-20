@@ -38,7 +38,7 @@ const ContactPage = () => {
 
     return (
         <>
-            <section className="w-full flex-center h-svh min-h-svh">
+            <section className="w-full h-[90svh] flex-center min-h-min">
                 <div
                     ref={textLoopRef}
                     className="absolute inset-0 z-0 flex flex-col text-secondary-theme"
@@ -65,9 +65,15 @@ const ContactPage = () => {
                 </div>
                 <div
                     ref={containerRef}
-                    className="relative flex w-2/3 overflow-hidden bg-transparent border rounded-sm shadow-lg h-3/4 min-w-fit border-secondary-theme/70"
+                    className="relative flex w-5/6 overflow-hidden bg-transparent border rounded-sm shadow-lg h-3/4 min-h-min min-w-min border-secondary-theme/70"
                 >
-                    <div className="relative flex flex-col w-1/2 h-full gap-10 p-5 bg-secondary-bg-color">
+                    <div className="relative flex flex-col w-1/2 h-full gap-10 p-5 bg-transparent border-[20px] border-secondary-bg-color overflow-hidden">
+                        <div className='absolute inset-0 w-full h-full bg-black/40 backdrop-blur-md'></div>
+                        <p className='z-10 flex w-full h-full leading-none uppercase text-secondary-bg-color flex-center text-9xl'>
+                            get in touch
+                        </p>
+                    </div>
+                    <div className="relative flex flex-col w-1/2 h-full gap-8 p-5 bg-secondary-bg-color">
                         <div className="flex flex-col gap-2">
                             <h5 className="text-xl font-medium">
                                 Contact Info
@@ -125,12 +131,7 @@ const ContactPage = () => {
                             </p>
                         </div>
                     </div>
-                    <div className="relative flex flex-col w-1/2 h-full gap-10 p-5 bg-transparent border-[20px] border-secondary-bg-color overflow-hidden">
-                        <div className='absolute inset-0 w-full h-full bg-black/40 backdrop-blur-md'></div>
-                        <p className='z-10 flex w-full h-full leading-none uppercase text-secondary-bg-color flex-center text-9xl'>
-                            get in touch
-                        </p>
-                    </div>
+                    
                 </div>
             </section>
         </>

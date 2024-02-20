@@ -16,6 +16,10 @@ const LoginPage = () => {
     // state
 
     const [showPassword, setShowPassword] = useState(false)
+    const [formValue, setFormValue] = useState({
+        username: '',
+        password: '',
+    })
 
     // ref
     const textLoopRef = useRef()
@@ -26,15 +30,10 @@ const LoginPage = () => {
         const provider = new GoogleAuthProvider()
         signInWithPopup(auth, provider)
             .then((result) => {
-                const name = result.user.displayName
-                const avatarUrl = result.user.photoURL
-                const uid = result.user.uid
-                const email = result.user.email
                 const token = result.user.accessToken
-
-                console.log('usersignin', result)
-                console.log('usersignin2', token)
-
+                const user = JSON.stringify(result.user)
+                console.log('usersignin', result.user)
+                sessionStorage.setItem('user', user)
 
                 navigate('/', { replace: true })
                 return
@@ -65,7 +64,7 @@ const LoginPage = () => {
             })
             const loop2 = horizontalLoop('.textLower', {
                 paused: false,
-                repeat:  -1,
+                repeat: -1,
                 speed: 0.5,
                 paddingRight: 20,
                 reversed: true,
@@ -74,12 +73,23 @@ const LoginPage = () => {
         { scope: textLoopRef }
     )
 
-    // onClick={signInWithGoogle}
+    useEffect(() => {
+        const user = sessionStorage.getItem('user')
+        if (user) {
+            navigate('/', { replace: true })
+        }
+    }, [])
 
     // func
 
     const handleSubmit = (event) => {
         event.preventDefault()
+    }
+
+    const handleInputChange = (e) => {
+        const { name, value } = e.target
+
+        setFormValue((prev) => ({ ...prev, [name]: value }))
     }
 
     const handleToggleShowPassword = () => {
@@ -97,7 +107,7 @@ const LoginPage = () => {
                 ref={textLoopRef}
                 className="absolute inset-0 z-0 flex flex-col text-secondary-theme"
             >
-                <div className="select-none flex h-fit w-fit gap-20 text-nowrap text-[50svh] uppercase ">
+                <div className="flex h-fit w-fit select-none gap-20 text-nowrap text-[50svh] uppercase ">
                     <span
                         className="textUpper leading-none [word-spacing:-100px]
 "
@@ -108,7 +118,7 @@ const LoginPage = () => {
                         Log in
                     </span>
                 </div>
-                <div className=" flex  h-fit w-fit gap-20 select-none text-nowrap text-[50svh] uppercase ">
+                <div className=" flex  h-fit w-fit select-none gap-20 text-nowrap text-[50svh] uppercase ">
                     <span className="textLower leading-none [word-spacing:-100px]">
                         Log in
                     </span>
@@ -148,14 +158,20 @@ const LoginPage = () => {
                         </span>
                         <input
                             type="text"
-                            placeholder="Email"
+                            onChange={handleInputChange}
+                            value={formValue.username}
+                            name="username"
+                            placeholder="User name"
                             className="block w-full p-3 text-sm text-gray-900 border rounded-full border-secondary-theme bg-primary-bg-color ps-4 focus:ring-secondary-theme"
                             required
                         />
                         <div className="relative w-full">
                             <input
                                 ref={passwordInputRef}
+                                onChange={handleInputChange}
+                                value={formValue.password}
                                 type="password"
+                                name="password"
                                 placeholder="Password"
                                 required
                                 className="block w-full p-3 text-sm text-gray-900 border rounded-full border-secondary-theme bg-primary-bg-color ps-4 focus:ring-secondary-theme"

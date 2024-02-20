@@ -1,18 +1,34 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { MagnifyingGlassIcon } from '../../assets';
+import UseDebounce from '../../hooks/UseDebounce';
+import { useState } from 'react';
 
 const SearchBar = ({onSubmit, placeholder}) => {
 
-    const handleSubmit = (event) => {
-        event.preventDefault();
+    const [value, setValue] = useState('')
+
+
+    const handleSubmit = () => {
 
         if(onSubmit) {
-            onSubmit()
+            onSubmit(value)
         }
     }
 
+    const handleChange = UseDebounce((e)=>{
+        setValue(e.target.value)
+    }, 1000)
+
+    useEffect(()=>{ 
+        handleSubmit()
+    },[value])
+
+   
+
+    
+
     return (
-        <form onSubmit={handleSubmit}>
+        <form>
             <label
                 htmlFor="default-search"
                 className="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white"
@@ -28,6 +44,8 @@ const SearchBar = ({onSubmit, placeholder}) => {
                     id="default-search"
                     className="block w-full p-3 text-sm text-gray-900 border rounded-full border-secondary-theme bg-primary-bg-color ps-4 focus:ring-secondary-theme"
                     placeholder={placeholder}
+                    onChange={handleChange}
+                    value={value}
                     required
                 />
                 <button

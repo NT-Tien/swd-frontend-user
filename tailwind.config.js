@@ -10,6 +10,7 @@ export default {
     theme: {
         extend: {
             colors: {
+                'cart-item-color': '#ece7df',
                 'primary-bg-color': '#f4f0ea',
                 'primary-theme': '#ffa500',
                 'secondary-theme': '#4d3d30',

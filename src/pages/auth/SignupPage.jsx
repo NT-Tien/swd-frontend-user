@@ -6,16 +6,29 @@ import EyeIcon from '../../assets/EyeIcon'
 import { useGSAP } from '@gsap/react'
 import gsap from 'gsap/gsap-core'
 import { horizontalLoop } from '../../utils/GSAPUtils'
+import UseDebounce from '../../hooks/UseDebounce'
+import { registerAccount } from '../../utils/api'
 
 const SignupPage = () => {
     // state
 
     const [showPassword, setShowPassword] = useState(false)
+    const [showPasswordRedo, setShowPasswordRedo] = useState(false)
+    const [passwordRedoValue, setPasswordRedoValue] = useState('')
+    const [formValue, setFormValue] = useState({
+        username: '',
+        password: '',
+        phone: '',
+        email: '',
+    })
+
+    const [errorMsg, setErrorMsg] = useState('')
 
     // ref
     const textLoopRef = useRef()
     const containerRef = useRef()
     const passwordInputRef = useRef()
+    const passwordRedoInputRef = useRef()
 
     //
 
@@ -36,7 +49,7 @@ const SignupPage = () => {
             })
             const loop2 = horizontalLoop('.textLower', {
                 paused: false,
-                repeat:  -1,
+                repeat: -1,
                 speed: 0.5,
                 paddingRight: 20,
                 reversed: true,
@@ -55,13 +68,50 @@ const SignupPage = () => {
             passwordInputRef.current.type = 'password'
         }
     }
+
+    const handleToggleShowPasswordRedo = () => {
+        setShowPasswordRedo((prev) => !prev)
+        if (!showPasswordRedo) {
+            passwordRedoInputRef.current.type = 'text'
+        } else {
+            passwordRedoInputRef.current.type = 'password'
+        }
+    }
+
+    const handleFormSubmit = (e) => {
+        e.preventDefault()
+
+        if (formValue.password !== passwordRedoValue) {
+            setErrorMsg('Passwords do not match!!')
+            return
+        }
+        setErrorMsg('')
+
+        console.log('Form submitted:', formValue)
+
+        registerAccount(formValue)
+
+        setFormValue({
+            username: '',
+            email: '',
+            password: '',
+            phone: '',
+        })
+        setPasswordRedoValue('')
+    }
+
+    const handleInputChange = (e) => {
+        const { name, value } = e.target
+        setFormValue({ ...formValue, [name]: value })
+    }
+
     return (
-        <section className="w-full flex-center h-svh min-h-svh ">
+        <section className="flex-center h-svh min-h-svh w-full ">
             <div
                 ref={textLoopRef}
                 className="absolute inset-0 z-0 flex flex-col text-secondary-theme"
             >
-                <div className="select-none flex h-fit w-fit gap-20 text-nowrap text-[50svh] uppercase ">
+                <div className="flex h-fit w-fit select-none gap-20 text-nowrap text-[50svh] uppercase ">
                     <span className="textUpper leading-none [word-spacing:-100px]">
                         sign up
                     </span>
@@ -69,7 +119,7 @@ const SignupPage = () => {
                         sign up
                     </span>
                 </div>
-                <div className="select-none flex  h-fit w-fit gap-20 text-nowrap text-[50svh] uppercase ">
+                <div className="flex h-fit  w-fit select-none gap-20 text-nowrap text-[50svh] uppercase ">
                     <span className="textLower leading-none [word-spacing:-100px]">
                         sign up
                     </span>
@@ -81,45 +131,116 @@ const SignupPage = () => {
 
             <div
                 ref={containerRef}
-                className="relative flex flex-col w-1/2 gap-2 p-5 overflow-hidden border rounded-sm shadow-lg flex-center h-3/4 min-w-max border-secondary-theme/70 bg-secondary-bg-color"
+                className="flex-center relative flex min-h-fit w-1/2 min-w-[500px] flex-col  gap-2 rounded-sm border border-secondary-theme/70  bg-secondary-bg-color  p-5 shadow-lg"
             >
-                <h1 className="absolute left-5 top-3">efurniture</h1>
                 <h1 className="text-4xl font-medium">Sign Up</h1>
 
-                <form className="flex-col w-2/3 gap-2 flex-center">
+                <form
+                    onSubmit={handleFormSubmit}
+                    className="flex w-2/3 flex-col gap-2"
+                >
+                    <label htmlFor="email">Email</label>
                     <input
-                        type="text"
+                        onChange={handleInputChange}
+                        type="email"
+                        id="email"
+                        name="email"
+                        value={formValue.email}
                         placeholder="Email"
-                        className="block w-full p-3 text-sm text-gray-900 border rounded-full border-secondary-theme bg-primary-bg-color ps-4 focus:ring-secondary-theme"
+                        className="block w-full rounded-full border border-secondary-theme bg-primary-bg-color p-3 ps-4 text-sm text-gray-900 focus:ring-secondary-theme"
                         required
                     />
+                    {/* phone */}
+                    <label htmlFor="phone">Phone number</label>
+                    <input
+                        onChange={handleInputChange}
+                        type="tel"
+                        size="20"
+                        minLength="9"
+                        maxLength="12"
+                        id="phone"
+                        name="phone"
+                        value={formValue.phone}
+                        placeholder="Phone number"
+                        className="block w-full rounded-full border border-secondary-theme bg-primary-bg-color p-3 ps-4 text-sm text-gray-900 focus:ring-secondary-theme"
+                        required
+                    />
+                    {/* UserName */}
+                    <label htmlFor="username">User name</label>
+                    <input
+                        onChange={handleInputChange}
+                        type="text"
+                        id="username"
+                        name="username"
+                        value={formValue.username}
+                        placeholder="User name"
+                        required
+                        className="block w-full rounded-full border border-secondary-theme bg-primary-bg-color p-3 ps-4 text-sm text-gray-900 focus:ring-secondary-theme"
+                    />
+                    {/* password */}
+                    <label htmlFor="password">Password</label>
                     <div className="relative w-full">
                         <input
                             ref={passwordInputRef}
+                            onChange={handleInputChange}
+                            name="password"
+                            id="password"
                             type="password"
                             placeholder="Password"
+                            value={formValue.password}
                             required
-                            className="block w-full p-3 text-sm text-gray-900 border rounded-full border-secondary-theme bg-primary-bg-color ps-4 focus:ring-secondary-theme"
+                            className="block w-full rounded-full border border-secondary-theme bg-primary-bg-color p-3 ps-4 text-sm text-gray-900 focus:ring-secondary-theme"
                         />
                         <button
                             type="button"
                             onClick={handleToggleShowPassword}
-                            className="absolute top-0 bottom-0 right-0 m-2 transition-all text-secondary-theme"
+                            className="absolute bottom-0 right-0 top-0 m-2 text-secondary-theme transition-all"
                         >
                             {showPassword ? <EyeSlashIcon /> : <EyeIcon />}
                         </button>
                     </div>
-                    <MainActionButton type="submit" className="w-52 min-w-max">
+                    <div className="relative w-full">
+                        <input
+                            ref={passwordRedoInputRef}
+                            onChange={(e) =>
+                                setPasswordRedoValue(e.target.value)
+                            }
+                            name="passwordRedo"
+                            type="password"
+                            placeholder="Confirm password"
+                            value={passwordRedoValue}
+                            required
+                            className="block w-full rounded-full border border-secondary-theme bg-primary-bg-color p-3 ps-4 text-sm text-gray-900 focus:ring-secondary-theme"
+                        />
+                        <button
+                            type="button"
+                            onClick={handleToggleShowPasswordRedo}
+                            className="absolute bottom-0 right-0 top-0 m-2 text-secondary-theme transition-all"
+                        >
+                            {showPasswordRedo ? <EyeSlashIcon /> : <EyeIcon />}
+                        </button>
+                    </div>
+                    {/*  */}
+
+                    {/* error msg */}
+                    <div className="font-medium text-red-600">
+                        {errorMsg && errorMsg.trim() !== '' && errorMsg}
+                    </div>
+
+                    <MainActionButton
+                        type="submit"
+                        className="w-52 min-w-max self-center"
+                    >
                         Sign up
                     </MainActionButton>
-                    <span className="w-full divider text-secondary-theme/70">
+                    <span className="divider w-full text-secondary-theme/70">
                         or
                     </span>
                 </form>
 
                 <button
                     type="button"
-                    className="flex items-center justify-center gap-4 px-4 py-2 font-semibold transition-colors rounded-full shadow-md bg-neutral-50 text-secondary-theme hover:bg-primary-bg-color focus:bg-neutral-200"
+                    className="flex items-center justify-center gap-4 rounded-full bg-neutral-50 px-4 py-2 font-semibold text-secondary-theme shadow-md transition-colors hover:bg-primary-bg-color focus:bg-neutral-200"
                 >
                     Sign Up with Google
                     <span className="text-xl">

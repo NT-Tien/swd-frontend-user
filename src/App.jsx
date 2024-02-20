@@ -9,16 +9,17 @@ import {
     HomePage,
     LoginPage,
     NotFound,
+    ProductDetailsPage,
     ShopPage,
     ShoppingCartPage,
     SignupPage,
     UserLayout,
+    WishListPage,
 } from './pages'
 
 function App() {
     return (
         <>
-            
             <main className="relative min-w-full min-h-full overflow-hidden app ">
                 <Routes>
                     <Route path="/" element={<UserLayout />}>
@@ -29,11 +30,16 @@ function App() {
                         <Route path="/about-us" element={<AboutUsPage />} />
                         <Route path="/booking" element={<BookingPage />} />
                         <Route path="/login" element={<LoginPage />} />
+
                         <Route path="/signup" element={<SignupPage />} />
                         <Route path="/checkout" element={<CheckOutPage />} />
+                        <Route path="/wishlist" element={<WishListPage />} />
+                        <Route
+                            path="/productDetails/:name"
+                            element={<ProductDetailsPage />}
+                        />
+                        <Route path="/*" element={<NotFound />} />
                     </Route>
-
-                    <Route path="/*" element={<NotFound />} />
                 </Routes>
             </main>
         </>

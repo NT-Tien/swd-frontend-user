@@ -11,10 +11,6 @@ body {
 	@apply bg-primary-bg-color
 }
 
-body {
-	overflow: auto;
-
-}
 
 div#root {
 	height: 100%;
