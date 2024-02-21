@@ -24,11 +24,11 @@ const CartItem = ({ removeItemFunc, addItemFunc, name, price, quantity, category
     }
 
     return (
-        <div onClick={handleOnClick} className={clsx("flex h-32 w-full justify-stretch gap-2 bg-cart-item-color p-2 transition-all", onClick && 'hover:shadow-lg')}>
-            <div className="aspect-square overflow-hidden bg-secondary-bg-color">
-                <img src={imgUrl} />
+        <div onClick={handleOnClick} className={clsx("flex h-32 w-full justify-stretch gap-2 bg-cart-item-color p-2 transition-all", onClick && 'hover:shadow-lg hover:scale-[1.01]')}>
+            <div className="overflow-hidden aspect-square bg-secondary-bg-color">
+                <img src={imgUrl} className='object-cover w-full h-full'/>
             </div>
-            <div className="flex h-full flex-1 flex-col justify-between">
+            <div className="flex flex-col justify-between flex-1 h-full">
                 <div className="flex justify-between ">
                     <h5 className="text-xl font-light">
                         {name}

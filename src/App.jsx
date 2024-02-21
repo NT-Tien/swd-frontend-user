@@ -14,10 +14,18 @@ import {
     ShoppingCartPage,
     SignupPage,
     UserLayout,
+    VerifyBookingPage,
     WishListPage,
 } from './pages'
+import { useEffect } from 'react'
 
 function App() {
+
+    useEffect(()=>{
+        const user = sessionStorage.getItem('user')
+        console.log(user)
+    },[])
+
     return (
         <>
             <main className="relative min-w-full min-h-full overflow-hidden app ">
@@ -29,6 +37,7 @@ function App() {
                         <Route path="/contact" element={<ContactPage />} />
                         <Route path="/about-us" element={<AboutUsPage />} />
                         <Route path="/booking" element={<BookingPage />} />
+                        <Route path="/verifyBooking" element={<VerifyBookingPage />} />
                         <Route path="/login" element={<LoginPage />} />
 
                         <Route path="/signup" element={<SignupPage />} />

@@ -198,7 +198,6 @@ const PageHeader = () => {
                         </button>
 
                         <div className="gap-6 flex-center">
-                            <MagnifyingGlassIcon />
 
                             <SettingModal />
                             <button

@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { ShoppingCartIcon } from '../../assets'
 import CartItem from '../../components/commons/CartItem'
-import { MainActionButton } from '../../components'
+import { MainActionButton, PageBanner } from '../../components'
 
 const CheckOutPage = () => {
     const [formValue, setFormValue] = useState({
@@ -31,9 +31,7 @@ const CheckOutPage = () => {
 
     return (
         <section className="px-20 min-h-svh">
-            <div className="mb-4 font-light uppercase text-9xl text-secondary-theme">
-                checkout
-            </div>
+            <PageBanner title='checkout'/>
             <div className="flex flex-col w-full h-full gap-4 border-t rounded-sm shadow-xl min-h-max border-t-neutral-800/10 md:flex-row ">
                 {/* items */}
                 <div className="flex flex-col flex-1 gap-4 p-6 shadow-lg">
@@ -56,7 +54,7 @@ const CheckOutPage = () => {
                             <span>$420</span>
                         </div>
 
-                        <hr class="h-px  border-0 bg-gray-300 " />
+                        <hr className="h-px bg-gray-300 border-0 " />
 
                         <div className="flex justify-between text-neutral-500 ">
                             <span className="uppercase ">shipping</span>

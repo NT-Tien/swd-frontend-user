@@ -17,7 +17,7 @@ const SearchBar = ({onSubmit, placeholder}) => {
 
     const handleChange = UseDebounce((e)=>{
         setValue(e.target.value)
-    }, 1000)
+    }, 600)
 
     useEffect(()=>{ 
         handleSubmit()
@@ -45,7 +45,6 @@ const SearchBar = ({onSubmit, placeholder}) => {
                     className="block w-full p-3 text-sm text-gray-900 border rounded-full border-secondary-theme bg-primary-bg-color ps-4 focus:ring-secondary-theme"
                     placeholder={placeholder}
                     onChange={handleChange}
-                    value={value}
                     required
                 />
                 <button

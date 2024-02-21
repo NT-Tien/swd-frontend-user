@@ -3,6 +3,7 @@ import {
     ActionButton,
     CartItem,
     DropdownSelection,
+    MainActionButton,
     PageBanner,
     ProductCard,
 } from '../../components'
@@ -18,9 +19,15 @@ import {
     useQueryClient,
     keepPreviousData,
 } from '@tanstack/react-query'
-import { addProductToCart, addProductToWishlist, fetchCategories, fetchProducts } from '../../utils/api'
+import {
+    addProductToCart,
+    addProductToWishlist,
+    fetchCategories,
+    fetchProducts,
+} from '../../utils/api'
 import clsx from 'clsx'
 import { useNavigate } from 'react-router-dom'
+import { DEFAULT_API_URL, GET_PRODUCT_IMAGE } from '../../config/api'
 
 const ShopPage = () => {
     const queryClient = useQueryClient()
@@ -28,8 +35,9 @@ const ShopPage = () => {
 
     const [page, setPage] = useState(1)
     const [isCardDisplay, setIsCardDisplay] = useState(true)
+    const [isSearching, setIsSearching] = useState(true)
 
-    const { status, data, error} = useQuery({
+    const { status, data, error } = useQuery({
         queryKey: ['products', page],
         queryFn: () => fetchProducts(page),
         placeholderData: keepPreviousData,
@@ -49,7 +57,6 @@ const ShopPage = () => {
         staleTime: 3600000,
     })
 
-
     // func
 
     const handlePageDecrease = () => {
@@ -62,15 +69,13 @@ const ShopPage = () => {
     }
 
     const handleAddToCart = (productId) => {
-        if(!user) return
+        if (!user) return
         addProductToCart(productId, user.accessToken)
-        console.log(productId)
     }
 
     const handleAddWishList = (productId) => {
-        if(!user) return
+        if (!user) return
         addProductToWishlist(productId, user.accessToken)
-        console.log(productId)
     }
 
     const handleItemClick = (name) => {
@@ -78,13 +83,19 @@ const ShopPage = () => {
     }
 
     const handleSearch = (name) => {
-        data
+        if (name.trim() === '') {
+            setIsSearching(false)
+            return
+        }
+
+        setIsSearching(true)
     }
 
     return (
-        <>
+        <div className="flex flex-col px-20 ">
             <PageBanner title="Shop" />
-            <section className="flex gap-4 px-20 py-10 min-h-svh">
+
+            <section className="flex gap-4 min-h-svh">
                 {/* dsplay */}
                 <div className="flex flex-col flex-1 h-full gap-5">
                     {/* buttons */}
@@ -113,91 +124,125 @@ const ShopPage = () => {
                     </div>
 
                     {/* items */}
-
-                    <div
-                        className={clsx(
-                            'flex h-full min-h-[75svh] flex-1 gap-4',
-                            isCardDisplay ? 'flex-wrap' : 'flex-col'
-                        )}
-                    >
-                        {isCardDisplay ? (
-                            <>
-                                {status === 'pending' ? (
-                                    <div>Loading...</div>
-                                ) : status === 'error' ? (
-                                    <div>Error: {error.message}</div>
+                    {isSearching ? (
+                        <div className="flex-center h-full min-h-[50svh] w-full flex-col">
+                            <div className='flex-col text-2xl flex-center'>
+                                <span>OOPS!</span>
+                                <span>THERE ARE NO RESULTS.</span>
+                            </div>
+                            <MainActionButton
+                                className="mt-4"
+                                onClick={() => setIsSearching(false)}
+                            >
+                                Shop other items
+                            </MainActionButton>
+                        </div>
+                    ) : (
+                        <>
+                            <div
+                                className={clsx(
+                                    'flex h-full min-h-[75svh] flex-1 gap-4',
+                                    isCardDisplay ? 'flex-wrap' : 'flex-col'
+                                )}
+                            >
+                                {isCardDisplay ? (
+                                    <>
+                                        {status === 'pending' ? (
+                                            <div>Loading...</div>
+                                        ) : status === 'error' ? (
+                                            <div>Error: {error.message}</div>
+                                        ) : (
+                                            <>
+                                                {data[0].map((product) => (
+                                                    <ProductCard
+                                                        key={product.id}
+                                                        imgUrl={
+                                                            DEFAULT_API_URL +
+                                                            GET_PRODUCT_IMAGE +
+                                                            product.images[0].replace(
+                                                                'image/',
+                                                                ''
+                                                            )
+                                                        }
+                                                        name={product.name}
+                                                        price={
+                                                            product
+                                                                .optionProducts[0]
+                                                                .price
+                                                        }
+                                                        onClick={() =>
+                                                            handleItemClick(
+                                                                product.name
+                                                            )
+                                                        }
+                                                        addItemFunc={() =>
+                                                            handleAddToCart(
+                                                                product.id
+                                                            )
+                                                        }
+                                                        addWishListFunc={() => {
+                                                            handleAddWishList(
+                                                                product.id
+                                                            )
+                                                        }}
+                                                    />
+                                                ))}
+                                            </>
+                                        )}
+                                    </>
                                 ) : (
                                     <>
-                                        {data[0].map((product) => (
-                                            <div
-                                                className="flex-center"
-                                                key={product.id}
-                                            >
-                                                <ProductCard
-                                                    imgUrl={product.images}
-                                                    name={product.name}
-                                                    price={
-                                                        product
-                                                            .optionProducts[0]
-                                                            .price
-                                                    }
-                                                    onClick={() =>
-                                                        handleItemClick(
-                                                            product.name
-                                                        )
-                                                    }
-                                                    addItemFunc={() =>
-                                                        handleAddToCart(product.id)
-                                                    }
-                                                    addWishListFunc={() => {
-                                                        handleAddWishList(product.id)
-                                                    }}
-                                                />
-                                            </div>
-                                        ))}
+                                        {status === 'pending' ? (
+                                            <div>Loading...</div>
+                                        ) : status === 'error' ? (
+                                            <div>Error: {error.message}</div>
+                                        ) : (
+                                            <>
+                                                {data[0].map((product) => (
+                                                    <div
+                                                        className="w-full flex-center"
+                                                        key={product.id}
+                                                    >
+                                                        <CartItem
+                                                            imgUrl={
+                                                                DEFAULT_API_URL +
+                                                                GET_PRODUCT_IMAGE +
+                                                                product.images[0].replace(
+                                                                    'image/',
+                                                                    ''
+                                                                )
+                                                            }
+                                                            name={product.name}
+                                                            category={
+                                                                product
+                                                                    .category_id
+                                                                    .name
+                                                            }
+                                                            price={
+                                                                product
+                                                                    .optionProducts[0]
+                                                                    .price
+                                                            }
+                                                            onClick={() =>
+                                                                handleItemClick(
+                                                                    product.name
+                                                                )
+                                                            }
+                                                            addItemFunc={() =>
+                                                                handleAddToCart(
+                                                                    product.id
+                                                                )
+                                                            }
+                                                        />
+                                                    </div>
+                                                ))}
+                                            </>
+                                        )}
                                     </>
                                 )}
-                            </>
-                        ) : (
-                            <>
-                                {status === 'pending' ? (
-                                    <div>Loading...</div>
-                                ) : status === 'error' ? (
-                                    <div>Error: {error.message}</div>
-                                ) : (
-                                    <>
-                                        {data[0].map((product) => (
-                                            <div
-                                                className="w-full flex-center"
-                                                key={product.id}
-                                            >
-                                                <CartItem
-                                                    imgUrl={product.images[0]}
-                                                    name={product.name}
-                                                    category={
-                                                        product.category_id.name
-                                                    }
-                                                    price={
-                                                        product
-                                                            .optionProducts[0]
-                                                            .price
-                                                    }
-                                                    onClick={() =>
-                                                        handleItemClick(
-                                                            product.name
-                                                        )
-                                                    }
-                                                    addItemFunc={() =>
-                                                        handleAddToCart(product.id)
-                                                    }
-                                                />
-                                            </div>
-                                        ))}
-                                    </>
-                                )}
-                            </>
-                        )}
-                    </div>
+                            </div>
+                        </>
+                    )}
 
                     <div className="flex items-end self-end justify-center gap-4 justify-self-end ">
                         <ActionButton
@@ -208,7 +253,7 @@ const ShopPage = () => {
                         </ActionButton>
                         <span>page: {page}</span>
                         <ActionButton
-                            disabled={data && (data[1] <= page*9)}
+                            disabled={data && data[1] <= page * 9}
                             onClick={handlePageIncrease}
                         >
                             <ArrowRightIcon />
@@ -219,7 +264,10 @@ const ShopPage = () => {
                 {/* right category bar */}
                 <div className="flex flex-col h-full px-1 min-w-80 ">
                     <div className="w-full mb-4">
-                        <SearchBar onSubmit={handleSearch} placeholder="Search..." />
+                        <SearchBar
+                            onSubmit={handleSearch}
+                            placeholder="Search..."
+                        />
                     </div>
                     <h1 className="mb-2 text-xl font-semibold">Category</h1>
                     <div className="flex flex-wrap gap-2 divide-secondary-theme/40">
@@ -231,7 +279,7 @@ const ShopPage = () => {
                             <>
                                 {categoryData[0].map((cat, i) => (
                                     <div className="flex " key={cat.id}>
-                                        <ActionButton className="px-2 py-1 rounded-full">
+                                        <ActionButton className="px-2 py-1 rounded-full min-w-12">
                                             {cat.name}
                                         </ActionButton>
                                     </div>
@@ -241,7 +289,7 @@ const ShopPage = () => {
                     </div>
                 </div>
             </section>
-        </>
+        </div>
     )
 }
 

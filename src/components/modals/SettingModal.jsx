@@ -60,7 +60,7 @@ const SettingModal = () => {
                 leaveFrom="opacity-100 translate-y-0"
                 leaveTo="opacity-0 translate-y-1"
             >
-                <Popover.Panel className="absolute right-0 z-10 top-14">
+                <Popover.Panel className="absolute z-10 right-2 top-14">
                     <div className="flex flex-col items-start justify-center px-6 py-3 text-lg border shadow-lg border-secondary-theme bg-primary-bg-color">
                         {user ? (
                             <>

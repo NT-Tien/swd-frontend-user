@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useQuery, keepPreviousData } from '@tanstack/react-query'
 import { fetchCartItems, removeProductFromCart } from '../../utils/api'
-import { MainActionLink } from '../../components'
+import { MainActionLink, PageBanner } from '../../components'
 
 const ShoppingCartPage = () => {
     const [page, setPage] = useState(1)
@@ -27,9 +27,7 @@ const ShoppingCartPage = () => {
 
     return (
         <section className="px-20 min-h-svh">
-            <div className="mb-4 font-light uppercase text-9xl text-secondary-theme">
-                cart
-            </div>
+            <PageBanner title='cart'/>
 
             {status === 'pending' ? (
                 <>

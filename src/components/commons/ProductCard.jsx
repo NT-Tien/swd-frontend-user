@@ -1,7 +1,8 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import MainActionButton from './buttons/MainActionButton'
 import ActionButton from './buttons/ActionButton'
 import { HeartIcon } from '../../assets'
+import { DEFAULT_API_URL } from '../../config/api'
 
 const ProductCard = ({
     imgUrl,
@@ -12,6 +13,7 @@ const ProductCard = ({
     addItemFunc,
     addWishListFunc,
 }) => {
+
     const handleAdd = () => {
         if (addItemFunc) {
             addItemFunc()
@@ -33,13 +35,13 @@ const ProductCard = ({
     return (
         <div
             onClick={handleClick}
-            className={`${className} relative flex aspect-[5/7] h-fit w-80 min-w-max max-w-96 flex-col items-center justify-between overflow-hidden rounded-sm bg-secondary-bg-color transition-all duration-300 hover:shadow-xl`}
+            className={`${className} relative flex aspect-[5/7] h-fit w-80 min-w-80 max-w-96 flex-col items-center justify-between overflow-hidden rounded-sm bg-secondary-bg-color transition-all duration-300 hover:shadow-xl hover:scale-[1.01]`}
         >
             <div className="relative w-full h-full ">
                 <img
                     src={imgUrl}
                     alt={name}
-                    className="absolute bottom-0 object-cover w-full h-auto"
+                    className="absolute bottom-0 object-cover w-full h-full"
                 />
                 {addWishListFunc && (
                     <ActionButton
@@ -51,7 +53,7 @@ const ProductCard = ({
                 )}
             </div>
             {/* details */}
-            <div className="flex flex-col w-full gap-4 px-5 py-2 ">
+            <div className="flex flex-col w-full gap-4 py-2 pl-4 ">
                 <span className="w-full text-xl font-light leading-none">
                     {name} &#11834;
                 </span>
@@ -60,7 +62,7 @@ const ProductCard = ({
                     {addItemFunc ? (
                         <>
                             <MainActionButton
-                                className="flex-1"
+                                className="flex-1 gap-0 w-max"
                                 onClick={handleAdd}
                             >
                                 Add to Cart

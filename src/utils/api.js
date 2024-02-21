@@ -1,12 +1,12 @@
 import axios from 'axios'
-import { DEFAULT_API_URL } from '../config/api'
-
-const GET_PRODUCTS_URL = 'product/get-all/' // + size/page
-const GET_PRODUCT_BY_NAME_URL = 'product/get-by-name/' // + name
-const GET_PRODUCT_OPTION_BY_ID_URL = 'option-products/get-all/' // + product_id
-const GET_CART_ITEM_URL = 'cart/get-all/' // + size/page
-
-const GET_CATEGORIES_URL = 'category/get-all' // NO PRAM
+import {
+    DEFAULT_API_URL,
+    GET_CART_ITEM_URL,
+    GET_CATEGORIES_URL,
+    GET_PRODUCTS_URL,
+    GET_PRODUCT_BY_NAME_URL,
+    GET_PRODUCT_OPTION_BY_ID_URL,
+} from '../config/api'
 
 export async function fetchProducts(page = 1, size = 9) {
     const { data } = await axios.get(
@@ -28,8 +28,6 @@ export async function fetchProductOptionById(id) {
     )
     return data.data
 }
-
-
 
 export async function fetchCategories() {
     const { data } = await axios.get(DEFAULT_API_URL + GET_CATEGORIES_URL)
@@ -71,18 +69,15 @@ export async function bookAppointment({ name, email, phone, time }) {
 }
 
 export async function verifyAppointment(code) {
-    const result = axios
-        .post(DEFAULT_API_URL + 'booking-visit/create/verify/' + code)
-        .then((res) => {
-            console.log(res)
-        })
-        .catch((err) => {})
-    return result
+    try {
+        const result = await axios.post(
+            DEFAULT_API_URL + 'booking-visit/create/verify/' + code
+        )
+        return result.data.data
+    } catch (e) {
+        console.log(e)
+    }
 }
-
-
-
-
 
 export async function fetchCartItems(size = 9, page = 1, token) {
     if (!user) return
@@ -100,7 +95,7 @@ export async function fetchCartItems(size = 9, page = 1, token) {
 
 export async function addProductToCart(id, token) {
     const result = axios
-        .put(DEFAULT_API_URL + '/cart/add-to-cart/' + id, {
+        .put(DEFAULT_API_URL + 'cart/add-to-cart/' + id, {
             headers: {
                 Authorization: 'Bearer ' + token,
             },
@@ -116,7 +111,7 @@ export async function addProductToCart(id, token) {
 
 export async function removeProductFromCart(id, token) {
     const result = axios
-        .delete(DEFAULT_API_URL + '/cart/delete/' + id, {
+        .delete(DEFAULT_API_URL + 'cart/delete/' + id, {
             headers: {
                 Authorization: 'Bearer ' + token,
             },
@@ -132,7 +127,7 @@ export async function removeProductFromCart(id, token) {
 
 export async function addProductToWishlist(id, token) {
     const result = axios
-        .put(DEFAULT_API_URL + '/wishlist/add-to-wishlist/' + id, {
+        .put(DEFAULT_API_URL + 'wishlist/add-to-wishlist/' + id, {
             headers: {
                 Authorization: 'Bearer ' + token,
             },
@@ -148,7 +143,7 @@ export async function addProductToWishlist(id, token) {
 
 export async function removeProductFromWishlist(id, token) {
     const result = axios
-        .delete(DEFAULT_API_URL + '/wishlist/delete/' + id, {
+        .delete(DEFAULT_API_URL + 'wishlist/delete/' + id, {
             headers: {
                 Authorization: 'Bearer ' + token,
             },
@@ -161,3 +156,19 @@ export async function removeProductFromWishlist(id, token) {
         })
     return result
 }
+
+// export async function getProductImage(id) {
+//     return axios
+//         .get(DEFAULT_API_URL + GET_PRODUCT_IMAGE + id)
+//         .then((response) => {
+//             let image = btoa(
+//                 new Uint8Array(response.data).reduce(
+//                     (data, byte) => data + String.fromCharCode(byte),
+//                     ''
+//                 )
+//             )
+//             return `data:${response.headers[
+//                 'content-type'
+//             ].toLowerCase()};base64,${image}`
+//         })
+// }

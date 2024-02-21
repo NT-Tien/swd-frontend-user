@@ -12,4 +12,5 @@ export {default as CheckOutPage} from './checkOutPage/CheckOutPage'
 export {default as ProductDetailsPage} from './productDetailsPage/ProductDetailsPage'
 export {default as ScrollToTop} from './ScrollToTop'
 export {default as WishListPage} from './wishListPage/WishListPage'
+export {default as VerifyBookingPage} from './bookingPage/VerifyBookingPage'
 

@@ -1,5 +1,5 @@
 import React from 'react'
-import { CartItem, MainActionLink } from '../../components'
+import { CartItem, MainActionLink, PageBanner } from '../../components'
 
 const WishListPage = () => {
     const addItemToCart = () => {
@@ -14,9 +14,7 @@ const WishListPage = () => {
 
     return (
         <section className="px-20 min-h-svh">
-            <div className="mb-4 font-light uppercase text-9xl text-secondary-theme">
-                wishlist
-            </div>
+            <PageBanner title='Wishlist'/>
 
             <CartItem
                 removeItemFunc={() => removeItemFromList(1)}

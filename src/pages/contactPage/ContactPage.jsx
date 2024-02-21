@@ -65,7 +65,7 @@ const ContactPage = () => {
                 </div>
                 <div
                     ref={containerRef}
-                    className="relative flex w-5/6 overflow-hidden bg-transparent border rounded-sm shadow-lg h-3/4 min-h-min min-w-min border-secondary-theme/70"
+                    className="relative flex w-5/6 bg-transparent border rounded-sm shadow-lg h-3/4 min-h-max min-w-min border-secondary-theme/70"
                 >
                     <div className="relative flex flex-col w-1/2 h-full gap-10 p-5 bg-transparent border-[20px] border-secondary-bg-color overflow-hidden">
                         <div className='absolute inset-0 w-full h-full bg-black/40 backdrop-blur-md'></div>
@@ -73,7 +73,7 @@ const ContactPage = () => {
                             get in touch
                         </p>
                     </div>
-                    <div className="relative flex flex-col w-1/2 h-full gap-8 p-5 bg-secondary-bg-color">
+                    <div className="relative flex flex-col w-1/2 h-full gap-6 p-4 bg-secondary-bg-color">
                         <div className="flex flex-col gap-2">
                             <h5 className="text-xl font-medium">
                                 Contact Info

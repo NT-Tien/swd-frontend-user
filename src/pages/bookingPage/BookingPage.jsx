@@ -1,7 +1,7 @@
 import React, { Fragment, useState } from 'react'
 import Calendar from 'react-calendar'
 import './Calendar.css'
-import { Dialog, Listbox, Transition } from '@headlessui/react'
+import {  Listbox, Transition } from '@headlessui/react'
 import {
     addMinutes,
     eachHourOfInterval,
@@ -12,10 +12,12 @@ import {
     setHours,
 } from 'date-fns'
 import { ChevronDown } from '../../assets'
-import { MainActionButton } from '../../components/index'
-import { bookAppointment, verifyAppointment } from '../../utils/api'
+import { MainActionButton, PageBanner } from '../../components/index'
+import { bookAppointment } from '../../utils/api'
+import { useNavigate } from 'react-router-dom'
 
 const BookingPage = () => {
+    const navigate = useNavigate()
     const [chosenDate, setChosenDate] = useState(null)
     const [dateTime, setDateTime] = useState(null)
     const [errorMsg, setErrorMsg] = useState('')
@@ -25,11 +27,9 @@ const BookingPage = () => {
         email: '',
     })
 
-    const [confirmModal, setConfirmModal] = useState(false)
-    const [verifyCode, setVerifyCode] = useState('')
-
     const roundedDateTime = (time, interval) => {
         const timeUntilNextInterval = interval - (getMinutes(time) % interval)
+
         return addMinutes(time, timeUntilNextInterval)
     }
 
@@ -43,7 +43,7 @@ const BookingPage = () => {
 
             const endWorkHour = setHours(roundedDate, 17)
 
-            if (beginWorkHour < endWorkHour) {
+            if (beginWorkHour > endWorkHour) {
                 return null
             }
 
@@ -84,7 +84,7 @@ const BookingPage = () => {
 
         setErrorMsg('')
 
-        const time = getUnixTime(dateTime)*1000
+        const time = getUnixTime(dateTime) * 1000
 
         console.log(time)
         console.log(dateTime)
@@ -97,41 +97,23 @@ const BookingPage = () => {
             email: '',
         })
 
-        setConfirmModal(true)
+        navigate('/verifyBooking', {replace: true})
     }
 
-    const handleVerifyCode = (e) => {
-        e.preventDefault()
-
-        if(verifyCode.trim() === '') return
-
-        try {
-            verifyAppointment(verifyCode)
-            
-        } catch (error) {
-            errorMsg('Incorrect code!')
-        }
-        setErrorMsg('')
-        closeModal()
-    }
-
-    const closeModal = () => {
-        setConfirmModal(false)
-    }
+    
 
     const times = chosenDate && getTimes()
 
     return (
         <>
             <section className="mt-4 flex min-h-[90svh] flex-col gap-4 md:px-20">
-                <h1 className="font-light uppercase text-9xl text-secondary-theme">
-                    Booking
-                </h1>
+                <PageBanner title="Booking" />
                 <div className="flex gap-10">
                     <Calendar
                         className="flex-1 h-max min-w-min"
                         value={chosenDate}
-                        onClickDay={(date) => onClickDay(date)}
+                        onChange={onClickDay}
+                        // onClickDay={(date) => onClickDay(date)}
                         view="month"
                         minDate={new Date()}
                     />
@@ -266,7 +248,7 @@ const BookingPage = () => {
                                     required
                                     className="block p-3 text-sm text-gray-900 border rounded-full min-w-96 border-secondary-theme bg-primary-bg-color ps-4 focus:ring-secondary-theme"
                                 />
-                                
+
                                 <MainActionButton
                                     type="submit"
                                     className="mt-4 max-w-96"
@@ -281,81 +263,6 @@ const BookingPage = () => {
                     </div>
                 </div>
             </section>
-
-
-            <Transition appear show={confirmModal} as={Fragment}>
-                <Dialog as="div" className="relative z-30" onClose={()=>{}}>
-                    <Transition.Child
-                        as={Fragment}
-                        enter="ease-out duration-300"
-                        enterFrom="opacity-0"
-                        enterTo="opacity-100"
-                        leave="ease-in duration-200"
-                        leaveFrom="opacity-100"
-                        leaveTo="opacity-0"
-                    >
-                        <div className="fixed inset-0 bg-black/25" />
-                    </Transition.Child>
-
-                    <div className="fixed inset-0 overflow-y-auto">
-                        <div className="flex items-center justify-center min-h-full p-4 text-center">
-                            <Transition.Child
-                                as={Fragment}
-                                enter="ease-out duration-300"
-                                enterFrom="opacity-0 scale-95"
-                                enterTo="opacity-100 scale-100"
-                                leave="ease-in duration-200"
-                                leaveFrom="opacity-100 scale-100"
-                                leaveTo="opacity-0 scale-95"
-                            >
-                                <Dialog.Panel className="flex flex-col justify-center w-full max-w-md p-6 overflow-hidden transition-all transform bg-white shadow-xl min-w-max rounded-2xl">
-                                    <Dialog.Title
-                                        as="h3"
-                                        className="text-lg font-medium leading-6 text-gray-900 underline"
-                                    >
-                                        Confirm booking appointment
-                                    </Dialog.Title>
-
-                                    <form
-                                        onSubmit={handleVerifyCode}
-                                        className="flex flex-col gap-2 mt-2"
-                                    >
-                                        <label
-                                            htmlFor="code"
-                                            className="text-sm text-gray-500"
-                                        >
-                                            Please enter a 6-digit code sent to
-                                            your email here.
-                                        </label>
-                                        <input
-                                            type="tel"
-                                            onChange={(e) =>
-                                                setVerifyCode(e.target.value)
-                                            }
-                                            value={verifyCode}
-                                            minLength={6}
-                                            maxLength={6}
-                                            name="code"
-                                            placeholder="Verify code..."
-                                            className="block w-full p-3 text-sm text-gray-900 border rounded-full border-secondary-theme bg-primary-bg-color ps-4 focus:ring-secondary-theme"
-                                            required
-                                        />
-                                        <div className='font-medium text-red-600'>{errorMsg}</div>
-
-                                        <div className="self-center mt-4">
-                                            <MainActionButton
-                                                type="submit"
-                                            >
-                                                Confirm booking
-                                            </MainActionButton>
-                                        </div>
-                                    </form>
-                                </Dialog.Panel>
-                            </Transition.Child>
-                        </div>
-                    </div>
-                </Dialog>
-            </Transition>
         </>
     )
 }
