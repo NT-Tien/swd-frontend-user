@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, {useState } from 'react'
 import {
     ActionButton,
     CartItem,
@@ -16,7 +16,6 @@ import {
 } from '../../assets'
 import {
     useQuery,
-    useQueryClient,
     keepPreviousData,
 } from '@tanstack/react-query'
 import {
@@ -27,10 +26,10 @@ import {
 } from '../../utils/api'
 import clsx from 'clsx'
 import { useNavigate } from 'react-router-dom'
-import { DEFAULT_API_URL, GET_PRODUCT_IMAGE } from '../../config/api'
+import { displayImage } from '../../utils/helper'
+import { useAuth } from '../../hooks/useAuth'
 
 const ShopPage = () => {
-    const queryClient = useQueryClient()
     const navigate = useNavigate()
 
     const [page, setPage] = useState(1)
@@ -44,7 +43,7 @@ const ShopPage = () => {
         staleTime: 3600000,
     })
 
-    const user = JSON.parse(sessionStorage.getItem('user'))
+    const {token }= useAuth()
 
     const {
         status: categoryStatus,
@@ -69,13 +68,13 @@ const ShopPage = () => {
     }
 
     const handleAddToCart = (productId) => {
-        if (!user) return
-        addProductToCart(productId, user.accessToken)
+        if (!token) return
+        addProductToCart(productId, token)
     }
 
     const handleAddWishList = (productId) => {
-        if (!user) return
-        addProductToWishlist(productId, user.accessToken)
+        if (!token) return
+        addProductToWishlist(productId, token)
     }
 
     const handleItemClick = (name) => {
@@ -126,7 +125,7 @@ const ShopPage = () => {
                     {/* items */}
                     {isSearching ? (
                         <div className="flex-center h-full min-h-[50svh] w-full flex-col">
-                            <div className='flex-col text-2xl flex-center'>
+                            <div className="flex-col text-2xl flex-center">
                                 <span>OOPS!</span>
                                 <span>THERE ARE NO RESULTS.</span>
                             </div>
@@ -156,14 +155,9 @@ const ShopPage = () => {
                                                 {data[0].map((product) => (
                                                     <ProductCard
                                                         key={product.id}
-                                                        imgUrl={
-                                                            DEFAULT_API_URL +
-                                                            GET_PRODUCT_IMAGE +
-                                                            product.images[0].replace(
-                                                                'image/',
-                                                                ''
-                                                            )
-                                                        }
+                                                        imgUrl={displayImage(
+                                                            product.images[0]
+                                                        )}
                                                         name={product.name}
                                                         price={
                                                             product
@@ -204,14 +198,10 @@ const ShopPage = () => {
                                                         key={product.id}
                                                     >
                                                         <CartItem
-                                                            imgUrl={
-                                                                DEFAULT_API_URL +
-                                                                GET_PRODUCT_IMAGE +
-                                                                product.images[0].replace(
-                                                                    'image/',
-                                                                    ''
-                                                                )
-                                                            }
+                                                            imgUrl={displayImage(
+                                                                product
+                                                                    .images[0]
+                                                            )}
                                                             name={product.name}
                                                             category={
                                                                 product

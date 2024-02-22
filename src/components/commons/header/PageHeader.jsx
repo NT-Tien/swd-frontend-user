@@ -1,8 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react'
-import {
-    MagnifyingGlassIcon,
-    ShoppingCartIcon,
-} from '../../../assets'
+import { MagnifyingGlassIcon, ShoppingCartIcon } from '../../../assets'
 import { gsap } from 'gsap'
 import { useGSAP } from '@gsap/react'
 import { TextPlugin } from 'gsap/TextPlugin'
@@ -10,8 +7,9 @@ import ExpandedMenu from './ExpandedMenu'
 import { CustomEase } from 'gsap/all'
 import CartModal from '../../modals/CartModal'
 import SettingModal from '../../modals/SettingModal'
-import { useLocation } from 'react-router-dom';
+import { useLocation } from 'react-router-dom'
 import { Link } from 'react-router-dom'
+import useCheckAuth from '../../../hooks/useCheckAuth'
 
 gsap.registerPlugin(TextPlugin)
 gsap.registerPlugin(CustomEase)
@@ -19,9 +17,7 @@ gsap.registerPlugin(CustomEase)
 const PageHeader = () => {
     const { pathname } = useLocation()
 
-    useEffect(() => {
-        setMenuOpened(false)
-    }, [pathname])
+    const { isLoggedIn, displayLoginCheckMessage, openCheckModal } = useCheckAuth()
 
     // state
     const [menuOpened, setMenuOpened] = useState(false)
@@ -145,7 +141,20 @@ const PageHeader = () => {
         }
     }, [menuOpened])
 
+    useEffect(() => {
+        setMenuOpened(false)
+    }, [pathname])
+
     // functions
+
+    const openCart = () => {
+        if (!isLoggedIn) {
+            openCheckModal()
+            displayLoginCheckMessage()
+        } else {
+            setCartOpened(true)
+        }
+    }
 
     const ToggleMenuOpened = () => {
         setMenuOpened((prev) => !prev)
@@ -198,12 +207,8 @@ const PageHeader = () => {
                         </button>
 
                         <div className="gap-6 flex-center">
-
                             <SettingModal />
-                            <button
-                                type="button"
-                                onClick={() => setCartOpened(true)}
-                            >
+                            <button type="button" onClick={openCart}>
                                 <ShoppingCartIcon />
                             </button>
                         </div>

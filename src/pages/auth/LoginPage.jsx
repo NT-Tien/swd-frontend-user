@@ -5,19 +5,22 @@ import { auth } from '../../config/firebase'
 import { GoogleIcon } from '../../assets'
 import EyeIcon from '../../assets/EyeIcon'
 import EyeSlashIcon from '../../assets/EyeSlashIcon'
-import { MainActionButton, MainActionLink } from '../../components'
+import {  MainActionButton, MainActionLink } from '../../components'
 import { useGSAP } from '@gsap/react'
 import gsap from 'gsap/gsap-core'
 import { horizontalLoop } from '../../utils/GSAPUtils'
+import { login } from '../../utils/api'
+import { useAuth } from '../../hooks/useAuth'
 
 const LoginPage = () => {
     const navigate = useNavigate()
+    const {loginHook, user} = useAuth()
 
     // state
 
     const [showPassword, setShowPassword] = useState(false)
     const [formValue, setFormValue] = useState({
-        username: '',
+        email: '',
         password: '',
     })
 
@@ -30,10 +33,10 @@ const LoginPage = () => {
         const provider = new GoogleAuthProvider()
         signInWithPopup(auth, provider)
             .then((result) => {
+                const user = result.user
                 const token = result.user.accessToken
-                const user = JSON.stringify(result.user)
-                console.log('usersignin', result.user)
-                sessionStorage.setItem('user', user)
+
+                loginHook(user, token)
 
                 navigate('/', { replace: true })
                 return
@@ -74,7 +77,6 @@ const LoginPage = () => {
     )
 
     useEffect(() => {
-        const user = sessionStorage.getItem('user')
         if (user) {
             navigate('/', { replace: true })
         }
@@ -82,8 +84,35 @@ const LoginPage = () => {
 
     // func
 
-    const handleSubmit = (event) => {
+    const handleSubmit = async (event) => {
         event.preventDefault()
+
+        if (!formValue) return
+
+        const result = await login(formValue)
+
+        console.log(result)
+
+        if(!result) return
+
+        if (result.data.message === 'Success'){
+            setFormValue({
+                email: '',
+                password: '',
+            })
+            console.log(result.data)
+            const user = result.data.data.profile
+            const token = result.data.data.token
+
+            loginHook(user, token)
+            
+
+            console.log(user)
+            console.log(token)
+
+            navigate('/', {replace: true})
+        }
+        
     }
 
     const handleInputChange = (e) => {
@@ -132,13 +161,68 @@ const LoginPage = () => {
                 className="relative flex w-2/3 overflow-hidden border rounded-sm shadow-lg h-3/4 min-w-max border-secondary-theme/70 bg-secondary-bg-color"
             >
                 <div
-                    onSubmit={handleSubmit}
                     className="relative flex-col w-2/3 h-full gap-2 p-5 flex-center"
                 >
-                    <h1 className="absolute left-5 top-3">efurniture</h1>
-                    <h1 className="text-4xl font-medium">
+                    <h1 className="text-4xl font-medium text-secondary-theme">
                         Login to Your Account
                     </h1>
+
+                    <form
+                        onSubmit={handleSubmit}
+                        className="flex-col w-2/3 gap-2 flex-center text-secondary-theme"
+                    >
+                        <div className="w-full space-y-1">
+                            <label htmlFor="email">Email:</label>
+                            <input
+                                type="text"
+                                onChange={handleInputChange}
+                                value={formValue.email}
+                                name="email"
+                                id="email"
+                                placeholder="Email"
+                                className="block w-full p-3 text-sm text-gray-900 border rounded-full border-secondary-theme bg-primary-bg-color ps-4 focus:ring-secondary-theme"
+                                required
+                            />
+                        </div>
+                        <div className="w-full space-y-1 ">
+                            <label htmlFor="password">Password:</label>
+
+                            <div className="relative w-full">
+                                <input
+                                    ref={passwordInputRef}
+                                    onChange={handleInputChange}
+                                    value={formValue.password}
+                                    type="password"
+                                    name="password"
+                                    id="password"
+                                    placeholder="Password"
+                                    required
+                                    className="block w-full p-3 text-sm text-gray-900 border rounded-full border-secondary-theme bg-primary-bg-color ps-4 focus:ring-secondary-theme"
+                                />
+                                <button
+                                    type="button"
+                                    onClick={handleToggleShowPassword}
+                                    className="absolute top-0 bottom-0 right-0 m-2 transition-all text-secondary-theme"
+                                >
+                                    {showPassword ? (
+                                        <EyeSlashIcon />
+                                    ) : (
+                                        <EyeIcon />
+                                    )}
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <MainActionButton
+                            type="submit"
+                            className="w-52 min-w-max"
+                        >
+                            Sign in
+                        </MainActionButton>
+                        <span className="w-full divider text-secondary-theme/70">
+                            or
+                        </span>
+                    </form>
                     <button
                         type="button"
                         onClick={signInWithGoogle}
@@ -149,49 +233,6 @@ const LoginPage = () => {
                             <GoogleIcon />
                         </span>
                     </button>
-                    <form
-                        onSubmit={handleSubmit}
-                        className="flex-col w-2/3 gap-2 flex-center"
-                    >
-                        <span className="w-full divider text-secondary-theme/70">
-                            or
-                        </span>
-                        <input
-                            type="text"
-                            onChange={handleInputChange}
-                            value={formValue.username}
-                            name="username"
-                            placeholder="User name"
-                            className="block w-full p-3 text-sm text-gray-900 border rounded-full border-secondary-theme bg-primary-bg-color ps-4 focus:ring-secondary-theme"
-                            required
-                        />
-                        <div className="relative w-full">
-                            <input
-                                ref={passwordInputRef}
-                                onChange={handleInputChange}
-                                value={formValue.password}
-                                type="password"
-                                name="password"
-                                placeholder="Password"
-                                required
-                                className="block w-full p-3 text-sm text-gray-900 border rounded-full border-secondary-theme bg-primary-bg-color ps-4 focus:ring-secondary-theme"
-                            />
-                            <button
-                                type="button"
-                                onClick={handleToggleShowPassword}
-                                className="absolute top-0 bottom-0 right-0 m-2 transition-all text-secondary-theme"
-                            >
-                                {showPassword ? <EyeSlashIcon /> : <EyeIcon />}
-                            </button>
-                        </div>
-                        <MainActionButton
-                            type="submit"
-                            onClick={handleSubmit}
-                            className="w-52 min-w-max"
-                        >
-                            Sign in
-                        </MainActionButton>
-                    </form>
                 </div>
                 <div className="flex-col w-1/3 h-full gap-4 flex-center bg-secondary-theme">
                     <h1 className="text-4xl font-medium text-white">

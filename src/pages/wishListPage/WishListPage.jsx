@@ -1,16 +1,26 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { CartItem, MainActionLink, PageBanner } from '../../components'
+import { useAuth } from '../../hooks/useAuth'
 
 const WishListPage = () => {
+    const {token} = useAuth()
+
+    const { status, data, error } = useQuery({
+        queryKey: ['products', page, token],
+        queryFn: () => fetchWishList(page, token),
+        placeholderData: keepPreviousData,
+        staleTime: 3600000,
+    })
+    
     const addItemToCart = () => {
         console.log('asdawd')
     }
 
     const removeItemFromList = (id) => {
-        const user = JSON.parse(sessionStorage.getItem('user'))
-        if (!user) return
-        removeItemFromList(id, user.accessToken)
+        if (!token) return
+        removeItemFromList(id, token)
     }
+
 
     return (
         <section className="px-20 min-h-svh">

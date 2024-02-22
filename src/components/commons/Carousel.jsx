@@ -10,7 +10,7 @@ const Carousel = ({ images }) => {
 
     useEffect(()=>{
         setChosenUrl(images[0])
-    },[])
+    },[images])
 
     const handleImageClick = (url) => {
         setChosenUrl(url)
@@ -35,7 +35,7 @@ const Carousel = ({ images }) => {
         <div className="flex flex-col w-full gap-2 ">
             {/* thumbnail */}
 
-            <div className="overflow-hidden  flex-center bg-secondary-bg-color h-96 min-w-96 min-h-96">
+            <div className="overflow-hidden flex-center bg-secondary-bg-color h-96 min-w-96 min-h-96">
                 <img src={chosenUrl} className='object-cover w-full h-full'/>
             </div>
 

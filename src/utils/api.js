@@ -1,11 +1,13 @@
 import axios from 'axios'
 import {
     DEFAULT_API_URL,
-    GET_CART_ITEM_URL,
+    GET_CART_ITEMS_URL,
     GET_CATEGORIES_URL,
     GET_PRODUCTS_URL,
     GET_PRODUCT_BY_NAME_URL,
     GET_PRODUCT_OPTION_BY_ID_URL,
+    GET_WISHLIST_ITEMS_URL,
+    POST_LOGIN_URL,
 } from '../config/api'
 
 export async function fetchProducts(page = 1, size = 9) {
@@ -51,6 +53,36 @@ export async function registerAccount({ username, email, phone, password }) {
     )
 }
 
+export async function login({ email, password }) {
+    return await axios.post(
+        DEFAULT_API_URL + POST_LOGIN_URL,
+        {
+            email: email,
+            password: password,
+        },
+        {
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        }
+    )
+}
+
+// export async function loginGoogle({ email,  password }) {
+//     return await axios.post(
+//         DEFAULT_API_URL + POST_LOGIN_URL,
+//         {
+//             email: email,
+//             password: password,
+//         },
+//         {
+//             headers: {
+//                 'Content-Type': 'application/json',
+//             },
+//         }
+//     )
+// }
+
 export async function bookAppointment({ name, email, phone, time }) {
     return await axios.post(
         DEFAULT_API_URL + 'booking-visit/create',
@@ -80,28 +112,35 @@ export async function verifyAppointment(code) {
 }
 
 export async function fetchCartItems(size = 9, page = 1, token) {
-    if (!user) return
-    console.log(user)
     const { data } = await axios.get(
-        DEFAULT_API_URL + GET_CART_ITEM_URL + size + '/' + page,
+        DEFAULT_API_URL + GET_CART_ITEMS_URL + size + '/' + page,
         {
             headers: {
-                Authorization: 'Bearer ' + token,
+                Authorization: token,
             },
         }
     )
-    return data
+    console.log(data.data)
+    return data.data
 }
 
 export async function addProductToCart(id, token) {
+    console.log('api', token)
+    console.log('apid', id)
+
     const result = axios
-        .put(DEFAULT_API_URL + 'cart/add-to-cart/' + id, {
-            headers: {
-                Authorization: 'Bearer ' + token,
-            },
-        })
+        .put(
+            DEFAULT_API_URL + 'cart/add-to-cart/' + id,
+            {},
+            {
+                headers: {
+                    Authorization: token,
+                },
+            }
+        )
         .then((res) => {
             console.log(res)
+            return res
         })
         .catch((error) => {
             console.log(error)
@@ -118,6 +157,7 @@ export async function removeProductFromCart(id, token) {
         })
         .then((res) => {
             console.log(res)
+            return res
         })
         .catch((error) => {
             console.log(error)
@@ -126,14 +166,16 @@ export async function removeProductFromCart(id, token) {
 }
 
 export async function addProductToWishlist(id, token) {
+    console.log('wishlistadd ', id, token)
     const result = axios
         .put(DEFAULT_API_URL + 'wishlist/add-to-wishlist/' + id, {
             headers: {
-                Authorization: 'Bearer ' + token,
+                Authorization: token,
             },
         })
         .then((res) => {
             console.log(res)
+            return res
         })
         .catch((error) => {
             console.log(error)
@@ -145,7 +187,7 @@ export async function removeProductFromWishlist(id, token) {
     const result = axios
         .delete(DEFAULT_API_URL + 'wishlist/delete/' + id, {
             headers: {
-                Authorization: 'Bearer ' + token,
+                Authorization: token,
             },
         })
         .then((res) => {
@@ -155,6 +197,19 @@ export async function removeProductFromWishlist(id, token) {
             console.log(error)
         })
     return result
+}
+
+export async function fetchWishList(size = 9, page = 1, token) {
+    const { data } = await axios.get(
+        DEFAULT_API_URL + GET_WISHLIST_ITEMS_URL + size + '/' + page,
+        {
+            headers: {
+                Authorization: token,
+            },
+        }
+    )
+    console.log('wishlist', token)
+    return data
 }
 
 // export async function getProductImage(id) {

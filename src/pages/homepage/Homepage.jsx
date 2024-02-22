@@ -5,13 +5,28 @@ import {
     MainActionLink,
     ProductCard,
 } from '../../components'
+import { useNavigate } from 'react-router-dom'
+import { useQuery, keepPreviousData } from '@tanstack/react-query'
+import { fetchProducts } from '../../utils/api'
+import { displayImage } from '../../utils/helper'
 
 const HomePage = () => {
-    const productLoop = [1, 2, 3, 4]
+    const page = 1
+    const navigate = useNavigate()
+
+    const { status, data, error } = useQuery({
+        queryKey: ['products', page],
+        queryFn: () => fetchProducts(page),
+        placeholderData: keepPreviousData,
+        staleTime: 3600000,
+    })
 
     const collectionCardStyle =
         'relative overflow-hidden border-[0.75rem] rounded border-secondary-bg-color hover:shadow-lg transition-all duration-500 group'
 
+    const handleItemClick = (name) => {
+        navigate(`/productDetails/${name}`)
+    }
     return (
         <>
             <section className="flex flex-col w-full h-full gap-10 overflow-hidden bg-primary-bg-color">
@@ -57,7 +72,7 @@ const HomePage = () => {
                         >
                             <img
                                 loading="lazy"
-                                src={"./src/assets/pictures/pink-chair.jpg"}
+                                src={'./src/assets/pictures/pink-chair.jpg'}
                                 className="absolute bottom-0"
                             />
                             <div className="absolute bottom-0 z-10 flex items-center w-full px-5 h-1/6 bg-opacity-20 bg-gradient-to-t from-neutral-600 ">
@@ -75,7 +90,7 @@ const HomePage = () => {
                             className={`${collectionCardStyle} col-span-1 aspect-square`}
                         >
                             <img
-                                src={"./src/assets/pictures/table.jpg"}
+                                src={'./src/assets/pictures/table.jpg'}
                                 className="object-cover h-full"
                             />
                             <div className="absolute bottom-0 z-10 flex items-center w-full px-5 h-1/6 bg-opacity-30 bg-gradient-to-t from-neutral-800">
@@ -91,7 +106,7 @@ const HomePage = () => {
                         </div>
                         <div className={`${collectionCardStyle} col-span-2`}>
                             <img
-                                src={"./src/assets/pictures/sofa-1.jpg"}
+                                src={'./src/assets/pictures/sofa-1.jpg'}
                                 className="absolute object-cover w-full -bottom-5"
                             />
                             <div className="absolute bottom-0 z-10 flex items-center w-full px-5 h-1/6 bg-opacity-30 bg-gradient-to-t from-neutral-600">
@@ -108,7 +123,7 @@ const HomePage = () => {
                         <div className={`${collectionCardStyle} col-span-2`}>
                             <img
                                 loading="lazy"
-                                src={"./src/assets/pictures/shelf-large.jpg"}
+                                src={'./src/assets/pictures/shelf-large.jpg'}
                                 className="absolute object-cover w-full"
                             />
                             <div className="absolute bottom-0 z-10 flex items-center w-full px-5 h-1/6 bg-opacity-30 bg-gradient-to-t from-neutral-600">
@@ -126,7 +141,7 @@ const HomePage = () => {
                             className={`${collectionCardStyle} col-span-1 aspect-square`}
                         >
                             <img
-                                src={"./src/assets/pictures/lamp-2-front.png"}
+                                src={'./src/assets/pictures/lamp-2-front.png'}
                                 className="absolute bottom-0"
                             />
                             <div className="absolute bottom-0 z-10 flex items-center w-full px-5 h-1/6 bg-opacity-30 bg-gradient-to-t from-neutral-700">
@@ -144,7 +159,9 @@ const HomePage = () => {
                             className={`${collectionCardStyle} col-span-1 aspect-square`}
                         >
                             <img
-                                src={"./src/assets/pictures/flow-pot-on-stool.jpg"}
+                                src={
+                                    './src/assets/pictures/flow-pot-on-stool.jpg'
+                                }
                                 className="absolute bottom-0 object-cover w-full"
                             />
                             <div className="absolute bottom-0 z-10 flex items-center w-full px-5 h-1/6 bg-opacity-30 bg-gradient-to-t from-neutral-700">
@@ -169,11 +186,34 @@ const HomePage = () => {
                         &#11834; Our Products &#11834;
                     </p>
                     <div className="grid items-center w-full grid-cols-1 gap-5 py-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-                        {productLoop.map((product, index) => (
-                            <div key={index} className="flex-center">
-                                <ProductCard path='/productDetails/1' name="Chair" price="$100" imgUrl={"./src/assets/pictures/chair-6-side.png"}/>
-                            </div>
-                        ))}
+                        {status === 'pending' ? (
+                            <div>Loading...</div>
+                        ) : status === 'error' ? (
+                            <div>Error: {error.message}</div>
+                        ) : (
+                            <>
+                                {data[0].map((product) => (
+                                    <div
+                                        key={product.id}
+                                        className="flex-center"
+                                    >
+                                        <ProductCard
+                                            key={product.id}
+                                            imgUrl={displayImage(
+                                                product.images[0]
+                                            )}
+                                            name={product.name}
+                                            price={
+                                                product.optionProducts[0].price
+                                            }
+                                            onClick={() =>
+                                                handleItemClick(product.name)
+                                            }
+                                        />
+                                    </div>
+                                ))}
+                            </>
+                        )}
                     </div>
                     <MainActionLink to="/shop">Shop with us</MainActionLink>
                 </div>

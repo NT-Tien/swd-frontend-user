@@ -48,20 +48,18 @@ const CheckOutPage = () => {
 
                     <CartItem />
                     {/* sub total */}
-                    <div className="flex flex-col self-end w-full gap-2 min-w-max">
+                    <div className="flex flex-col self-end w-full gap-2 divide-y min-w-max divide-secondary-theme/30">
                         <div className="flex justify-between gap-4 mt-4">
                             <span className="uppercase">sub total</span>
                             <span>$420</span>
                         </div>
 
-                        <hr className="h-px bg-gray-300 border-0 " />
 
                         <div className="flex justify-between text-neutral-500 ">
                             <span className="uppercase ">shipping</span>
                             <span>free</span>
                         </div>
 
-                        <hr className="h-px bg-gray-300 border-0 " />
 
                         <div className="flex justify-between ">
                             <span className="uppercase">total</span>

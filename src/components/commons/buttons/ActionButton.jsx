@@ -26,11 +26,11 @@ const ActionButton = ({
                 disabled
                     ? 'bg-transparent text-secondary-theme/50 border-opacity-50 '
                     : active
-                      ? 'bg-secondary-theme text-neutral-100 hover:bg-black/90'
-                      : 'bg-transparent text-secondary-theme  hover:bg-secondary-theme/20 '
+                      ? 'bg-secondary-theme text-neutral-100 hover:bg-secondary-theme/75'
+                      : 'bg-transparent text-secondary-theme  hover:bg-secondary-theme/30 '
             )}
         >
-            <span className="flex-center relative h-fit overflow-hidden leading-none">
+            <span className="relative overflow-hidden leading-none flex-center h-fit">
                 <span className={`flex-center flex-col `}>
                     <span>{children}</span>
                 </span>

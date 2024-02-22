@@ -1,29 +1,18 @@
 import React, { Fragment, useEffect, useState } from 'react'
 
 import { Popover, Transition } from '@headlessui/react'
-import { UserIcon } from '../../assets'
+import { UserCircleIcon, UserIcon } from '../../assets'
 import CustomLink from '../commons/CustomLink'
-import { useNavigate } from 'react-router-dom'
 import { auth } from '../../config/firebase'
+import { useAuth } from '../../hooks/useAuth'
 
 const SettingModal = () => {
-    const navigate = useNavigate()
-
-    const [user, setUser] = useState(null)
-    const userSession = JSON.parse(sessionStorage.getItem('user'))
-
-
-    useEffect(() => {
-        setUser(userSession)
-        
-    }, [])
-
-
+    const {logoutHook, user, token} = useAuth()
     const handleLogout = () => {
-        console.log('asdaw')
-        sessionStorage.removeItem('user')
-        setUser(null)
-        if (auth.currentUser) {
+
+        logoutHook()
+
+        if (auth && auth.currentUser) {
             signOut(auth)
                 .then(() => {
                     console.log('User signed out')
@@ -33,13 +22,13 @@ const SettingModal = () => {
                 })
         } 
 
-        navigate('/', { replace: true })
+
     }
 
     return (
         <Popover>
             <Popover.Button className="relative flex-center">
-                {user ? (
+                {user ?  (user.photoURL ? (
                     <div className="w-6 h-6 overflow-hidden rounded-full aspect-square">
                         <img
                             src={user.photoURL}
@@ -47,7 +36,10 @@ const SettingModal = () => {
                         />
                     </div>
                 ) : (
+                    <UserCircleIcon />
+                )): (
                     <UserIcon />
+                    
                 )}
             </Popover.Button>
 
@@ -93,6 +85,7 @@ const SettingModal = () => {
 
                                 <CustomLink
                                     className="font-normal"
+                                    to='/'
                                     active={false}
                                     underlineWidth="h-[1px]"
                                     onClick={handleLogout}

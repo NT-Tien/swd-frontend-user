@@ -1,24 +1,23 @@
 import React, { useEffect, useState } from 'react'
 import { useQuery, keepPreviousData } from '@tanstack/react-query'
 import { fetchCartItems, removeProductFromCart } from '../../utils/api'
-import { MainActionLink, PageBanner } from '../../components'
+import { CartItem, MainActionLink, PageBanner } from '../../components'
+import { useAuth } from '../../hooks/useAuth'
 
 const ShoppingCartPage = () => {
     const [page, setPage] = useState(1)
-    const user = JSON.parse(sessionStorage.getItem('user'))
-    const token = user?.accessToken
+    const { token } = useAuth()
     const { status, data, error } = useQuery({
         queryKey: ['cart', page, token],
-        queryFn: () => fetchCartItems(page, token),
+        queryFn: () => fetchCartItems(9, page, token),
         placeholderData: keepPreviousData,
         enabled: !!token,
         staleTime: 180000,
     })
 
     const removeItem = (id) => {
-        const user = JSON.parse(sessionStorage.getItem('user'))
-        if (!user) return
-        removeProductFromCart(id, user.accessToken)
+        if (!token) return
+        removeProductFromCart(id, token)
     }
 
     useEffect(() => {
@@ -27,7 +26,7 @@ const ShoppingCartPage = () => {
 
     return (
         <section className="px-20 min-h-svh">
-            <PageBanner title='cart'/>
+            <PageBanner title="cart" suffix="0" />
 
             {status === 'pending' ? (
                 <>
@@ -58,11 +57,9 @@ const ShoppingCartPage = () => {
                     </div>
                 </>
             ) : data.length > 0 ? (
-                <>
+                <div className="flex flex-col gap-2">
                     {data.map((item) => (
-                        <div key={item.id} className="w-full">
-                            <CartItem removeItemFunc={() => removeItem(item.id)} />
-                        </div>
+                        <CartItem removeItemFunc={() => removeItem(item.id)} />
                     ))}
 
                     <div className="mt-4 flex-center">
@@ -70,7 +67,7 @@ const ShoppingCartPage = () => {
                             proceed to checkout
                         </MainActionLink>
                     </div>
-                </>
+                </div>
             ) : (
                 <>
                     <div className="mt-4 ">
@@ -80,7 +77,7 @@ const ShoppingCartPage = () => {
                     </div>
 
                     <div className="mt-4 flex-center">
-                        <MainActionLink onClick={closeModalFunction} to="/shop">
+                        <MainActionLink to="/shop">
                             continue shopping
                         </MainActionLink>
                     </div>

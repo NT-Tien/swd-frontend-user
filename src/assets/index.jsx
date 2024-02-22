@@ -12,3 +12,6 @@ export {default as UserIcon} from './UserIcon.jsx'
 export {default as ArrowUpIcon} from './ArrowUpIcon.jsx'
 export {default as ArrowLeftIcon} from './ArrowLeftIcon.jsx'
 export {default as HeartIcon} from './HeartIcon.jsx'
+export {default as ArrowLoopIcon} from './ArrowLoopIcon.jsx'
+export {default as UserCircleIcon} from './UserCircleIcon.jsx'
+

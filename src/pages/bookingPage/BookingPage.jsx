@@ -86,9 +86,6 @@ const BookingPage = () => {
 
         const time = getUnixTime(dateTime) * 1000
 
-        console.log(time)
-        console.log(dateTime)
-
         bookAppointment({ ...formValue, time: time })
 
         setFormValue({

@@ -73,7 +73,7 @@ const VerifyBookingPage = () => {
                     onSubmit={handleVerifyCode}
                     className="flex flex-col gap-2 mt-2"
                 >
-                    <label htmlFor="code" className="text-sm text-gray-500">
+                    <label htmlFor="code" className="text-sm text-gray-500 ">
                         Please enter a 6-digit code sent to your email here.
                     </label>
                     <input

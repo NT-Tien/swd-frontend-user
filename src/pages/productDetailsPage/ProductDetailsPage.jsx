@@ -4,6 +4,7 @@ import { ActionButton, Carousel, MainActionButton, PageBanner } from '../../comp
 import { fetchProductByName, fetchProductOptionById } from '../../utils/api'
 import { useQuery, keepPreviousData } from '@tanstack/react-query'
 import { DEFAULT_API_URL } from '../../config/api'
+import { ArrowLoopIcon } from '../../assets'
 
 const ProductDetailsPage = () => {
     const { name } = useParams()
@@ -52,9 +53,9 @@ const ProductDetailsPage = () => {
     return (
         <section className="flex flex-col min-h-screen px-20 text-secondary-theme">
             <PageBanner title='Details'/>
-            <div className="flex h-full gap-4">
+            <div className="flex h-full ">
                 {status === 'pending' ? (
-                    <div>Loading...</div>
+                    <div className='flex gap-2'><ArrowLoopIcon style='animate-spin-slow'/> Loading...</div>
                 ) : status === 'error' ? (
                     <div>Error: {error.message}</div>
                 ) : (
@@ -64,7 +65,7 @@ const ProductDetailsPage = () => {
                             <Carousel images={imgUrls} />
                         </div>
                         {/* name */}
-                        <div className="flex flex-col justify-between w-2/3 h-96 min-h-max">
+                        <div className="flex flex-col justify-between w-2/3 pl-10 h-96 min-h-max">
                             <div className="flex flex-col gap-4">
                                 <h3 className="text-3xl uppercase">
                                     {data?.name}

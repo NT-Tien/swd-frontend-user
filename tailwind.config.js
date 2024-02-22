@@ -9,6 +9,9 @@ export default {
     ],
     theme: {
         extend: {
+            animation: {
+                'spin-slow': 'spin 3s linear infinite',
+            },
             colors: {
                 'cart-item-color': '#ece7df',
                 'primary-bg-color': '#f4f0ea',

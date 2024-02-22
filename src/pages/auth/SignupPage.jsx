@@ -6,10 +6,12 @@ import EyeIcon from '../../assets/EyeIcon'
 import { useGSAP } from '@gsap/react'
 import gsap from 'gsap/gsap-core'
 import { horizontalLoop } from '../../utils/GSAPUtils'
-import UseDebounce from '../../hooks/UseDebounce'
 import { registerAccount } from '../../utils/api'
+import { useNavigate } from 'react-router-dom'
 
 const SignupPage = () => {
+
+    const navigate = useNavigate()
     // state
 
     const [showPassword, setShowPassword] = useState(false)
@@ -78,7 +80,7 @@ const SignupPage = () => {
         }
     }
 
-    const handleFormSubmit = (e) => {
+    const handleFormSubmit = async (e) => {
         e.preventDefault()
 
         if (formValue.password !== passwordRedoValue) {
@@ -89,15 +91,17 @@ const SignupPage = () => {
 
         console.log('Form submitted:', formValue)
 
-        registerAccount(formValue)
-
+        const result = await registerAccount(formValue)
+        console.log(result)
         setFormValue({
             username: '',
             email: '',
             password: '',
             phone: '',
         })
+
         setPasswordRedoValue('')
+        navigate('/login', {replace: true})
     }
 
     const handleInputChange = (e) => {
@@ -106,7 +110,7 @@ const SignupPage = () => {
     }
 
     return (
-        <section className="flex-center h-svh min-h-svh w-full ">
+        <section className="w-full flex-center h-svh min-h-svh ">
             <div
                 ref={textLoopRef}
                 className="absolute inset-0 z-0 flex flex-col text-secondary-theme"
@@ -137,7 +141,7 @@ const SignupPage = () => {
 
                 <form
                     onSubmit={handleFormSubmit}
-                    className="flex w-2/3 flex-col gap-2"
+                    className="flex flex-col w-2/3 gap-2"
                 >
                     <label htmlFor="email">Email</label>
                     <input
@@ -147,7 +151,7 @@ const SignupPage = () => {
                         name="email"
                         value={formValue.email}
                         placeholder="Email"
-                        className="block w-full rounded-full border border-secondary-theme bg-primary-bg-color p-3 ps-4 text-sm text-gray-900 focus:ring-secondary-theme"
+                        className="block w-full p-3 text-sm text-gray-900 border rounded-full border-secondary-theme bg-primary-bg-color ps-4 focus:ring-secondary-theme"
                         required
                     />
                     {/* phone */}
@@ -162,7 +166,7 @@ const SignupPage = () => {
                         name="phone"
                         value={formValue.phone}
                         placeholder="Phone number"
-                        className="block w-full rounded-full border border-secondary-theme bg-primary-bg-color p-3 ps-4 text-sm text-gray-900 focus:ring-secondary-theme"
+                        className="block w-full p-3 text-sm text-gray-900 border rounded-full border-secondary-theme bg-primary-bg-color ps-4 focus:ring-secondary-theme"
                         required
                     />
                     {/* UserName */}
@@ -175,7 +179,7 @@ const SignupPage = () => {
                         value={formValue.username}
                         placeholder="User name"
                         required
-                        className="block w-full rounded-full border border-secondary-theme bg-primary-bg-color p-3 ps-4 text-sm text-gray-900 focus:ring-secondary-theme"
+                        className="block w-full p-3 text-sm text-gray-900 border rounded-full border-secondary-theme bg-primary-bg-color ps-4 focus:ring-secondary-theme"
                     />
                     {/* password */}
                     <label htmlFor="password">Password</label>
@@ -189,12 +193,12 @@ const SignupPage = () => {
                             placeholder="Password"
                             value={formValue.password}
                             required
-                            className="block w-full rounded-full border border-secondary-theme bg-primary-bg-color p-3 ps-4 text-sm text-gray-900 focus:ring-secondary-theme"
+                            className="block w-full p-3 text-sm text-gray-900 border rounded-full border-secondary-theme bg-primary-bg-color ps-4 focus:ring-secondary-theme"
                         />
                         <button
                             type="button"
                             onClick={handleToggleShowPassword}
-                            className="absolute bottom-0 right-0 top-0 m-2 text-secondary-theme transition-all"
+                            className="absolute top-0 bottom-0 right-0 m-2 transition-all text-secondary-theme"
                         >
                             {showPassword ? <EyeSlashIcon /> : <EyeIcon />}
                         </button>
@@ -210,12 +214,12 @@ const SignupPage = () => {
                             placeholder="Confirm password"
                             value={passwordRedoValue}
                             required
-                            className="block w-full rounded-full border border-secondary-theme bg-primary-bg-color p-3 ps-4 text-sm text-gray-900 focus:ring-secondary-theme"
+                            className="block w-full p-3 text-sm text-gray-900 border rounded-full border-secondary-theme bg-primary-bg-color ps-4 focus:ring-secondary-theme"
                         />
                         <button
                             type="button"
                             onClick={handleToggleShowPasswordRedo}
-                            className="absolute bottom-0 right-0 top-0 m-2 text-secondary-theme transition-all"
+                            className="absolute top-0 bottom-0 right-0 m-2 transition-all text-secondary-theme"
                         >
                             {showPasswordRedo ? <EyeSlashIcon /> : <EyeIcon />}
                         </button>
@@ -229,18 +233,18 @@ const SignupPage = () => {
 
                     <MainActionButton
                         type="submit"
-                        className="w-52 min-w-max self-center"
+                        className="self-center w-52 min-w-max"
                     >
                         Sign up
                     </MainActionButton>
-                    <span className="divider w-full text-secondary-theme/70">
+                    <span className="w-full divider text-secondary-theme/70">
                         or
                     </span>
                 </form>
 
                 <button
                     type="button"
-                    className="flex items-center justify-center gap-4 rounded-full bg-neutral-50 px-4 py-2 font-semibold text-secondary-theme shadow-md transition-colors hover:bg-primary-bg-color focus:bg-neutral-200"
+                    className="flex items-center justify-center gap-4 px-4 py-2 font-semibold transition-colors rounded-full shadow-md bg-neutral-50 text-secondary-theme hover:bg-primary-bg-color focus:bg-neutral-200"
                 >
                     Sign Up with Google
                     <span className="text-xl">

@@ -4,16 +4,17 @@ import MainActionLink from '../commons/buttons/MainActionLink'
 import CartItem from '../commons/CartItem'
 import { useQuery, keepPreviousData } from '@tanstack/react-query'
 import { fetchCartItems } from '../../utils/api'
+import { useAuth } from '../../hooks/useAuth'
 
 const CartModal = ({ isOpen, closeModalFunction }) => {
     const [page, setPage] = useState(1)
-    const user = JSON.parse(sessionStorage.getItem('user'))
-    const token = user?.accessToken
-    const { status, data, error } = useQuery({
+
+    const { token, isLoggedIn } = useAuth()
+    const { status, data, error, refetch } = useQuery({
         queryKey: ['cart', page, token],
-        queryFn: () => fetchCartItems(page, token),
+        queryFn: () => fetchCartItems(9, page, token),
         placeholderData: keepPreviousData,
-        enabled: !!token,
+        enabled: false,
         staleTime: 180000,
     })
 
@@ -26,6 +27,12 @@ const CartModal = ({ isOpen, closeModalFunction }) => {
     const removeItem = () => {
         console.log('remove item')
     }
+
+    useEffect(() => {
+        if(isOpen && isLoggedIn) {
+            refetch()
+        }
+    }, [isOpen, refetch, isLoggedIn])
 
     useEffect(() => {
         console.log(data)
@@ -95,7 +102,9 @@ const CartModal = ({ isOpen, closeModalFunction }) => {
                                 ) : status === 'error' ? (
                                     <>
                                         <div className="mt-4 ">
-                                            <p className="text-sm text-center text-gray-500">{error.message}</p>
+                                            <p className="text-sm text-center text-gray-500">
+                                                {error.message}
+                                            </p>
                                         </div>
 
                                         <div className="mt-4 flex-center">

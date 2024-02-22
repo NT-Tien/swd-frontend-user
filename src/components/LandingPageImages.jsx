@@ -46,7 +46,7 @@ const LandingPageImages = () => {
             <img
                 src="./src/assets/pictures/homepage-wallpaper.jpg"
                 alt="landing page image"
-                className="absolute bottom-0 object-cover w-full h-auto"
+                className="absolute bottom-0 object-cover w-full h-full"
             />
         </div>
     )

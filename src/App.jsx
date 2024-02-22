@@ -17,18 +17,13 @@ import {
     VerifyBookingPage,
     WishListPage,
 } from './pages'
-import { useEffect } from 'react'
-
+import useCheckAuth from './hooks/useCheckAuth'
 function App() {
-
-    useEffect(()=>{
-        const user = sessionStorage.getItem('user')
-        console.log(user)
-    },[])
-
+    const {displayLoginCheckMessage, isLoggedIn} = useCheckAuth()
     return (
         <>
             <main className="relative min-w-full min-h-full overflow-hidden app ">
+                {!isLoggedIn && displayLoginCheckMessage()}
                 <Routes>
                     <Route path="/" element={<UserLayout />}>
                         <Route index element={<HomePage />} />
