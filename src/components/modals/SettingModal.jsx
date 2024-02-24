@@ -7,7 +7,7 @@ import { auth } from '../../config/firebase'
 import { useAuth } from '../../hooks/useAuth'
 
 const SettingModal = () => {
-    const {logoutHook, user, token} = useAuth()
+    const {logoutHook, user} = useAuth()
     const handleLogout = () => {
 
         logoutHook()

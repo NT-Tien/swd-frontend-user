@@ -1,31 +1,11 @@
-import React, { useEffect } from 'react'
-import { MagnifyingGlassIcon } from '../../assets';
-import UseDebounce from '../../hooks/UseDebounce';
-import { useState } from 'react';
+import React, { forwardRef } from 'react'
+import { MagnifyingGlassIcon } from '../../assets'
+import UseDebounce from '../../hooks/UseDebounce'
 
-const SearchBar = ({onSubmit, placeholder}) => {
-
-    const [value, setValue] = useState('')
-
-
-    const handleSubmit = () => {
-
-        if(onSubmit) {
-            onSubmit(value)
-        }
-    }
-
-    const handleChange = UseDebounce((e)=>{
-        setValue(e.target.value)
-    }, 600)
-
-    useEffect(()=>{ 
-        handleSubmit()
-    },[value])
-
-   
-
-    
+const SearchBar = forwardRef(({ placeholder, onChange }, ref) => {
+    const handleChangeDebounce = UseDebounce((e) => {
+        onChange(e.target.value)
+    }, 500)
 
     return (
         <form>
@@ -40,11 +20,12 @@ const SearchBar = ({onSubmit, placeholder}) => {
                     
                 </div> */}
                 <input
+                    ref={ref}
                     type="search"
                     id="default-search"
                     className="block w-full p-3 text-sm text-gray-900 border rounded-full border-secondary-theme bg-primary-bg-color ps-4 focus:ring-secondary-theme"
                     placeholder={placeholder}
-                    onChange={handleChange}
+                    onChange={handleChangeDebounce}
                     required
                 />
                 <button
@@ -56,6 +37,6 @@ const SearchBar = ({onSubmit, placeholder}) => {
             </div>
         </form>
     )
-}
+})
 
 export default SearchBar

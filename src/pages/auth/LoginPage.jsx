@@ -5,19 +5,20 @@ import { auth } from '../../config/firebase'
 import { GoogleIcon } from '../../assets'
 import EyeIcon from '../../assets/EyeIcon'
 import EyeSlashIcon from '../../assets/EyeSlashIcon'
-import {  MainActionButton, MainActionLink } from '../../components'
+import { MainActionButton, MainActionLink } from '../../components'
 import { useGSAP } from '@gsap/react'
 import gsap from 'gsap/gsap-core'
 import { horizontalLoop } from '../../utils/GSAPUtils'
-import { login } from '../../utils/api'
+import { login, loginGoogle } from '../../utils/api'
 import { useAuth } from '../../hooks/useAuth'
 
 const LoginPage = () => {
     const navigate = useNavigate()
-    const {loginHook, user} = useAuth()
+    const { loginHook, user } = useAuth()
 
     // state
 
+    const [errorMsg, setErrorMsg] = useState('')
     const [showPassword, setShowPassword] = useState(false)
     const [formValue, setFormValue] = useState({
         email: '',
@@ -28,25 +29,6 @@ const LoginPage = () => {
     const textLoopRef = useRef()
     const containerRef = useRef()
     const passwordInputRef = useRef()
-
-    const signInWithGoogle = () => {
-        const provider = new GoogleAuthProvider()
-        signInWithPopup(auth, provider)
-            .then((result) => {
-                const user = result.user
-                const token = result.user.accessToken
-
-                loginHook(user, token)
-
-                navigate('/', { replace: true })
-                return
-            })
-            .catch((error) => {
-                const errorCode = error.code
-                const errorMessage = error.message
-                console.error(errorCode, errorMessage)
-            })
-    }
 
     //
 
@@ -78,11 +60,30 @@ const LoginPage = () => {
 
     useEffect(() => {
         if (user) {
-            navigate('/', { replace: true })
+            navigate(-1)
         }
     }, [])
 
     // func
+
+    const signInWithGoogle = () => {
+        const provider = new GoogleAuthProvider()
+        signInWithPopup(auth, provider)
+            .then(async (result) => {
+                const userGoogle = result.user
+                const loginData = await loginGoogle(result.user.accessToken)
+                const token = loginData.token
+                const user = { ...loginData, photoURL: userGoogle.photoURL }
+                loginHook(user, token)
+                navigate(-1)
+                return
+            })
+            .catch((error) => {
+                const errorCode = error.code
+                const errorMessage = error.message
+                console.error(errorCode, errorMessage)
+            })
+    }
 
     const handleSubmit = async (event) => {
         event.preventDefault()
@@ -91,11 +92,14 @@ const LoginPage = () => {
 
         const result = await login(formValue)
 
-        console.log(result)
+        if (!result) return
 
-        if(!result) return
+        if (!result.data) {
+            setErrorMsg(result.message)
+            return
+        }
 
-        if (result.data.message === 'Success'){
+        if (result.data.message === 'Success') {
             setFormValue({
                 email: '',
                 password: '',
@@ -105,14 +109,10 @@ const LoginPage = () => {
             const token = result.data.data.token
 
             loginHook(user, token)
-            
+            setErrorMsg('')
 
-            console.log(user)
-            console.log(token)
-
-            navigate('/', {replace: true})
+            navigate(-1)
         }
-        
     }
 
     const handleInputChange = (e) => {
@@ -160,9 +160,7 @@ const LoginPage = () => {
                 ref={containerRef}
                 className="relative flex w-2/3 overflow-hidden border rounded-sm shadow-lg h-3/4 min-w-max border-secondary-theme/70 bg-secondary-bg-color"
             >
-                <div
-                    className="relative flex-col w-2/3 h-full gap-2 p-5 flex-center"
-                >
+                <div className="relative flex-col w-2/3 h-full gap-2 p-5 flex-center">
                     <h1 className="text-4xl font-medium text-secondary-theme">
                         Login to Your Account
                     </h1>
@@ -212,7 +210,11 @@ const LoginPage = () => {
                                 </button>
                             </div>
                         </div>
-                        
+
+                        <div className="font-semibold text-red-600">
+                            {errorMsg && `${errorMsg}!`}
+                        </div>
+
                         <MainActionButton
                             type="submit"
                             className="w-52 min-w-max"

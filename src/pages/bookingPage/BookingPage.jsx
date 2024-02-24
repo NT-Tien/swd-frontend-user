@@ -1,13 +1,14 @@
 import React, { Fragment, useState } from 'react'
 import Calendar from 'react-calendar'
 import './Calendar.css'
-import {  Listbox, Transition } from '@headlessui/react'
+import { Listbox, Transition } from '@headlessui/react'
 import {
     addMinutes,
     eachHourOfInterval,
     format,
     getMinutes,
     getUnixTime,
+    isBefore,
     isToday,
     setHours,
 } from 'date-fns'
@@ -38,8 +39,12 @@ const BookingPage = () => {
 
         if (isToday(chosenDate)) {
             const roundedDate = roundedDateTime(chosenDate, 60)
-
-            const beginWorkHour = roundedDate
+            let beginWorkHour
+            if (isBefore(roundedDate, setHours(chosenDate, 8))) {
+                beginWorkHour = setHours(chosenDate, 8)
+            } else {
+                beginWorkHour = roundedDate
+            }
 
             const endWorkHour = setHours(roundedDate, 17)
 
@@ -94,10 +99,8 @@ const BookingPage = () => {
             email: '',
         })
 
-        navigate('/verifyBooking', {replace: true})
+        navigate('/verifyBooking', { replace: true })
     }
-
-    
 
     const times = chosenDate && getTimes()
 

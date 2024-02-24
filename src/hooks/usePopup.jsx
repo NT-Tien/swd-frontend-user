@@ -1,33 +1,39 @@
-import React, { Fragment, useState } from 'react'
-import { useAuth } from './useAuth'
 import { Dialog, Transition } from '@headlessui/react'
+import React, { Fragment, useContext, useRef, useState } from 'react'
 import { ActionButton } from '../components'
+import PopupContext from '../context/PopupContext'
 
-const useCheckAuth = () => {
-    const { isLoggedIn, isOpenCheckModal, setIsOpenCheckModal } = useAuth()
+const usePopup = () => {
+    const {
+        isPopupOpen,
+        setIsPopupOpen,
+        message,
+        setMessage,
+        confirmButtonMsg,
+        setConfirmButtonMsg,
+    } = useContext(PopupContext)
 
-    const openCheckModal = () => {
-        setIsOpenCheckModal(true)
+    const focusRef = useRef()
+
+    const openPopupFunc = (msg, cButtonMsg) => {
+        setConfirmButtonMsg(cButtonMsg)
+        setMessage(msg)
+        setIsPopupOpen(true)
     }
 
-    const closeModal = () => {
-        setIsOpenCheckModal(false)
+    const closePopupFunc = () => {
+        setIsPopupOpen(false)
     }
 
-    const checkAuthFunction = (callback) => {
-        return (...arg) => {
-            if (!isLoggedIn) {
-                openCheckModal()
-            } else {
-                callback(...arg)
-            }
-        }
-    }
-
-    const displayLoginCheckMessage = () => {
+    const displayPopup = () => {
         return (
-            <Transition appear show={isOpenCheckModal} as={Fragment}>
-                <Dialog as="div" className="relative z-40" onClose={closeModal}>
+            <Transition appear show={isPopupOpen} as={Fragment}>
+                <Dialog
+                    initialFocus={focusRef}
+                    as="div"
+                    className="relative z-40"
+                    onClose={closePopupFunc}
+                >
                     <Transition.Child
                         as={Fragment}
                         enter="ease-out duration-300"
@@ -56,17 +62,18 @@ const useCheckAuth = () => {
                                         as="h3"
                                         className="text-lg font-medium leading-6 "
                                     >
-                                        You need to log in to use this function
+                                        {message}
                                     </Dialog.Title>
 
                                     <div className="w-full mt-4 flex-center">
                                         <ActionButton
+                                            ref={focusRef}
                                             type="button"
                                             active
                                             className="p-2 px-4 rounded-full"
-                                            onClick={closeModal}
+                                            onClick={closePopupFunc}
                                         >
-                                            Got it, thanks!
+                                            {confirmButtonMsg}
                                         </ActionButton>
                                     </div>
                                 </Dialog.Panel>
@@ -78,12 +85,7 @@ const useCheckAuth = () => {
         )
     }
 
-    return {
-        isLoggedIn,
-        displayLoginCheckMessage,
-        openCheckModal,
-        checkAuthFunction,
-    }
+    return { isPopupOpen, openPopupFunc, closePopupFunc, displayPopup }
 }
 
-export default useCheckAuth
+export default usePopup

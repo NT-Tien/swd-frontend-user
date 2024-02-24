@@ -8,8 +8,12 @@ import { CustomEase } from 'gsap/all'
 import CartModal from '../../modals/CartModal'
 import SettingModal from '../../modals/SettingModal'
 import { useLocation } from 'react-router-dom'
+import { useQuery, keepPreviousData } from '@tanstack/react-query'
+
 import { Link } from 'react-router-dom'
 import useCheckAuth from '../../../hooks/useCheckAuth'
+import { fetchCartItems } from '../../../utils/api'
+import { useAuth } from '../../../hooks/useAuth'
 
 gsap.registerPlugin(TextPlugin)
 gsap.registerPlugin(CustomEase)
@@ -17,7 +21,16 @@ gsap.registerPlugin(CustomEase)
 const PageHeader = () => {
     const { pathname } = useLocation()
 
-    const { isLoggedIn, displayLoginCheckMessage, openCheckModal } = useCheckAuth()
+    const { checkAuthFunction } = useCheckAuth()
+
+    const { token, isLoggedIn } = useAuth()
+    const { status, data, error, refetch } = useQuery({
+        queryKey: ['cart', token],
+        queryFn: () => fetchCartItems(99, 1, token),
+        placeholderData: keepPreviousData,
+        enabled: false,
+        staleTime: 180000,
+    })
 
     // state
     const [menuOpened, setMenuOpened] = useState(false)
@@ -35,6 +48,12 @@ const PageHeader = () => {
     const menuButtonAnimationRef = useRef()
 
     // useeffect
+
+    useEffect(() => {
+        if (isLoggedIn) {
+            refetch()
+        }
+    }, [refetch, isLoggedIn])
 
     useGSAP(() => {
         expandedMenuAnimationRef.current = gsap.timeline({
@@ -147,14 +166,7 @@ const PageHeader = () => {
 
     // functions
 
-    const openCart = () => {
-        if (!isLoggedIn) {
-            openCheckModal()
-            displayLoginCheckMessage()
-        } else {
-            setCartOpened(true)
-        }
-    }
+    const openCart = checkAuthFunction(() => setCartOpened(true))
 
     const ToggleMenuOpened = () => {
         setMenuOpened((prev) => !prev)
@@ -167,7 +179,7 @@ const PageHeader = () => {
                 className="fixed top-0 z-40 flex-col w-full flex-center h-14 "
             >
                 {/* top flex container */}
-                <div className="absolute left-0 top-0 z-40 w-full gap-4 border-b border-secondary-theme border-opacity-20 bg-primary-bg-color px-[5svw]">
+                <div className="absolute left-0 top-0 z-40 w-full gap-4 border-b border-secondary-theme/50 bg-primary-bg-color px-[5svw]">
                     <div className="flex items-center justify-between h-14">
                         <div className="items-center justify-center hidden md:flex">
                             <Link to="/">
@@ -206,10 +218,19 @@ const PageHeader = () => {
                             </span>
                         </button>
 
-                        <div className="gap-6 flex-center">
+                        <div className="gap-6 flex-center ">
                             <SettingModal />
-                            <button type="button" onClick={openCart}>
+                            <button
+                                type="button"
+                                className="relative flex gap-1"
+                                onClick={openCart}
+                            >
                                 <ShoppingCartIcon />
+                                {data && (
+                                    <span className="absolute text-xs text-white rounded-full size-4 -right-2 -top-1 bg-secondary-theme">
+                                        {data.length}
+                                    </span>
+                                )}
                             </button>
                         </div>
                     </div>

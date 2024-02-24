@@ -1,13 +1,30 @@
 import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
-import { ActionButton, Carousel, MainActionButton, PageBanner } from '../../components'
-import { fetchProductByName, fetchProductOptionById } from '../../utils/api'
+import {
+    ActionButton,
+    Carousel,
+    MainActionButton,
+    PageBanner,
+    SimpleLoading,
+} from '../../components'
+import {
+    addProductToCart,
+    addProductToWishlist,
+    fetchProductByName,
+    fetchProductOptionById,
+} from '../../utils/api'
 import { useQuery, keepPreviousData } from '@tanstack/react-query'
 import { DEFAULT_API_URL } from '../../config/api'
-import { ArrowLoopIcon } from '../../assets'
+import usePopup from '../../hooks/usePopup'
+import useCheckAuth from '../../hooks/useCheckAuth'
+import { HeartIcon } from '../../assets'
+import { useAuth } from '../../hooks/useAuth'
 
 const ProductDetailsPage = () => {
     const { name } = useParams()
+    const { checkAuthFunction } = useCheckAuth()
+    const {token} = useAuth()
+    const { openPopupFunc } = usePopup()
 
     const [chosenOption, setChosenOption] = useState(null)
     const [imgUrls, setImgUrls] = useState([])
@@ -36,6 +53,26 @@ const ProductDetailsPage = () => {
         staleTime: 3600000,
     })
 
+    const handleAddToCart = checkAuthFunction(async () => {
+        console.log(token)
+        if (!token) return
+        await addProductToCart(data.id, token)
+        openPopupFunc(`${data.name} is added to you cart`, 'Got it, thanks!')
+    })
+
+    const handleAddWishList = checkAuthFunction(async () => {
+        if (!token) return
+        await addProductToWishlist(data.id, token)
+        openPopupFunc(
+            `${data.name} is added to you wishlist`,
+            'Got it, thanks!'
+        )
+    })
+
+    const handleOptionClick = (option) => {
+        if(option) setChosenOption(option)
+    }
+
     useEffect(() => {
         if (optionsData) setChosenOption(optionsData[0])
     }, [optionsData])
@@ -44,7 +81,7 @@ const ProductDetailsPage = () => {
         if (!data) return
         let imgUrlArray = []
         data.images.map((image) => {
-            const id = image.replace('image/', (DEFAULT_API_URL + 'file/show/'))
+            const id = image.replace('image/', DEFAULT_API_URL + 'file/show/')
             imgUrlArray.push(id)
         })
         setImgUrls(imgUrlArray)
@@ -52,10 +89,11 @@ const ProductDetailsPage = () => {
 
     return (
         <section className="flex flex-col min-h-screen px-20 text-secondary-theme">
-            <PageBanner title='Details'/>
+            <PageBanner title="Details" />
+
             <div className="flex h-full ">
                 {status === 'pending' ? (
-                    <div className='flex gap-2'><ArrowLoopIcon style='animate-spin-slow'/> Loading...</div>
+                    <SimpleLoading />
                 ) : status === 'error' ? (
                     <div>Error: {error.message}</div>
                 ) : (
@@ -71,19 +109,24 @@ const ProductDetailsPage = () => {
                                     {data?.name}
                                 </h3>
                                 {/* description */}
-                                <div><span className='font-medium'>Description: </span>{data?.description}</div>
+                                <div>
+                                    <span className="font-medium">
+                                        Description:{' '}
+                                    </span>
+                                    {data?.description}
+                                </div>
                                 {/* options */}
                                 <div className="flex flex-col gap-2">
                                     <span className="font-medium">
                                         Options:
                                     </span>
                                     {optionStatus === 'pending' ? (
-                                        <div>Loading...</div>
+                                        <SimpleLoading />
                                     ) : optionStatus === 'error' ? (
                                         <div>Error: {optionError.message}</div>
                                     ) : (
                                         <div className="flex gap-4">
-                                            {optionsData?.map((option) => (
+                                            {optionsData?.map((option, i) => (
                                                 <ActionButton
                                                     key={option.id}
                                                     active={
@@ -91,8 +134,7 @@ const ProductDetailsPage = () => {
                                                         chosenOption?.name
                                                     }
                                                     className="p-1 px-2 rounded-full min-w-16"
-                                                    onClick={() =>
-                                                        console.log('click')
+                                                    onClick={()=>handleOptionClick(option)
                                                     }
                                                 >
                                                     {option.name}
@@ -114,9 +156,21 @@ const ProductDetailsPage = () => {
                                 <span className="text-5xl font-light">
                                     ${chosenOption?.price}
                                 </span>
-                                <MainActionButton className="w-max">
-                                    Add to Cart
-                                </MainActionButton>
+                                <div className="flex gap-2">
+                                    <MainActionButton
+                                        onClick={handleAddToCart}
+                                        className="w-max"
+                                    >
+                                        Add to Cart
+                                    </MainActionButton>
+                                    <MainActionButton
+                                        onClick={handleAddWishList}
+                                        className="w-max"
+                                        suffixArrow={<HeartIcon />}
+                                    >
+                                        Add to Wishlist
+                                    </MainActionButton>
+                                </div>
                             </div>
                         </div>
                     </>

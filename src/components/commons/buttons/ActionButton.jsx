@@ -2,6 +2,7 @@ import clsx from 'clsx'
 import React from 'react'
 
 const ActionButton = ({
+    ref,
     disabled = false,
     onClick,
     children,
@@ -18,16 +19,16 @@ const ActionButton = ({
 
     return (
         <button
+            ref={ref}
             disabled={disabled}
-            onClick={(e)=>handleOnClick(e)}
+            onClick={(e) => handleOnClick(e)}
             className={clsx(
-                `gap-2 border ${borderColor} flex-center max-w-max ${className}  transition-all duration-[400ms] ease-in-out`,
-
+                `gap-2 border ${borderColor} flex-center max-w-max  ${className}  transition-all  ease-in-out `,
                 disabled
-                    ? 'bg-transparent text-secondary-theme/50 border-opacity-50 '
+                    ? 'border-opacity-50 bg-transparent text-secondary-theme/50 '
                     : active
                       ? 'bg-secondary-theme text-neutral-100 hover:bg-secondary-theme/75'
-                      : 'bg-transparent text-secondary-theme  hover:bg-secondary-theme/30 '
+                      : ' text-secondary-theme  hover:bg-secondary-theme/30 '
             )}
         >
             <span className="relative overflow-hidden leading-none flex-center h-fit">

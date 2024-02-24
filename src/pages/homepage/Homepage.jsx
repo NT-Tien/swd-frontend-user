@@ -199,13 +199,8 @@ const HomePage = () => {
                                     >
                                         <ProductCard
                                             key={product.id}
-                                            imgUrl={displayImage(
-                                                product.images[0]
-                                            )}
-                                            name={product.name}
-                                            price={
-                                                product.optionProducts[0].price
-                                            }
+                                            product={product}
+                                           
                                             onClick={() =>
                                                 handleItemClick(product.name)
                                             }

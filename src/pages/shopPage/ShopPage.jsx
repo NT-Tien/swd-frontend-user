@@ -1,23 +1,18 @@
-import React, {useState } from 'react'
+import React, { useRef, useState } from 'react'
 import {
     ActionButton,
-    CartItem,
     DropdownSelection,
     MainActionButton,
     PageBanner,
     ProductCard,
+    SimpleLoading,
 } from '../../components'
 import SearchBar from '../../components/commons/SearchBar'
 import {
     ArrowLeftIcon,
     ArrowRightIcon,
-    RowViewIcon,
-    SquaresIcon,
 } from '../../assets'
-import {
-    useQuery,
-    keepPreviousData,
-} from '@tanstack/react-query'
+import { useQuery, keepPreviousData } from '@tanstack/react-query'
 import {
     addProductToCart,
     addProductToWishlist,
@@ -26,15 +21,20 @@ import {
 } from '../../utils/api'
 import clsx from 'clsx'
 import { useNavigate } from 'react-router-dom'
-import { displayImage } from '../../utils/helper'
 import { useAuth } from '../../hooks/useAuth'
+import useCheckAuth from '../../hooks/useCheckAuth'
+import usePopup from '../../hooks/usePopup'
 
 const ShopPage = () => {
     const navigate = useNavigate()
 
+    const { checkAuthFunction } = useCheckAuth()
+    const { token } = useAuth()
+    const { openPopupFunc, isPopupOpen, displayPopup } = usePopup()
+
     const [page, setPage] = useState(1)
-    const [isCardDisplay, setIsCardDisplay] = useState(true)
-    const [isSearching, setIsSearching] = useState(true)
+    const [searchValue, setSearchValue] = useState('')
+    const [chosenCategoryId, setChosenCategoryId] = useState(null)
 
     const { status, data, error } = useQuery({
         queryKey: ['products', page],
@@ -42,8 +42,6 @@ const ShopPage = () => {
         placeholderData: keepPreviousData,
         staleTime: 3600000,
     })
-
-    const {token }= useAuth()
 
     const {
         status: categoryStatus,
@@ -56,6 +54,27 @@ const ShopPage = () => {
         staleTime: 3600000,
     })
 
+    const sortOptions = [
+        {
+            value: '1',
+            title: 'Newest to Oldest',
+        },
+        {
+            value: '2',
+            title: 'Oldest to Newest',
+        },
+        {
+            value: '3',
+            title: 'A to Z',
+        },
+        {
+            value: '4',
+            title: 'Z to A',
+        },
+    ]
+
+
+    const searchBarRef = useRef()
     // func
 
     const handlePageDecrease = () => {
@@ -67,71 +86,83 @@ const ShopPage = () => {
         setPage((prev) => prev + 1)
     }
 
-    const handleAddToCart = (productId) => {
-        if (!token) return
-        addProductToCart(productId, token)
-    }
+    const handleAddToCart = checkAuthFunction(
+        async (productId, productName) => {
+            if (!token) return
+            await addProductToCart(productId, token)
+            openPopupFunc(
+                `${productName} is added to you cart`,
+                'Got it, thanks!'
+            )
+        }
+    )
 
-    const handleAddWishList = (productId) => {
+    const handleAddWishList = checkAuthFunction((productId, productName) => {
         if (!token) return
         addProductToWishlist(productId, token)
-    }
+        openPopupFunc(
+            `${productName} is added to you wishlist`,
+            'Got it, thanks!'
+        )
+    })
 
     const handleItemClick = (name) => {
         navigate(`/productDetails/${name}`)
     }
 
     const handleSearch = (name) => {
-        if (name.trim() === '') {
-            setIsSearching(false)
+        setSearchValue(name.trim())
+    }
+
+    const clearSearchBar = () =>{
+        searchBarRef.current.value = ''
+        setSearchValue('')
+    }
+
+    const handleClickCategory = (catId) => {
+        if (!catId) return
+        if (catId === chosenCategoryId) {
+            setChosenCategoryId(null)
             return
         }
-
-        setIsSearching(true)
+        setChosenCategoryId(catId)
     }
 
     return (
         <div className="flex flex-col px-20 ">
             <PageBanner title="Shop" />
 
-            <section className="flex gap-4 min-h-svh">
+            <section className="flex gap-4 min-h-max">
                 {/* dsplay */}
                 <div className="flex flex-col flex-1 h-full gap-5">
                     {/* buttons */}
 
                     <div className="flex items-center justify-between w-full ">
                         <div className="flex gap-2">
-                            <ActionButton
-                                onClick={() => setIsCardDisplay(true)}
-                                active={isCardDisplay}
-                                className="p-1 rounded-md"
-                            >
-                                <SquaresIcon />
-                            </ActionButton>
-                            <ActionButton
-                                onClick={() => setIsCardDisplay(false)}
-                                active={!isCardDisplay}
-                                className="p-1 rounded-md"
-                            >
-                                <RowViewIcon />
-                            </ActionButton>
+                            <h5 className="text-lg font-semibold">
+                                Displaying
+                            </h5>
+
                         </div>
-                        <div className="flex justify-center"></div>
+
+                        {/* sort */}
                         <div className="z-10 flex justify-end">
-                            <DropdownSelection />
+                            <DropdownSelection options={sortOptions}>
+                                Sort Options
+                            </DropdownSelection>
                         </div>
                     </div>
 
                     {/* items */}
-                    {isSearching ? (
+                    {searchValue ? (
                         <div className="flex-center h-full min-h-[50svh] w-full flex-col">
                             <div className="flex-col text-2xl flex-center">
                                 <span>OOPS!</span>
-                                <span>THERE ARE NO RESULTS.</span>
+                                <span>THERE ARE NO RESULTS FOR {searchValue}.</span>
                             </div>
                             <MainActionButton
                                 className="mt-4"
-                                onClick={() => setIsSearching(false)}
+                                onClick={clearSearchBar}
                             >
                                 Shop other items
                             </MainActionButton>
@@ -140,96 +171,42 @@ const ShopPage = () => {
                         <>
                             <div
                                 className={clsx(
-                                    'flex h-full min-h-[75svh] flex-1 gap-4',
-                                    isCardDisplay ? 'flex-wrap' : 'flex-col'
+                                    'flex h-full min-h-max flex-1 flex-wrap gap-4'
                                 )}
                             >
-                                {isCardDisplay ? (
-                                    <>
-                                        {status === 'pending' ? (
-                                            <div>Loading...</div>
-                                        ) : status === 'error' ? (
-                                            <div>Error: {error.message}</div>
-                                        ) : (
-                                            <>
-                                                {data[0].map((product) => (
-                                                    <ProductCard
-                                                        key={product.id}
-                                                        imgUrl={displayImage(
-                                                            product.images[0]
-                                                        )}
-                                                        name={product.name}
-                                                        price={
-                                                            product
-                                                                .optionProducts[0]
-                                                                .price
-                                                        }
-                                                        onClick={() =>
-                                                            handleItemClick(
-                                                                product.name
-                                                            )
-                                                        }
-                                                        addItemFunc={() =>
-                                                            handleAddToCart(
-                                                                product.id
-                                                            )
-                                                        }
-                                                        addWishListFunc={() => {
-                                                            handleAddWishList(
-                                                                product.id
-                                                            )
-                                                        }}
-                                                    />
-                                                ))}
-                                            </>
-                                        )}
-                                    </>
-                                ) : (
-                                    <>
-                                        {status === 'pending' ? (
-                                            <div>Loading...</div>
-                                        ) : status === 'error' ? (
-                                            <div>Error: {error.message}</div>
-                                        ) : (
-                                            <>
-                                                {data[0].map((product) => (
-                                                    <div
-                                                        className="w-full flex-center"
-                                                        key={product.id}
-                                                    >
-                                                        <CartItem
-                                                            imgUrl={displayImage(
-                                                                product
-                                                                    .images[0]
-                                                            )}
-                                                            name={product.name}
-                                                            category={
-                                                                product
-                                                                    .category_id
-                                                                    .name
-                                                            }
-                                                            price={
-                                                                product
-                                                                    .optionProducts[0]
-                                                                    .price
-                                                            }
-                                                            onClick={() =>
-                                                                handleItemClick(
-                                                                    product.name
-                                                                )
-                                                            }
-                                                            addItemFunc={() =>
-                                                                handleAddToCart(
-                                                                    product.id
-                                                                )
-                                                            }
-                                                        />
-                                                    </div>
-                                                ))}
-                                            </>
-                                        )}
-                                    </>
-                                )}
+                                <>
+                                    {status === 'pending' ? (
+                                        <SimpleLoading />
+                                    ) : status === 'error' ? (
+                                        <div>Error: {error.message}</div>
+                                    ) : (
+                                        <>
+                                            {data[0].map((product) => (
+                                                <ProductCard
+                                                    key={product.id}
+                                                    product={product}
+                                                    onClick={() =>
+                                                        handleItemClick(
+                                                            product.name
+                                                        )
+                                                    }
+                                                    addItemFunc={() =>
+                                                        handleAddToCart(
+                                                            product.id,
+                                                            product.name
+                                                        )
+                                                    }
+                                                    addWishListFunc={() => {
+                                                        handleAddWishList(
+                                                            product.id,
+                                                            product.name
+                                                        )
+                                                    }}
+                                                />
+                                            ))}
+                                        </>
+                                    )}
+                                </>
                             </div>
                         </>
                     )}
@@ -255,7 +232,8 @@ const ShopPage = () => {
                 <div className="flex flex-col h-full px-1 min-w-80 ">
                     <div className="w-full mb-4">
                         <SearchBar
-                            onSubmit={handleSearch}
+                            ref={searchBarRef}
+                            onChange={handleSearch}
                             placeholder="Search..."
                         />
                     </div>
@@ -267,9 +245,15 @@ const ShopPage = () => {
                             <div>Error: {categoryError.message}</div>
                         ) : (
                             <>
-                                {categoryData[0].map((cat, i) => (
+                                {categoryData[0].map((cat) => (
                                     <div className="flex " key={cat.id}>
-                                        <ActionButton className="px-2 py-1 rounded-full min-w-12">
+                                        <ActionButton
+                                            active={cat.id === chosenCategoryId}
+                                            onClick={() =>
+                                                handleClickCategory(cat.id)
+                                            }
+                                            className="px-2 py-1 rounded-full min-w-12"
+                                        >
                                             {cat.name}
                                         </ActionButton>
                                     </div>
