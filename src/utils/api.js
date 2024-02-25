@@ -9,12 +9,34 @@ import {
     GET_WISHLIST_ITEMS_URL,
     POST_LOGIN_GOOGLE_URL,
     POST_LOGIN_URL,
+    POST_PAYMENT_CREATE_ORDER_URL,
     PUT_UPDATE_CART_ITEM_QUANTITY,
 } from '../config/api'
 
-export async function fetchProducts(page = 1, size = 9) {
+export async function fetchProducts(
+    size = 9,
+    page = 1,
+    searchValue = '',
+    chosenCategoryId = '',
+    sortOption
+) {
+    const sortDirection = sortOption ? sortOption.direction : 'ASC'
+    const sortValue = sortOption ? sortOption.value : 'name'
+   
     const { data } = await axios.get(
-        DEFAULT_API_URL + GET_PRODUCTS_URL + size + '/' + page
+        DEFAULT_API_URL +
+            GET_PRODUCTS_URL +
+            size +
+            '/' +
+            page +
+            '?query=' +
+            searchValue +
+            '&sortBy=' +
+            sortValue +
+            '&direction=' +
+            sortDirection +
+            '&categoryId=' +
+            chosenCategoryId
     )
     return data.data
 }
@@ -94,21 +116,6 @@ export async function loginGoogle(token) {
     return data.data
 }
 
-// export async function loginGoogle({ email,  password }) {
-//     return await axios.post(
-//         DEFAULT_API_URL + POST_LOGIN_URL,
-//         {
-//             email: email,
-//             password: password,
-//         },
-//         {
-//             headers: {
-//                 'Content-Type': 'application/json',
-//             },
-//         }
-//     )
-// }
-
 export async function bookAppointment({ name, email, phone, time }) {
     return await axios.post(
         DEFAULT_API_URL + 'booking-visit/create',
@@ -145,6 +152,7 @@ export async function fetchCartItems(size = 9, page = 1, token) {
             },
         })
         .then((res) => {
+            console.log(res)
             return res.data.data
         })
         .catch((err) => {
@@ -154,11 +162,32 @@ export async function fetchCartItems(size = 9, page = 1, token) {
     return result
 }
 
-export async function addProductToCart(id, token) {
-
+export async function addProductToCart(id, oid,  token) {
     const result = axios
         .put(
-            DEFAULT_API_URL + 'cart/add-to-cart/' + id,
+            DEFAULT_API_URL + 'cart/add-to-cart/' + id + '/' + oid,
+            {},
+            {
+                headers: {
+                    Authorization: token,
+                },
+            }
+        )
+        .then((res) => {
+            console.log(res)
+            return res
+        })
+        .catch((error) => {
+            console.log(error)
+            return error
+        })
+    return result
+}
+
+export async function updateCartItemQuantity(id, oid, amount, token) {
+    const result = axios
+        .put(
+            DEFAULT_API_URL + PUT_UPDATE_CART_ITEM_QUANTITY + id + '/' + oid + '/' + amount,
             {},
             {
                 headers: {
@@ -176,30 +205,9 @@ export async function addProductToCart(id, token) {
     return result
 }
 
-export async function updateCartItemQuantity(id, amount, token) {
+export async function removeProductFromCart(id, oid,  token) {
     const result = axios
-        .put(
-            DEFAULT_API_URL + PUT_UPDATE_CART_ITEM_QUANTITY + id +'/' + amount,
-            {},
-            {
-                headers: {
-                    Authorization: token,
-                },
-            }
-        )
-        .then((res) => {
-            console.log(res)
-            return res
-        })
-        .catch((error) => {
-            console.log(error)
-        })
-    return result
-}
-
-export async function removeProductFromCart(id, token) {
-    const result = axios
-        .delete(DEFAULT_API_URL + 'cart/delete/' + id, {
+        .delete(DEFAULT_API_URL + 'cart/delete/' + id + '/' + oid, {
             headers: {
                 Authorization: token,
             },
@@ -215,7 +223,6 @@ export async function removeProductFromCart(id, token) {
 }
 
 export async function addProductToWishlist(id, token) {
-    console.log('wishlistadd ', id, token)
     const result = axios
         .put(
             DEFAULT_API_URL + 'wishlist/add-to-wishlist/' + id,
@@ -261,22 +268,35 @@ export async function fetchWishList(size = 9, page = 1, token) {
             },
         }
     )
-    console.log('wishlist', token)
     return data.data
 }
 
-// export async function getProductImage(id) {
-//     return axios
-//         .get(DEFAULT_API_URL + GET_PRODUCT_IMAGE + id)
-//         .then((response) => {
-//             let image = btoa(
-//                 new Uint8Array(response.data).reduce(
-//                     (data, byte) => data + String.fromCharCode(byte),
-//                     ''
-//                 )
-//             )
-//             return `data:${response.headers[
-//                 'content-type'
-//             ].toLowerCase()};base64,${image}`
-//         })
-// }
+export async function createOrder(user_id, total, products, {voucher_id = '', address, phone, email}, token) {
+    return axios
+        .post(
+            DEFAULT_API_URL + POST_PAYMENT_CREATE_ORDER_URL,
+            {
+                user_id,
+                total,
+                products,
+                voucher_id,
+                address,
+                phone,
+                email
+            },
+            {
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: 'Bearer ' + token,
+                },
+            }
+        )
+        .then((res) => {
+            console.log(res)
+            return res
+        })
+        .catch((error) => {
+            console.log(error)
+            return error.response.data
+        })
+}

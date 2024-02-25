@@ -14,6 +14,7 @@ import { Link } from 'react-router-dom'
 import useCheckAuth from '../../../hooks/useCheckAuth'
 import { fetchCartItems } from '../../../utils/api'
 import { useAuth } from '../../../hooks/useAuth'
+import { useCartData } from '../../../hooks/useCartData'
 
 gsap.registerPlugin(TextPlugin)
 gsap.registerPlugin(CustomEase)
@@ -24,13 +25,7 @@ const PageHeader = () => {
     const { checkAuthFunction } = useCheckAuth()
 
     const { token, isLoggedIn } = useAuth()
-    const { status, data, error, refetch } = useQuery({
-        queryKey: ['cart', token],
-        queryFn: () => fetchCartItems(99, 1, token),
-        placeholderData: keepPreviousData,
-        enabled: false,
-        staleTime: 180000,
-    })
+    const { data, refetch } = useCartData(1)
 
     // state
     const [menuOpened, setMenuOpened] = useState(false)
@@ -226,8 +221,8 @@ const PageHeader = () => {
                                 onClick={openCart}
                             >
                                 <ShoppingCartIcon />
-                                {data && (
-                                    <span className="absolute text-xs text-white rounded-full size-4 -right-2 -top-1 bg-secondary-theme">
+                                {data && data.length > 0 && (
+                                    <span className="absolute text-xs text-white rounded-full min-w-fit size-4 -right-2 -top-1 bg-secondary-theme">
                                         {data.length}
                                     </span>
                                 )}

@@ -3,12 +3,14 @@ import React, { createContext, useEffect, useState } from 'react'
 const AuthContext = createContext({})
 
 export const AuthProvider = ({ children }) => {
-    const initalToken = sessionStorage.getItem('token')
-        ? JSON.parse(sessionStorage.getItem('token'))
+    const initalToken = localStorage.getItem('token')
+        ? JSON.parse(localStorage.getItem('token'))
         : null
-    const initialUser = sessionStorage.getItem('user')
-        ? JSON.parse(sessionStorage.getItem('user'))
+    const initialUser = localStorage.getItem('user')
+        ? JSON.parse(localStorage.getItem('user'))
         : null
+
+    console.log(initialUser)
 
     const initialState = initialUser && initalToken ? true : false 
     const [user, setUser] = useState(initialUser)   
@@ -17,8 +19,8 @@ export const AuthProvider = ({ children }) => {
     const [token, setToken] = useState(initalToken)
 
     const logoutHook = () => {
-        sessionStorage.removeItem('user')
-        sessionStorage.removeItem('token')
+        localStorage.removeItem('user')
+        localStorage.removeItem('token')
         setIsLoggedIn(false)
         setUser(null)
         setToken(null)
@@ -29,8 +31,8 @@ export const AuthProvider = ({ children }) => {
     const loginHook = (user, token) => {
         setUser(user)
         setToken(token)
-        sessionStorage.setItem('token', JSON.stringify(token))
-        sessionStorage.setItem('user', JSON.stringify(user))
+        localStorage.setItem('token', JSON.stringify(token))
+        localStorage.setItem('user', JSON.stringify(user))
         setIsLoggedIn(true)
 
         console.log('logged in  ', isLoggedIn)

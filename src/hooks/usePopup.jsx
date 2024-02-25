@@ -31,7 +31,7 @@ const usePopup = () => {
                 <Dialog
                     initialFocus={focusRef}
                     as="div"
-                    className="relative z-40"
+                    className="relative z-50"
                     onClose={closePopupFunc}
                 >
                     <Transition.Child

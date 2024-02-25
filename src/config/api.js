@@ -8,7 +8,7 @@ export const GET_PRODUCT_IMAGE = 'file/show/' // + id
 export const GET_CATEGORIES_URL = 'category/get-all' // NO PRAM
 export const GET_WISHLIST_ITEMS_URL = 'wishlist/get-all/' // + size/page
 
-export const POST_PAYMENT_CREATE_ORDER = 'payment/create-order'
+export const POST_PAYMENT_CREATE_ORDER_URL = 'payment/create-order'
 export const POST_LOGIN_URL = 'auth/login'
 export const POST_LOGIN_GOOGLE_URL = 'auth/login/google'
 

@@ -1,64 +1,95 @@
 import React, { useEffect, useState } from 'react'
 import { ShoppingCartIcon } from '../../assets'
 import CartItem from '../../components/commons/CartItem'
-import { MainActionButton, PageBanner, SimpleLoading } from '../../components'
+import {
+    MainActionButton,
+    MainActionLink,
+    PageBanner,
+    SimpleLoading,
+} from '../../components'
+import { useCartData } from '../../hooks/useCartData'
 import { useAuth } from '../../hooks/useAuth'
-import { useQuery, keepPreviousData } from '@tanstack/react-query'
-import { fetchCartItems } from '../../utils/api'
+import { createOrder } from '../../utils/api'
 
 const CheckOutPage = () => {
-    const { isLoggedIn, token } = useAuth()
-
-    const [page, setPage] = useState(1)
+    const { token, user } = useAuth()
+    const [totalPrice, setTotalPrice] = useState(0)
     const [formValue, setFormValue] = useState({
-        firstname: '',
-        lastname: '',
+        phone: '',
         email: '',
         address: '',
+        voucher_id: '',
     })
 
-    const { status, data, error, refetch } = useQuery({
-        queryKey: ['cart', page, token],
-        queryFn: () => fetchCartItems(9, page, token),
-        placeholderData: keepPreviousData,
-        enabled: false,
-        staleTime: 180000,
-    })
-
-    useEffect(() => {
-        if (isLoggedIn) {
-            refetch()
-        }
-    }, [])
-
-    useEffect(() => {
-        if (isLoggedIn) {
-            console.log(data)
-        }
-    }, [data])
+    const { status, data, error } = useCartData(1)
 
     const handleInputChange = (e) => {
         const { name, value } = e.target
         setFormValue((prev) => ({ ...prev, [name]: value }))
     }
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault()
 
         console.log(formValue)
 
+        if (formValue && user && data) {
+            const cartItems = data
+            let products = []
+            cartItems.forEach((item) => {
+                const chosenOption = item.product.optionProducts.find(
+                    (option) => option.id === item.chooseOption
+                )
+                const product_id = chosenOption.id
+                const name = chosenOption.name
+                const material = chosenOption.material
+                const price = chosenOption.price
+                const product = {
+                    id: product_id,
+                    product_id: item.product.id,
+                    name: name,
+                    material: material,
+                    price: price,
+                    quantity: item.quantity,
+                }
+                products.push(product)
+            })
+            console.log(products)
+            const result = await createOrder(
+                user.profile.profile.id,
+                totalPrice,
+                products,
+                formValue,
+                token
+            )
+            console.log(result)
+        }
+
         setFormValue({
-            firstname: '',
-            lastname: '',
+            phone: '',
             email: '',
             address: '',
+            voucher_id: '',
         })
     }
+
+    useEffect(() => {
+        const totalPrice = data?.reduce(
+            (accumulator, item) =>
+                item.product.optionProducts.find(
+                    (option) => option.id === item.chooseOption
+                ).price *
+                    item.quantity +
+                accumulator,
+            0
+        )
+        setTotalPrice(totalPrice)
+    }, [data])
 
     return (
         <section className="px-20 min-h-svh">
             <PageBanner title="checkout" />
-            <div className="flex flex-col w-full h-full gap-4 border-t divide-x rounded-sm shadow-xl divide-secondary-theme/50 min-h-max border-t-neutral-800/10 md:flex-row ">
+            <div className="flex flex-col w-full h-full gap-4 rounded-sm min-h-max md:flex-row ">
                 {/* items */}
                 <div className="flex flex-col flex-1 gap-4 p-6 ">
                     <div className="flex w-full gap-2 text-lg uppercase">
@@ -72,69 +103,40 @@ const CheckOutPage = () => {
                         <div>{error.message}</div>
                     ) : (
                         <>
-                            <h5 className="text-5xl ">$0</h5>
                             <div className="flex max-h-[55svh] flex-col gap-2 overflow-y-auto">
-                                {data?.map(
-                                    (item, i) =>
-                                        i > 0 && (
-                                            <>
-                                                <CartItem
-                                                    key={item.product?.id}
-                                                    quantity={item.quantity}
-                                                    product={item.product}
-                                                />
-                                                <CartItem
-                                                    key={item.product?.id}
-                                                    product={item.product}
-                                                />
-                                                <CartItem
-                                                    key={item.product?.id}
-                                                    product={item.product}
-                                                />
-                                                <CartItem
-                                                    key={item.product?.id}
-                                                    product={item.product}
-                                                />
-                                                <CartItem
-                                                    key={item.product?.id}
-                                                    product={item.product}
-                                                />
-                                                <CartItem
-                                                    key={item.product?.id}
-                                                    product={item.product}
-                                                />
-                                                <CartItem
-                                                    key={item.product?.id}
-                                                    product={item.product}
-                                                />
-                                            </>
-                                        )
-                                )}
+                                {data?.map((item, i) => (
+                                    <>
+                                        <CartItem
+                                            isItemEditable={false}
+                                            key={item.chooseOption}
+                                            quantity={item.quantity}
+                                            chooseOption={item.chooseOption}
+                                            product={item.product}
+                                        />
+                                    </>
+                                ))}
                             </div>
                         </>
                     )}
 
-                    {/* sub total */}
-                    <div className="flex flex-col self-end w-full gap-2 divide-y min-w-max divide-secondary-theme/30">
-                        {/* <div className="flex justify-between gap-4 mt-4">
-                            <span className="uppercase">sub total</span>
-                            <span></span>
+                    <div className="flex-col self-end w-full gap-4 flex-center min-w-max ">
+                        <div className="flex justify-between w-full">
+                            <span className="text-lg uppercase">total</span>
+                            <h5 className="text-5xl ">${totalPrice}</h5>
                         </div>
-
-                        <div className="flex justify-between text-neutral-500 ">
-                            <span className="uppercase ">shipping</span>
-                            <span>free</span>
-                        </div> */}
-
-                        <div className="flex justify-between ">
-                            <span className="uppercase">total</span>
-                            <span></span>
+                        <div className="w-full gap-4 flex-center">
+                            <MainActionLink to="/cart">
+                                edit cart
+                            </MainActionLink>
+                            <MainActionLink to="/shop">
+                                continue shopping
+                            </MainActionLink>
                         </div>
                     </div>
                 </div>
 
                 {/* payment info */}
-                <div className="flex flex-col p-6 ">
+                <div className="flex flex-col p-6 pb-10 border shadow-xl w-96 min-w-max border-secondary-theme">
                     <div className="flex w-full gap-2 mb-4 text-lg uppercase">
                         <span> Billing information</span>
                     </div>
@@ -143,29 +145,22 @@ const CheckOutPage = () => {
                         onSubmit={handleSubmit}
                         className="flex flex-col gap-2"
                     >
-                        <label htmlFor="nameInput">
-                            Name<span className="text-red-600">*</span>
+                        <label htmlFor="phoneInput">
+                            Phone<span className="text-red-600">*</span>
                         </label>
-                        <div id="nameInput" className="flex gap-4">
-                            <input
-                                type="text"
-                                placeholder="First Name"
-                                onChange={handleInputChange}
-                                value={formValue.firstname}
-                                name="firstname"
-                                className="block w-full p-3 text-sm text-gray-900 border rounded-full border-secondary-theme bg-primary-bg-color ps-4 focus:ring-secondary-theme"
-                                required
-                            />
-                            <input
-                                type="text"
-                                onChange={handleInputChange}
-                                value={formValue.lastname}
-                                name="lastname"
-                                placeholder="Last Name"
-                                className="block w-full p-3 text-sm text-gray-900 border rounded-full border-secondary-theme bg-primary-bg-color ps-4 focus:ring-secondary-theme"
-                                required
-                            />
-                        </div>
+
+                        <input
+                            type="tel"
+                            minLength={9}
+                            maxLength={12}
+                            onChange={handleInputChange}
+                            value={formValue.phone}
+                            id="phoneInput"
+                            name="phone"
+                            placeholder="phone"
+                            className="block w-full p-3 text-sm text-gray-900 border rounded-full border-secondary-theme bg-primary-bg-color ps-4 focus:ring-secondary-theme"
+                            required
+                        />
 
                         {/* address */}
                         <label htmlFor="addressInput">
@@ -197,6 +192,20 @@ const CheckOutPage = () => {
                             className="block w-full p-3 text-sm text-gray-900 border rounded-full border-secondary-theme bg-primary-bg-color ps-4 focus:ring-secondary-theme"
                             required
                         />
+
+                        {/* voucher */}
+
+                        <label htmlFor="voucherInput">Voucher</label>
+                        <input
+                            id="voucherInput"
+                            name="voucher_id"
+                            onChange={handleInputChange}
+                            value={formValue.voucher_id}
+                            type="text"
+                            placeholder="Voucher"
+                            className="block w-full p-3 text-sm text-gray-900 border rounded-full border-secondary-theme bg-primary-bg-color ps-4 focus:ring-secondary-theme"
+                        />
+
                         <MainActionButton
                             isSuffixArrow={false}
                             type="submit"

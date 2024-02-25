@@ -7,33 +7,27 @@ import {
 } from '../../components'
 import { useAuth } from '../../hooks/useAuth'
 import { useQuery, keepPreviousData } from '@tanstack/react-query'
-import { fetchWishList, removeProductFromWishlist } from '../../utils/api'
-import { displayImage } from '../../utils/helper'
+import { addProductToCart, fetchWishList, removeProductFromWishlist } from '../../utils/api'
 import usePopup from '../../hooks/usePopup'
+import { useRemoveWishlistItem, useWishlistData } from '../../hooks/useWishlistData'
+import { useAddCartItem} from '../../hooks/useCartData'
 
 const WishListPage = () => {
     const { token } = useAuth()
-    const { isPopupOpen, displayPopup, openPopupFunc } = usePopup()
+    const {  openPopupFunc } = usePopup()
 
     const [page, setPage] = useState(1)
 
-    const { status, data, error, refetch } = useQuery({
-        queryKey: ['products', page, token],
-        queryFn: () => fetchWishList(9, page, token),
-        placeholderData: keepPreviousData,
-        enable: !!token,
-        staleTime: 3600000,
-    })
+    const { status, data, error } = useWishlistData(page)
+    const {mutate: addToCart} = useAddCartItem()
+    const {mutate: removeWishlistItem} = useRemoveWishlistItem()
 
-    const addItemToCart = () => {
-        console.log('asdawd')
+    const addItemToCart = async (id, oid, name) => {
+        addToCart({id, oid, name})
     }
 
-    const removeItemFromList = async(id, name) => {
-        if (!token) return
-        await removeProductFromWishlist(id, token)
-        openPopupFunc(`${name} is remove from the wishlist`, 'Got it, thanks')
-        await refetch()
+    const removeItemFromWishlist = async(id, name) => {
+        removeWishlistItem({id, name})
     }
 
     useEffect(() => {
@@ -46,15 +40,15 @@ const WishListPage = () => {
             {status === 'pending' ? (
                 <SimpleLoading />
             ) : status === 'error' ? (
-                <div>{error.message}</div>
+                <div>OOPS. SOMETHING WENT WRONG DETCHING YOUR WISHLIST</div>
             ) : (
                 <div className='flex flex-col w-full gap-2'>
                     {data.map((item) => (
                         <CartItem
                             key={item.product?.id}
                             product={item.product}
-                            removeItemFunc={() => removeItemFromList(item.product?.id, item.product?.name)}
-                            addItemFunc={()=>addItemToCart(item.product?.id)}
+                            removeItemFunc={() => removeItemFromWishlist(item.product?.id, item.product?.name)}
+                            addItemFunc={addItemToCart}
                         />
                     ))}
                 </div>

@@ -26,7 +26,6 @@ const SearchBar = forwardRef(({ placeholder, onChange }, ref) => {
                     className="block w-full p-3 text-sm text-gray-900 border rounded-full border-secondary-theme bg-primary-bg-color ps-4 focus:ring-secondary-theme"
                     placeholder={placeholder}
                     onChange={handleChangeDebounce}
-                    required
                 />
                 <button
                     type="submit"

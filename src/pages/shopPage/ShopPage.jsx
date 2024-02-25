@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import {
     ActionButton,
     DropdownSelection,
@@ -8,11 +8,13 @@ import {
     SimpleLoading,
 } from '../../components'
 import SearchBar from '../../components/commons/SearchBar'
+import { ArrowLeftIcon, ArrowRightIcon } from '../../assets'
 import {
-    ArrowLeftIcon,
-    ArrowRightIcon,
-} from '../../assets'
-import { useQuery, keepPreviousData } from '@tanstack/react-query'
+    useQuery,
+    keepPreviousData,
+    useQueryClient,
+    useMutation,
+} from '@tanstack/react-query'
 import {
     addProductToCart,
     addProductToWishlist,
@@ -24,21 +26,26 @@ import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../../hooks/useAuth'
 import useCheckAuth from '../../hooks/useCheckAuth'
 import usePopup from '../../hooks/usePopup'
+import { useAddCartItem } from '../../hooks/useCartData'
+import { useAddWishlistItem } from '../../hooks/useWishlistData'
 
 const ShopPage = () => {
     const navigate = useNavigate()
 
     const { checkAuthFunction } = useCheckAuth()
     const { token } = useAuth()
-    const { openPopupFunc, isPopupOpen, displayPopup } = usePopup()
-
+    const { openPopupFunc } = usePopup()
+    const queryClient = useQueryClient()
+    const size = 9
     const [page, setPage] = useState(1)
     const [searchValue, setSearchValue] = useState('')
-    const [chosenCategoryId, setChosenCategoryId] = useState(null)
+    const [sortOption, setSortOption] = useState('')
+    const [chosenCategoryId, setChosenCategoryId] = useState('')
 
     const { status, data, error } = useQuery({
-        queryKey: ['products', page],
-        queryFn: () => fetchProducts(page),
+        queryKey: ['products', page, searchValue, chosenCategoryId, sortOption],
+        queryFn: () =>
+            fetchProducts(9, page, searchValue, chosenCategoryId, sortOption),
         placeholderData: keepPreviousData,
         staleTime: 3600000,
     })
@@ -54,25 +61,39 @@ const ShopPage = () => {
         staleTime: 3600000,
     })
 
+    const { mutate: addToCart } = useAddCartItem()
+    const {mutate: addToWishlist} = useAddWishlistItem()
+
     const sortOptions = [
         {
-            value: '1',
+            value: {
+                value: 'createdAt',
+                direction: 'DESC',
+            },
             title: 'Newest to Oldest',
         },
         {
-            value: '2',
+            value: {
+                value: 'createdAt',
+                direction: 'ASC',
+            },
             title: 'Oldest to Newest',
         },
         {
-            value: '3',
+            value: {
+                value: 'name',
+                direction: 'ASC',
+            },
             title: 'A to Z',
         },
         {
-            value: '4',
+            value: {
+                value: 'name',
+                direction: 'DESC',
+            },
             title: 'Z to A',
         },
     ]
-
 
     const searchBarRef = useRef()
     // func
@@ -86,24 +107,12 @@ const ShopPage = () => {
         setPage((prev) => prev + 1)
     }
 
-    const handleAddToCart = checkAuthFunction(
-        async (productId, productName) => {
-            if (!token) return
-            await addProductToCart(productId, token)
-            openPopupFunc(
-                `${productName} is added to you cart`,
-                'Got it, thanks!'
-            )
-        }
-    )
+    const handleAddToCart = checkAuthFunction((id, oid, name) => {
+        addToCart({id, oid, name})
+    })
 
-    const handleAddWishList = checkAuthFunction((productId, productName) => {
-        if (!token) return
-        addProductToWishlist(productId, token)
-        openPopupFunc(
-            `${productName} is added to you wishlist`,
-            'Got it, thanks!'
-        )
+    const handleAddWishList = checkAuthFunction((id, name) => {
+        addToWishlist({id, name})
     })
 
     const handleItemClick = (name) => {
@@ -114,15 +123,16 @@ const ShopPage = () => {
         setSearchValue(name.trim())
     }
 
-    const clearSearchBar = () =>{
+    const clearQuery = () => {
         searchBarRef.current.value = ''
         setSearchValue('')
+        setChosenCategoryId('')
     }
 
     const handleClickCategory = (catId) => {
         if (!catId) return
         if (catId === chosenCategoryId) {
-            setChosenCategoryId(null)
+            setChosenCategoryId('')
             return
         }
         setChosenCategoryId(catId)
@@ -140,29 +150,43 @@ const ShopPage = () => {
                     <div className="flex items-center justify-between w-full ">
                         <div className="flex gap-2">
                             <h5 className="text-lg font-semibold">
-                                Displaying
+                                Displaying{' '}
+                                <span className="font-normal">
+                                    {data && data[0].length * (page - 1) + 1}
+                                </span>{' '}
+                                to{' '}
+                                <span className="font-normal">
+                                    {data && data[0].length * page}
+                                </span>{' '}
+                                items out of{' '}
+                                <span className="font-normal">
+                                    {data && data[1]}{' '}
+                                </span>
+                                items
                             </h5>
-
                         </div>
 
                         {/* sort */}
                         <div className="z-10 flex justify-end">
-                            <DropdownSelection options={sortOptions}>
+                            <DropdownSelection
+                                onChange={setSortOption}
+                                options={sortOptions}
+                            >
                                 Sort Options
                             </DropdownSelection>
                         </div>
                     </div>
 
                     {/* items */}
-                    {searchValue ? (
+                    {data && data[0].length === 0 ? (
                         <div className="flex-center h-full min-h-[50svh] w-full flex-col">
                             <div className="flex-col text-2xl flex-center">
                                 <span>OOPS!</span>
-                                <span>THERE ARE NO RESULTS FOR {searchValue}.</span>
+                                <span>THERE ARE NO RESULTS.</span>
                             </div>
                             <MainActionButton
                                 className="mt-4"
-                                onClick={clearSearchBar}
+                                onClick={clearQuery}
                             >
                                 Shop other items
                             </MainActionButton>
@@ -190,18 +214,12 @@ const ShopPage = () => {
                                                             product.name
                                                         )
                                                     }
-                                                    addItemFunc={() =>
-                                                        handleAddToCart(
-                                                            product.id,
-                                                            product.name
-                                                        )
+                                                    addItemFunc={
+                                                        handleAddToCart
                                                     }
-                                                    addWishListFunc={() => {
-                                                        handleAddWishList(
-                                                            product.id,
-                                                            product.name
-                                                        )
-                                                    }}
+                                                    addWishListFunc={
+                                                        handleAddWishList
+                                                    }
                                                 />
                                             ))}
                                         </>

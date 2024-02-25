@@ -9,25 +9,19 @@ import {
 } from '../../components'
 import { useAuth } from '../../hooks/useAuth'
 import usePopup from '../../hooks/usePopup'
+import { useCartData, useRemoveCartItem } from '../../hooks/useCartData'
 
 const ShoppingCartPage = () => {
+
     const [page, setPage] = useState(1)
-    const { isPopupOpen, openPopupFunc, displayPopup} = usePopup()
+    const [totalPrice, setTotalPrice] = useState(0)
     const { token } = useAuth()
-    const { status, data, error, refetch } = useQuery({
-        queryKey: ['cart', page, token],
-        queryFn: () => fetchCartItems(9, page, token),
-        placeholderData: keepPreviousData,
-        enabled: false,
-        staleTime: 180000,
-    })
 
-    const removeItem = async(id, name) => {
-        if (!token) return
-        await removeProductFromCart(id, token)
-        openPopupFunc(`${name} is removed from your cart`, 'Got it, thanks!')
-        await refetch()
+    const { status, data, error, refetch } = useCartData(page)
+    const {mutate: removeCartItem} = useRemoveCartItem()
 
+    const removeItem = (id, oid,  name) => {
+        removeCartItem({id, oid, name})
     }
 
     useEffect(() => {
@@ -37,13 +31,24 @@ const ShoppingCartPage = () => {
     }, [])
 
     useEffect(() => {
-        console.log(data)
+        const totalPrice = data?.reduce(
+            (accumulator, item) =>
+                item.product.optionProducts.find(
+                    (option) => option.id === item.chooseOption
+                ).price *
+                    item.quantity +
+                accumulator,
+            0
+        )
+        setTotalPrice(totalPrice)
     }, [data])
 
     return (
         <section className="px-20 min-h-svh">
             <PageBanner title="cart" suffix={data?.length ? data.length : '0'} />
-            {isPopupOpen && displayPopup()}
+            <div className='mb-4 text-5xl font-light'>
+                ${totalPrice}
+            </div>
             {status === 'pending' ? (
                 <>
                     <div className="mt-4 flex-center">
@@ -61,7 +66,7 @@ const ShoppingCartPage = () => {
                     <div className="mt-4 ">
                         <p className="text-sm text-center text-gray-500">
                             {/* {error.message} */}
-                            error
+                            Opps. Something happened when fetching your cart items
                         </p>
                     </div>
 
@@ -75,10 +80,12 @@ const ShoppingCartPage = () => {
                 <div className="flex flex-col gap-2">
                     {data.map((item) => (
                         <CartItem
-                            key={item.product?.id}
+                            key={item.chooseOption}
                             product={item.product}
                             quantity={item.quantity}
-                            removeItemFunc={() => removeItem(item.product?.id, item.product?.name)}
+                            isItemEditable={true}
+                            chooseOption={item.chooseOption}
+                            removeItemFunc={() => removeItem(item.product?.id, item.chooseOption, item.product?.name)}
                         />
                     ))}
 

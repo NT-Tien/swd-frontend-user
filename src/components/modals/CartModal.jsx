@@ -2,24 +2,16 @@ import React, { Fragment, useEffect, useState } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
 import MainActionLink from '../commons/buttons/MainActionLink'
 import CartItem from '../commons/CartItem'
-import { useQuery, keepPreviousData } from '@tanstack/react-query'
-import { fetchCartItems, removeProductFromCart } from '../../utils/api'
+import {  removeProductFromCart } from '../../utils/api'
 import { useAuth } from '../../hooks/useAuth'
 import SimpleLoading from '../commons/loading/SimpleLoading'
 import usePopup from '../../hooks/usePopup'
+import { useCartData } from '../../hooks/useCartData'
 
 const CartModal = ({ isOpen, closeModalFunction }) => {
     const [page, setPage] = useState(1)
-    const { openPopupFunc} = usePopup()
 
-    const { token, isLoggedIn } = useAuth()
-    const { status, data, error, refetch } = useQuery({
-        queryKey: ['cart', page, token],
-        queryFn: () => fetchCartItems(9, page, token),
-        placeholderData: keepPreviousData,
-        enabled: false,
-        staleTime: 180000,
-    })
+    const { status, data, error} = useCartData(page)
 
     const closeModal = () => {
         if (closeModalFunction) {
@@ -27,18 +19,6 @@ const CartModal = ({ isOpen, closeModalFunction }) => {
         }
     }
 
-    const removeItem = async (id, name) => {
-        if (!token) return
-        await removeProductFromCart(id, token)
-        openPopupFunc(`${name} is removed from your cart`, 'Got it, thanks!')
-        await refetch()
-    }
-
-    useEffect(() => {
-        if (isOpen && isLoggedIn) {
-            refetch()
-        }
-    }, [isOpen, refetch, isLoggedIn])
 
     useEffect(() => {
         console.log(data)
@@ -121,23 +101,27 @@ const CartModal = ({ isOpen, closeModalFunction }) => {
                                             </MainActionLink>
                                         </div>
                                     </>
-                                ) : data.length > 0 ? (
+                                ) : Array.isArray(data) ? (
                                     <>
                                         <div className="flex flex-col w-full gap-2 overflow-y-auto">
                                             {data.map((item) => (
                                                 <CartItem
-                                                    key={item.product?.id}
+                                                    key={item.chooseOption}
+                                                    isItemEditable={false}
                                                     product={item.product}
-                                                    removeItemFunc={() =>
-                                                        removeItem(
-                                                            item.product?.id, item.product?.name
-                                                        )
-                                                    }
+                                                    quantity={item.quantity}
+                                                    chooseOption={item.chooseOption}
                                                 />
                                             ))}
                                         </div>
 
-                                        <div className="mt-4 flex-center">
+                                        <div className="gap-4 mt-4 flex-center">
+                                        <MainActionLink
+                                                onClick={closeModalFunction}
+                                                to="/cart"
+                                            >
+                                                Edit your cart
+                                            </MainActionLink>
                                             <MainActionLink
                                                 onClick={closeModalFunction}
                                                 to="/checkout"

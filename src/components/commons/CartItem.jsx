@@ -8,26 +8,36 @@ import { HeartIcon } from '../../assets'
 import DropdownSelection from './DropdownSelection'
 import { updateCartItemQuantity } from '../../utils/api'
 import { useAuth } from '../../hooks/useAuth'
+import { useQueryClient } from '@tanstack/react-query'
 
 const CartItem = ({
     removeItemFunc,
     addItemFunc,
     product,
     quantity,
+    isItemEditable,
     onClick,
+    chooseOption,
     addWishListFunc,
 }) => {
-
-    const {token} = useAuth()
-
+    const { token } = useAuth()
+    const queryClient = useQueryClient()
     const imgUrl = product?.images ? displayImage(product.images[0]) : ''
     const name = product?.name ? product.name : ''
     const category = product?.category_id ? product.category_id.name : ''
+    const findIndexOption = product.optionProducts.findIndex(
+        (option) => option.id === chooseOption
+    )
+    const chooseOptionIndex = chooseOption
+        ? findIndexOption
+            ? findIndexOption
+            : 0
+        : 0
 
     const [price, setPrice] = useState('')
     const [isEditable, setisEditable] = useState(false)
     const [chosenQuantity, setChosenQuantity] = useState(quantity)
-    const [chosenOption, setChosenOption] = useState(0)
+    const [chosenOption, setChosenOption] = useState(chooseOptionIndex)
 
     const removeItem = () => {
         if (removeItemFunc) {
@@ -37,8 +47,8 @@ const CartItem = ({
 
     const handleOptionClick = (index) => {
         if (index === chosenOption) return
-        setisEditable(true)
         setChosenOption(index)
+        console.log(product.optionProducts[chosenOption].id)
     }
 
     const handleOnClick = () => {
@@ -49,24 +59,40 @@ const CartItem = ({
 
     const handleAddWishList = () => {
         if (addWishListFunc) {
-            addWishListFunc()
+            addWishListFunc(product.id, product.name)
         }
     }
 
     const handleAddToCart = () => {
         if (addItemFunc) {
-            addItemFunc()
+            console.log(product.optionProducts[chosenOption].id)
+            addItemFunc(
+                product.id,
+                product.optionProducts[chosenOption].id,
+                product.name
+            )
         }
     }
 
-    const handleConfirmChange = () => {
-        if(chosenOption !== quantity) {
-            updateCartItemQuantity(product.id, chosenQuantity, token)
-        } 
+    const handleConfirmChange = async () => {
+        if (chosenQuantity !== quantity) {
+            updateCartItemQuantity(
+                product.id,
+                product.optionProducts[chosenOption],
+                chosenQuantity,
+                token
+            )
+            await queryClient.invalidateQueries(
+                {
+                    queryKey: ['cart'],
+                    exact: true,
+                    refetchType: 'active',
+                },
+                { throwOnError, cancelRefetch }
+            )
+        }
 
         setisEditable(false)
-
-
     }
 
     const handleQuantityChange = (value) => {
@@ -101,16 +127,36 @@ const CartItem = ({
                         <div className="flex flex-col gap-2">
                             <h5 className="text-xl font-light">{name}</h5>{' '}
                             <div className="flex gap-2 h-max text-secondary-theme">
-                                {product?.optionProducts?.map((option, i) => (
-                                    <ActionButton
-                                        className="p-1 px-2 rounded-full"
-                                        onClick={() => handleOptionClick(i)}
-                                        key={option.id}
-                                        active={i === chosenOption}
-                                    >
-                                        {option.name}
-                                    </ActionButton>
-                                ))}
+                                {chooseOption 
+                                    ? product?.optionProducts?.map(
+                                          (option, i) =>
+                                              option.id === chooseOption && (
+                                                  <ActionButton
+                                                      className="p-1 px-2 rounded-full"
+                                                      onClick={() =>
+                                                          handleOptionClick(i)
+                                                      }
+                                                      key={option.id}
+                                                      active
+                                                  >
+                                                      {option.name}
+                                                  </ActionButton>
+                                              )
+                                      )
+                                    : product?.optionProducts?.map(
+                                          (option, i) => (
+                                              <ActionButton
+                                                  className="p-1 px-2 rounded-full"
+                                                  onClick={() =>
+                                                      handleOptionClick(i)
+                                                  }
+                                                  key={option.id}
+                                                  active={i === chosenOption}
+                                              >
+                                                  {option.name}
+                                              </ActionButton>
+                                          )
+                                      )}
                             </div>
                             <Tag>{category}</Tag>
                         </div>
@@ -149,26 +195,39 @@ const CartItem = ({
                         </div>
                     </div>
 
-                    <div className="flex justify-between w-2/5">
-                        {/* qty */}
-                        {quantity && (
-                            <DropdownSelection onChange={handleQuantityChange}>
-                                QTY: {chosenQuantity}
-                            </DropdownSelection>
-                        )}
-
-                        {/* price */}
-
-                        <div className="flex flex-col items-end justify-between ">
-                            <div className="text-3xl font-light">
-                                ${quantity ? price * chosenQuantity : price}
-                            </div>
-                            {isEditable && (
-                                <MainActionButton onClick={handleConfirmChange}>
-                                    Confirm change
-                                </MainActionButton>
+                    <div className="flex flex-col items-end justify-between w-2/5 ">
+                        <div className="flex justify-between w-full">
+                            {/* qty */}
+                            {quantity ? (
+                                isItemEditable ? (
+                                    <DropdownSelection
+                                        onChange={handleQuantityChange}
+                                    >
+                                        QTY: {chosenQuantity}
+                                    </DropdownSelection>
+                                ) : (
+                                    <div className="p-2 px-4 text-sm font-medium border rounded-full border-secondary-theme text-secondary-theme">
+                                        QTY: {chosenQuantity}
+                                    </div>
+                                )
+                            ) : (
+                                <div></div>
                             )}
+                            {/* price */}
+
+                            <div className="text-3xl font-light">
+                                $
+                                {quantity
+                                    ? Math.round(price * chosenQuantity * 10) /
+                                      10
+                                    : price}
+                            </div>
                         </div>
+                        {isItemEditable && isEditable && (
+                            <MainActionButton onClick={handleConfirmChange}>
+                                Confirm change
+                            </MainActionButton>
+                        )}
                     </div>
                 </div>
             </div>
