@@ -1,15 +1,23 @@
 import React, { Fragment, useEffect, useState } from 'react'
 
 import { Popover, Transition } from '@headlessui/react'
-import { UserCircleIcon, UserIcon } from '../../assets'
+import {
+    HeartIcon,
+    LoginIcon,
+    LogoutIcon,
+    ShoppingBagIcon,
+    ShoppingCartIcon,
+    SignupIcon,
+    UserCircleIcon,
+    UserIcon,
+} from '../../assets'
 import CustomLink from '../commons/CustomLink'
 import { auth } from '../../config/firebase'
 import { useAuth } from '../../hooks/useAuth'
 
 const SettingModal = () => {
-    const {logoutHook, user} = useAuth()
+    const { logoutHook, user } = useAuth()
     const handleLogout = () => {
-
         logoutHook()
 
         if (auth && auth.currentUser) {
@@ -20,26 +28,25 @@ const SettingModal = () => {
                 .catch((error) => {
                     console.error('Error signing out:', error)
                 })
-        } 
-
-
+        }
     }
 
     return (
         <Popover>
             <Popover.Button className="relative flex-center">
-                {user ?  (user.photoURL ? (
-                    <div className="w-6 h-6 overflow-hidden rounded-full aspect-square">
-                        <img
-                            src={user.photoURL}
-                            className="object-cover w-full h-full" 
-                        />
-                    </div>
+                {user ? (
+                    user.photoURL ? (
+                        <div className="w-6 h-6 overflow-hidden rounded-full aspect-square">
+                            <img
+                                src={user.photoURL}
+                                className="object-cover w-full h-full"
+                            />
+                        </div>
+                    ) : (
+                        <UserCircleIcon />
+                    )
                 ) : (
-                    <UserCircleIcon />
-                )): (
                     <UserIcon />
-                    
                 )}
             </Popover.Button>
 
@@ -53,7 +60,7 @@ const SettingModal = () => {
                 leaveTo="opacity-0 translate-y-1"
             >
                 <Popover.Panel className="absolute z-10 right-2 top-14">
-                    <div className="flex flex-col items-start justify-center px-6 py-3 text-lg border shadow-lg border-secondary-theme bg-primary-bg-color">
+                    <div className="flex flex-col items-start justify-center gap-2 px-6 py-3 text-lg border shadow-lg border-secondary-theme bg-primary-bg-color">
                         {user ? (
                             <>
                                 <CustomLink
@@ -62,7 +69,7 @@ const SettingModal = () => {
                                     underlineWidth="h-[1px]"
                                     to="/checkout"
                                 >
-                                    Check out
+                                    <ShoppingBagIcon /> Check out
                                 </CustomLink>
 
                                 <CustomLink
@@ -71,7 +78,7 @@ const SettingModal = () => {
                                     underlineWidth="h-[1px]"
                                     to="/wishlist"
                                 >
-                                    Wish list
+                                    <HeartIcon /> Wish list
                                 </CustomLink>
 
                                 <CustomLink
@@ -80,18 +87,17 @@ const SettingModal = () => {
                                     underlineWidth="h-[1px]"
                                     to="/cart"
                                 >
-                                    Cart
+                                    <ShoppingCartIcon /> Cart
                                 </CustomLink>
 
                                 <CustomLink
                                     className="font-normal"
-                                    to='/'
+                                    to="/"
                                     active={false}
                                     underlineWidth="h-[1px]"
                                     onClick={handleLogout}
                                 >
-                                    Log out
-                                    
+                                    <LogoutIcon /> Log out
                                 </CustomLink>
                             </>
                         ) : (
@@ -101,6 +107,7 @@ const SettingModal = () => {
                                     underlineWidth="h-[1px]"
                                     to="/login"
                                 >
+                                    <LoginIcon />
                                     Log in
                                 </CustomLink>
                                 <CustomLink
@@ -108,6 +115,7 @@ const SettingModal = () => {
                                     underlineWidth="h-[1px]"
                                     to="/signup"
                                 >
+                                    <SignupIcon />
                                     Sign up
                                 </CustomLink>
                             </>

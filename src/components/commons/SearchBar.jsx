@@ -4,11 +4,12 @@ import UseDebounce from '../../hooks/UseDebounce'
 
 const SearchBar = forwardRef(({ placeholder, onChange }, ref) => {
     const handleChangeDebounce = UseDebounce((e) => {
+        e.preventDefault()
         onChange(e.target.value)
     }, 500)
 
     return (
-        <form>
+        <form onSubmit={handleChangeDebounce}>
             <label
                 htmlFor="default-search"
                 className="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white"

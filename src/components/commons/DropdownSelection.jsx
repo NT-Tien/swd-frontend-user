@@ -16,13 +16,13 @@ const DropdownSelection = ({ options, children, onChange }) => {
     }
 
     return (
-        <div className="max-w-fit">
-            <Menu as="div" className="relative inline-block text-left">
+        <div className="z-20 max-w-fit">
+            <Menu as="div" className="relative z-20 inline-block text-left">
                 <div>
                     <Menu.Button
                         as="button"
                         className={clsx(
-                            'flex-center w-full gap-2 rounded-full border border-secondary-theme bg-transparent p-2 px-4 text-sm font-medium text-secondary-theme transition-all duration-300 hover:bg-black/10 focus:outline-none focus-visible:ring-2 focus-visible:ring-secondary-theme/75'
+                            'flex-center w-max gap-2 rounded-full border border-secondary-theme bg-transparent p-2 px-4 text-sm font-medium text-secondary-theme transition-all duration-300 hover:bg-black/10 focus:outline-none focus-visible:ring-2 focus-visible:ring-secondary-theme/75'
                         )}
                     >
                         {children}
@@ -38,7 +38,7 @@ const DropdownSelection = ({ options, children, onChange }) => {
                     leaveFrom="transform opacity-100 scale-100"
                     leaveTo="transform opacity-0 scale-95"
                 >
-                    <Menu.Items className="absolute right-0 z-[15] min-w-full mt-2 origin-top-right border divide-y divide-gray-100 rounded-md shadow-lg border-secondary-theme/50 bg-primary-bg-color ring-1 ring-black/5 focus:outline-none">
+                    <Menu.Items className="absolute right-0 z-10 w-full mt-2 origin-top-right border divide-y divide-gray-100 rounded-md shadow-lg min-w-max border-secondary-theme/50 bg-primary-bg-color ring-1 ring-black/5 focus:outline-none">
                         <div className="p-1 overflow-y-auto max-h-80">
                             {options
                                 ? options.map((option, i) => (
@@ -47,7 +47,7 @@ const DropdownSelection = ({ options, children, onChange }) => {
                                               <button
                                                   onClick={() =>
                                                       handleOnChange(
-                                                          option.value
+                                                          option
                                                       )
                                                   }
                                                   className={`${
@@ -67,7 +67,7 @@ const DropdownSelection = ({ options, children, onChange }) => {
                                               <button
                                                   onClick={() =>
                                                       handleOnChange(
-                                                          option.value
+                                                          option
                                                       )
                                                   }
                                                   className={`${

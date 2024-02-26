@@ -26,7 +26,7 @@ const CustomLink = ({onClick, active = true, children, to, className = 'font-lig
             to={to}
             onClick={handleOnClick}
         >
-            <span>{children}</span>
+            <span className='gap-2 flex-center'>{children}</span>
             <span className="flex justify-end group-hover:justify-start">
                 <span className={`flex ${underlineWidth} w-0 rounded ${underlineColor} transition-all duration-[250ms] group-hover:w-full`}></span>
             </span>

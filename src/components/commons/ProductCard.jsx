@@ -42,10 +42,10 @@ const ProductCard = ({
     return (
         <div
             onClick={handleClick}
-            className={`${className}  relative flex aspect-[5/7] h-fit w-80 min-w-80 max-w-96 flex-col items-center justify-between overflow-hidden rounded-sm bg-secondary-bg-color transition-all duration-[400ms] hover:scale-[1.02] hover:shadow-2xl`}
+            className={`${className} z-[1]  relative flex aspect-[5/7] h-fit w-80 min-w-80 max-w-96 flex-col items-center justify-between overflow-hidden rounded-sm bg-secondary-bg-color transition-all duration-[400ms] hover:scale-[1.02] hover:shadow-2xl`}
         >
             <div className="relative w-full h-full group/image">
-                <div className="absolute inset-0 z-10 opacity-0 h-full w-full bg-neutral-800/20 group-hover/image:opacity-100 transition-opacity duration-[400ms]">
+                <div className="absolute inset-0 z-[2] opacity-0 h-full w-full bg-neutral-800/20 group-hover/image:opacity-100 transition-opacity duration-[400ms]">
                     {options && (
                         <div className="absolute flex flex-col w-full gap-2 left-2 top-2 ">
                             {options.map((option, i) => (

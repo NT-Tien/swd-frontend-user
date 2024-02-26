@@ -1,6 +1,6 @@
 import React from 'react'
 import {
-    CustomLink,
+    LandingPageCollections,
     LandingPageImages,
     MainActionLink,
     ProductCard,
@@ -8,21 +8,18 @@ import {
 import { useNavigate } from 'react-router-dom'
 import { useQuery, keepPreviousData } from '@tanstack/react-query'
 import { fetchProducts } from '../../utils/api'
-import { displayImage } from '../../utils/helper'
 
 const HomePage = () => {
     const page = 1
     const navigate = useNavigate()
 
     const { status, data, error } = useQuery({
-        queryKey: ['products', page],
-        queryFn: () => fetchProducts(page),
+        queryKey: ['products'],
+        queryFn: () => fetchProducts(4, 1),
         placeholderData: keepPreviousData,
         staleTime: 3600000,
     })
 
-    const collectionCardStyle =
-        'relative overflow-hidden border-[0.75rem] rounded border-secondary-bg-color hover:shadow-lg transition-all duration-500 group'
 
     const handleItemClick = (name) => {
         navigate(`/productDetails/${name}`)
@@ -31,33 +28,9 @@ const HomePage = () => {
         <>
             <section className="flex flex-col w-full h-full gap-10 overflow-hidden bg-primary-bg-color">
                 {/* landing image */}
-                <div className="relative flex w-full overflow-hidden h-svh">
-                    {/* carousel img */}
 
                     <LandingPageImages />
 
-                    <div className="absolute top-0 left-0 flex flex-col justify-center w-full h-full px-20 pt-10 text-white gap-7 bg-secondary-theme bg-opacity-35">
-                        <div className="font-light text-7xl">
-                            <p>Discover your </p>
-                            <p>Dream home</p>
-                        </div>
-                        <div className="text-xl uppercase">
-                            <p>Discover a world of elegance </p>
-                            <p>Elevate your living spaces</p>
-                            <p>Radiate style and personality</p>
-                        </div>
-                        <div className="w">
-                            <MainActionLink
-                                to="/shop"
-                                textColor="text-secondary"
-                                className="border-secondary-theme bg-secondary-theme"
-                                arrowColor="text-secondary-theme bg-white font-thin"
-                            >
-                                explore collection
-                            </MainActionLink>
-                        </div>
-                    </div>
-                </div>
 
                 {/* new product section*/}
                 <div className="flex flex-col items-center w-full gap-4 px-20 bg-transparent">
@@ -66,116 +39,7 @@ const HomePage = () => {
                     </p>
                     {/* products */}
 
-                    <div className="grid grid-cols-4 gap-5 h-max ">
-                        <div
-                            className={`${collectionCardStyle} col-span-1 aspect-square`}
-                        >
-                            <img
-                                loading="lazy"
-                                src={'./src/assets/pictures/pink-chair.jpg'}
-                                className="absolute bottom-0"
-                            />
-                            <div className="absolute bottom-0 z-10 flex items-center w-full px-5 h-1/6 bg-opacity-20 bg-gradient-to-t from-neutral-600 ">
-                                <CustomLink
-                                    active={false}
-                                    className="text-2xl text-stroke-shadow text-secondary-bg-color"
-                                    underlineColor="bg-secondary-bg-color"
-                                    to="/error"
-                                >
-                                    Chairs
-                                </CustomLink>
-                            </div>
-                        </div>
-                        <div
-                            className={`${collectionCardStyle} col-span-1 aspect-square`}
-                        >
-                            <img
-                                src={'./src/assets/pictures/table.jpg'}
-                                className="object-cover h-full"
-                            />
-                            <div className="absolute bottom-0 z-10 flex items-center w-full px-5 h-1/6 bg-opacity-30 bg-gradient-to-t from-neutral-800">
-                                <CustomLink
-                                    active={false}
-                                    className="text-2xl text-stroke-shadow text-secondary-bg-color"
-                                    underlineColor="bg-secondary-bg-color"
-                                    to="/error"
-                                >
-                                    Tables
-                                </CustomLink>
-                            </div>
-                        </div>
-                        <div className={`${collectionCardStyle} col-span-2`}>
-                            <img
-                                src={'./src/assets/pictures/sofa-1.jpg'}
-                                className="absolute object-cover w-full -bottom-5"
-                            />
-                            <div className="absolute bottom-0 z-10 flex items-center w-full px-5 h-1/6 bg-opacity-30 bg-gradient-to-t from-neutral-600">
-                                <CustomLink
-                                    active={false}
-                                    className="text-2xl text-stroke-shadow text-secondary-bg-color"
-                                    underlineColor="bg-secondary-bg-color"
-                                    to="/error"
-                                >
-                                    Sofas
-                                </CustomLink>
-                            </div>
-                        </div>
-                        <div className={`${collectionCardStyle} col-span-2`}>
-                            <img
-                                loading="lazy"
-                                src={'./src/assets/pictures/shelf-large.jpg'}
-                                className="absolute object-cover w-full"
-                            />
-                            <div className="absolute bottom-0 z-10 flex items-center w-full px-5 h-1/6 bg-opacity-30 bg-gradient-to-t from-neutral-600">
-                                <CustomLink
-                                    active={false}
-                                    className="text-2xl text-stroke-shadow text-secondary-bg-color"
-                                    underlineColor="bg-secondary-bg-color"
-                                    to="/error"
-                                >
-                                    Shelves
-                                </CustomLink>
-                            </div>
-                        </div>
-                        <div
-                            className={`${collectionCardStyle} col-span-1 aspect-square`}
-                        >
-                            <img
-                                src={'./src/assets/pictures/lamp-2-front.png'}
-                                className="absolute bottom-0"
-                            />
-                            <div className="absolute bottom-0 z-10 flex items-center w-full px-5 h-1/6 bg-opacity-30 bg-gradient-to-t from-neutral-700">
-                                <CustomLink
-                                    active={false}
-                                    className="text-2xl text-stroke-shadow text-secondary-bg-color"
-                                    underlineColor="bg-secondary-bg-color"
-                                    to="/error"
-                                >
-                                    Lamps
-                                </CustomLink>
-                            </div>
-                        </div>
-                        <div
-                            className={`${collectionCardStyle} col-span-1 aspect-square`}
-                        >
-                            <img
-                                src={
-                                    './src/assets/pictures/flow-pot-on-stool.jpg'
-                                }
-                                className="absolute bottom-0 object-cover w-full"
-                            />
-                            <div className="absolute bottom-0 z-10 flex items-center w-full px-5 h-1/6 bg-opacity-30 bg-gradient-to-t from-neutral-700">
-                                <CustomLink
-                                    active={false}
-                                    className="text-2xl text-stroke-shadow text-secondary-bg-color"
-                                    underlineColor="bg-secondary-bg-color"
-                                    to="/error"
-                                >
-                                    Accessories
-                                </CustomLink>
-                            </div>
-                        </div>
-                    </div>
+                    <LandingPageCollections />
 
                     <MainActionLink to="/shop">
                         Explore collection

@@ -2,6 +2,7 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import { ArrowRightIcon } from '../../../assets'
 import './style.css'
+import { twMerge } from 'tailwind-merge'
 
 const MainActionLink = ({
     children,
@@ -21,9 +22,9 @@ const MainActionLink = ({
         <Link
             to={to}
             onClick={handleOnClick}
-            className={`gap-2 border p-2 ${className} flex-center group max-w-max rounded-full border-gray-800`}
+            className={twMerge('gap-2 border p-2 w-max  flex items-center justify-between group  rounded-full border-gray-800', className)}
         >
-            <span className="relative pl-2 overflow-hidden leading-none uppercase flex-center h-fit">
+            <span className="relative w-full pl-2 overflow-hidden leading-none uppercase flex-center h-fit">
                 <span
                     className={`flex-center flex-col transition-transform duration-[400ms] ease-in-out group-hover:-translate-y-full ${textColor}`}
                 >

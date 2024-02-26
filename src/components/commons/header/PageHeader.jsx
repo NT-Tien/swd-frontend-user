@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react'
-import { MagnifyingGlassIcon, ShoppingCartIcon } from '../../../assets'
+import { ShoppingCartIcon } from '../../../assets'
 import { gsap } from 'gsap'
 import { useGSAP } from '@gsap/react'
 import { TextPlugin } from 'gsap/TextPlugin'
@@ -8,11 +8,9 @@ import { CustomEase } from 'gsap/all'
 import CartModal from '../../modals/CartModal'
 import SettingModal from '../../modals/SettingModal'
 import { useLocation } from 'react-router-dom'
-import { useQuery, keepPreviousData } from '@tanstack/react-query'
 
 import { Link } from 'react-router-dom'
 import useCheckAuth from '../../../hooks/useCheckAuth'
-import { fetchCartItems } from '../../../utils/api'
 import { useAuth } from '../../../hooks/useAuth'
 import { useCartData } from '../../../hooks/useCartData'
 
@@ -87,7 +85,7 @@ const PageHeader = () => {
             .to(
                 backdropRef.current,
                 {
-                    height: '70vh',
+                    height: '100vh',
                     delay: 0.25,
                     ease: CustomEase.create(
                         'custom',
@@ -174,7 +172,7 @@ const PageHeader = () => {
                 className="fixed top-0 z-40 flex-col w-full flex-center h-14 "
             >
                 {/* top flex container */}
-                <div className="absolute left-0 top-0 z-40 w-full gap-4 border-b border-secondary-theme/50 bg-primary-bg-color px-[5svw]">
+                <div className="absolute left-0 top-0 z-40 w-full gap-4 border-b border-secondary-theme/50 transition-colors duration-[400ms] bg-primary-bg-color/60 hover:bg-primary-bg-color px-[5svw]">
                     <div className="flex items-center justify-between h-14">
                         <div className="items-center justify-center hidden md:flex">
                             <Link to="/">
@@ -221,7 +219,7 @@ const PageHeader = () => {
                                 onClick={openCart}
                             >
                                 <ShoppingCartIcon />
-                                {data && data.length > 0 && (
+                                {data && Array.isArray(data) && data.length > 0 && (
                                     <span className="absolute text-xs text-white rounded-full min-w-fit size-4 -right-2 -top-1 bg-secondary-theme">
                                         {data.length}
                                     </span>
@@ -248,8 +246,7 @@ const PageHeader = () => {
                 />
             </div>
 
-            {/* padding to leave space */}
-            <div className="p-7"></div>
+            
 
             <CartModal
                 isOpen={cartOpened}

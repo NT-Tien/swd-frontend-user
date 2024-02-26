@@ -20,8 +20,8 @@ export async function fetchProducts(
     chosenCategoryId = '',
     sortOption
 ) {
-    const sortDirection = sortOption ? sortOption.direction : 'ASC'
-    const sortValue = sortOption ? sortOption.value : 'name'
+    const sortDirection = sortOption ? sortOption.value.direction : 'ASC'
+    const sortValue = sortOption ? sortOption.value.value : 'name'
    
     const { data } = await axios.get(
         DEFAULT_API_URL +
@@ -145,6 +145,7 @@ export async function verifyAppointment(code) {
 }
 
 export async function fetchCartItems(size = 9, page = 1, token) {
+    if(!token) return null
     const result = axios
         .get(DEFAULT_API_URL + GET_CART_ITEMS_URL + size + '/' + page, {
             headers: {

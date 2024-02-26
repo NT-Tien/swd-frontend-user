@@ -14,4 +14,8 @@ export {default as ArrowLeftIcon} from './ArrowLeftIcon.jsx'
 export {default as HeartIcon} from './HeartIcon.jsx'
 export {default as ArrowLoopIcon} from './ArrowLoopIcon.jsx'
 export {default as UserCircleIcon} from './UserCircleIcon.jsx'
+export {default as ShoppingBagIcon} from './ShoppingbagIcon.jsx'
+export {default as LogoutIcon} from './LogoutIcon.jsx'
+export {default as LoginIcon} from './LoginIcon.jsx'
+export {default as SignupIcon} from './SignupIcon.jsx'
 

@@ -21,7 +21,7 @@ function ScrollToTop() {
         <ActionButton
             active
             onClick={scrollToTop}
-            className="fixed z-40 p-1 rounded-full bottom-10 right-10 aspect-square max-w-10"
+            className="fixed z-40 p-1 rounded-full bottom-10 right-[5svw] aspect-square max-w-10"
         >
             <ArrowUpIcon />
         </ActionButton>

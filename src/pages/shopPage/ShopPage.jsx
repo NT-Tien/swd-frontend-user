@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useRef, useState } from 'react'
 import {
     ActionButton,
     DropdownSelection,
@@ -9,23 +9,11 @@ import {
 } from '../../components'
 import SearchBar from '../../components/commons/SearchBar'
 import { ArrowLeftIcon, ArrowRightIcon } from '../../assets'
-import {
-    useQuery,
-    keepPreviousData,
-    useQueryClient,
-    useMutation,
-} from '@tanstack/react-query'
-import {
-    addProductToCart,
-    addProductToWishlist,
-    fetchCategories,
-    fetchProducts,
-} from '../../utils/api'
+import { useQuery, keepPreviousData } from '@tanstack/react-query'
+import { fetchCategories, fetchProducts } from '../../utils/api'
 import clsx from 'clsx'
 import { useNavigate } from 'react-router-dom'
-import { useAuth } from '../../hooks/useAuth'
 import useCheckAuth from '../../hooks/useCheckAuth'
-import usePopup from '../../hooks/usePopup'
 import { useAddCartItem } from '../../hooks/useCartData'
 import { useAddWishlistItem } from '../../hooks/useWishlistData'
 
@@ -33,10 +21,6 @@ const ShopPage = () => {
     const navigate = useNavigate()
 
     const { checkAuthFunction } = useCheckAuth()
-    const { token } = useAuth()
-    const { openPopupFunc } = usePopup()
-    const queryClient = useQueryClient()
-    const size = 9
     const [page, setPage] = useState(1)
     const [searchValue, setSearchValue] = useState('')
     const [sortOption, setSortOption] = useState('')
@@ -62,7 +46,7 @@ const ShopPage = () => {
     })
 
     const { mutate: addToCart } = useAddCartItem()
-    const {mutate: addToWishlist} = useAddWishlistItem()
+    const { mutate: addToWishlist } = useAddWishlistItem()
 
     const sortOptions = [
         {
@@ -108,11 +92,11 @@ const ShopPage = () => {
     }
 
     const handleAddToCart = checkAuthFunction((id, oid, name) => {
-        addToCart({id, oid, name})
+        addToCart({ id, oid, name })
     })
 
     const handleAddWishList = checkAuthFunction((id, name) => {
-        addToWishlist({id, name})
+        addToWishlist({ id, name })
     })
 
     const handleItemClick = (name) => {
@@ -152,7 +136,11 @@ const ShopPage = () => {
                             <h5 className="text-lg font-semibold">
                                 Displaying{' '}
                                 <span className="font-normal">
-                                    {data && data[0].length * (page - 1) + 1}
+                                    {status === 'success'
+                                        ? data && data[0].length === 0
+                                            ? data[0].length
+                                            : data[0].length * (page - 1) + 1
+                                        : 0}
                                 </span>{' '}
                                 to{' '}
                                 <span className="font-normal">
@@ -172,7 +160,7 @@ const ShopPage = () => {
                                 onChange={setSortOption}
                                 options={sortOptions}
                             >
-                                Sort Options
+                               {sortOption ? sortOption.title : 'Sort Options'}
                             </DropdownSelection>
                         </div>
                     </div>

@@ -19,11 +19,6 @@ const CartModal = ({ isOpen, closeModalFunction }) => {
         }
     }
 
-
-    useEffect(() => {
-        console.log(data)
-    }, [data])
-
     return (
         <>
         <Transition show={isOpen} as={Fragment}>
