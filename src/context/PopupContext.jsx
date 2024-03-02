@@ -6,6 +6,8 @@ export const PopupProvider = ({ children }) => {
     const [isPopupOpen, setIsPopupOpen] = useState(false)
     const [message, setMessage] = useState('')
     const [confirmButtonMsg, setConfirmButtonMsg] = useState('')
+    const [onCloseFunc, setOnCloseFunc] = useState(() => {})
+
     return (
         <PopupContext.Provider
             value={{
@@ -15,6 +17,8 @@ export const PopupProvider = ({ children }) => {
                 setMessage,
                 confirmButtonMsg,
                 setConfirmButtonMsg,
+                onCloseFunc,
+                setOnCloseFunc,
             }}
         >
             {children}

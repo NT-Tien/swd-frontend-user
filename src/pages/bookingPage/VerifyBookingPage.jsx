@@ -59,7 +59,7 @@ const VerifyBookingPage = () => {
     }, [openConfirmModal, countdown])
 
     return (
-        <section className="flex min-h-[60svh]  w-full flex-col px-20">
+        <section className="flex min-h-[80svh]  w-full flex-col px-20">
             <PageBanner title="Verify Booking" />
 
             <div className="flex-col flex-center min-w-fit ">

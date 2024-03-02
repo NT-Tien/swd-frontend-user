@@ -9,6 +9,7 @@ import {
     HomePage,
     LoginPage,
     NotFound,
+    OrderHistoryPage,
     ProductDetailsPage,
     RequireAuth,
     ShopPage,
@@ -45,6 +46,10 @@ function App() {
                         <Route path="/signup" element={<SignupPage />} />
 
                         <Route element={<RequireAuth />}>
+                            <Route 
+                                path='/order-history'
+                                element={<OrderHistoryPage/>}
+                            />
                             <Route
                                 path="/cart"
                                 element={<ShoppingCartPage />}

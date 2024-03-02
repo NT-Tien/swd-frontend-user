@@ -18,4 +18,5 @@ export {default as ShoppingBagIcon} from './ShoppingbagIcon.jsx'
 export {default as LogoutIcon} from './LogoutIcon.jsx'
 export {default as LoginIcon} from './LoginIcon.jsx'
 export {default as SignupIcon} from './SignupIcon.jsx'
-
+export {default as ChevronLeft} from './ChevronLeft.jsx'
+export {default as ClipBoardIcon} from './ClipBoardIcon.jsx'

@@ -1,6 +1,6 @@
 import { useQuery, useMutation, keepPreviousData, useQueryClient } from '@tanstack/react-query'
 import { useAuth } from './useAuth'
-import { addProductToCart, fetchCartItems, removeProductFromCart } from '../utils/api'
+import { addProductToCart, clearCart, fetchCartItems, removeProductFromCart, updateCartItemQuantity } from '../utils/api'
 import usePopup from './usePopup'
 
 
@@ -53,4 +53,34 @@ export const useRemoveCartItem = () => {
             )
         }
     })
+}
+
+export const useClearCart = () => {
+    const queryClient = useQueryClient()
+    const {token} = useAuth()
+
+    return useMutation({
+        mutationFn: () => clearCart(token),
+        onSuccess: (data, variables, context) => {
+            queryClient.invalidateQueries({ queryKey: ['cart'] })
+        }
+    })
+}
+
+export const useUpdateCartQuantity = () => {
+    const queryClient = useQueryClient()
+    const {token} = useAuth()
+    const {openPopupFunc} = usePopup()
+
+    return useMutation({
+        mutationFn: ({id, oid, amount}) => updateCartItemQuantity(id, oid, amount, token),
+        onSuccess: (data, variables, context) => {
+            queryClient.invalidateQueries({ queryKey: ['cart'] })
+            openPopupFunc(
+                `You cart has been updated`,
+                'Got it, thanks!'
+            )
+        }
+    })
+
 }

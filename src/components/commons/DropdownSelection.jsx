@@ -16,8 +16,8 @@ const DropdownSelection = ({ options, children, onChange }) => {
     }
 
     return (
-        <div className="z-20 max-w-fit">
-            <Menu as="div" className="relative z-20 inline-block text-left">
+        <div className="max-w-fit">
+            <Menu as="div" className="relative inline-block text-left">
                 <div>
                     <Menu.Button
                         as="button"
@@ -38,7 +38,7 @@ const DropdownSelection = ({ options, children, onChange }) => {
                     leaveFrom="transform opacity-100 scale-100"
                     leaveTo="transform opacity-0 scale-95"
                 >
-                    <Menu.Items className="absolute right-0 z-10 w-full mt-2 origin-top-right border divide-y divide-gray-100 rounded-md shadow-lg min-w-max border-secondary-theme/50 bg-primary-bg-color ring-1 ring-black/5 focus:outline-none">
+                    <Menu.Items className="absolute right-0 z-20 w-full mt-2 origin-top-right border divide-y divide-gray-100 rounded-md shadow-lg min-w-max border-secondary-theme/50 bg-primary-bg-color ring-1 ring-black/5 focus:outline-none">
                         <div className="p-1 overflow-y-auto max-h-80">
                             {options
                                 ? options.map((option, i) => (
@@ -67,7 +67,7 @@ const DropdownSelection = ({ options, children, onChange }) => {
                                               <button
                                                   onClick={() =>
                                                       handleOnChange(
-                                                          option
+                                                          option.value
                                                       )
                                                   }
                                                   className={`${

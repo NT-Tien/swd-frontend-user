@@ -1,5 +1,6 @@
 import React from 'react'
 import { ArrowRightIcon } from '../../../assets'
+import { twMerge} from 'tailwind-merge'
 
 const MainActionButton = ({
     disabled = false,
@@ -22,7 +23,7 @@ const MainActionButton = ({
             disabled={disabled}
             onClick={(e) => handleOnClick(e)}
             type={type}
-            className={`gap-2 border p-2 pl-4 ${className} group/btnmain flex items-center justify-between rounded-full border-gray-800`}
+            className={twMerge(`gap-2 border p-2 pl-4 group/btnmain flex items-center justify-between rounded-full border-gray-800`, className)}
         >
             <span className="relative w-full overflow-hidden leading-none uppercase flex-center h-fit">
                 <span

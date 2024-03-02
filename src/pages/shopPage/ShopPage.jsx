@@ -123,7 +123,7 @@ const ShopPage = () => {
     }
 
     return (
-        <div className="flex flex-col px-20 ">
+        <div className="flex flex-col px-20 min-h-svh ">
             <PageBanner title="Shop" />
 
             <section className="flex gap-4 min-h-max">

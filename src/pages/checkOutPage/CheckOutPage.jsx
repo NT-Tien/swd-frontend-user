@@ -7,12 +7,14 @@ import {
     PageBanner,
     SimpleLoading,
 } from '../../components'
-import { useCartData } from '../../hooks/useCartData'
+import { useCartData, useClearCart } from '../../hooks/useCartData'
 import { useAuth } from '../../hooks/useAuth'
 import { createOrder } from '../../utils/api'
+import usePopup from '../../hooks/usePopup'
 
 const CheckOutPage = () => {
     const { token, user } = useAuth()
+    const { openPopupFunc } = usePopup()
     const [totalPrice, setTotalPrice] = useState(0)
     const [formValue, setFormValue] = useState({
         phone: '',
@@ -22,6 +24,7 @@ const CheckOutPage = () => {
     })
 
     const { status, data, error } = useCartData(1)
+    // const {mutate: clearCart} = useClearCart()
 
     const handleInputChange = (e) => {
         const { name, value } = e.target
@@ -30,8 +33,6 @@ const CheckOutPage = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault()
-
-        console.log(formValue)
 
         if (formValue && user && data) {
             const cartItems = data
@@ -43,7 +44,7 @@ const CheckOutPage = () => {
                 const product_id = chosenOption.id
                 const name = chosenOption.name
                 const material = chosenOption.material
-                const price = chosenOption.price
+                const price = Number(chosenOption.price)
                 const product = {
                     id: product_id,
                     product_id: item.product.id,
@@ -54,15 +55,24 @@ const CheckOutPage = () => {
                 }
                 products.push(product)
             })
-            console.log(products)
             const result = await createOrder(
-                user.profile.profile.id,
+                user.accountId,
                 totalPrice,
                 products,
                 formValue,
                 token
             )
-            console.log(result)
+            if (result.code === '00') {
+                const checkoutUrl = result.data.checkoutUrl
+                openPopupFunc(
+                    'Your order has been received!',
+                    'Head to payment',
+                    () => {
+                        window.open(checkoutUrl, '_blank')
+                    }
+                )
+                // clearCart()
+            }
         }
 
         setFormValue({
@@ -108,7 +118,7 @@ const CheckOutPage = () => {
                                     <>
                                         <CartItem
                                             isItemEditable={false}
-                                            key={item.chooseOption}
+                                            key={i}
                                             quantity={item.quantity}
                                             chooseOption={item.chooseOption}
                                             product={item.product}
@@ -122,7 +132,7 @@ const CheckOutPage = () => {
                     <div className="flex-col self-end w-full gap-4 flex-center min-w-max ">
                         <div className="flex justify-between w-full">
                             <span className="text-lg uppercase">total</span>
-                            <h5 className="text-5xl ">${totalPrice}</h5>
+                            <h5 className="text-5xl ">VND{totalPrice}</h5>
                         </div>
                         <div className="w-full gap-4 flex-center">
                             <MainActionLink to="/cart">

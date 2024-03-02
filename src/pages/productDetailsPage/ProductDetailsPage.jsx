@@ -19,6 +19,8 @@ import usePopup from '../../hooks/usePopup'
 import useCheckAuth from '../../hooks/useCheckAuth'
 import { HeartIcon } from '../../assets'
 import { useAuth } from '../../hooks/useAuth'
+import { useAddCartItem } from '../../hooks/useCartData'
+import { useAddWishlistItem } from '../../hooks/useWishlistData'
 
 const ProductDetailsPage = () => {
     const { name } = useParams()
@@ -53,20 +55,23 @@ const ProductDetailsPage = () => {
         staleTime: 3600000,
     })
 
+    const {mutate: addToCart} = useAddCartItem()
+    const { mutate: addToWishlist} = useAddWishlistItem()
+
     const handleAddToCart = checkAuthFunction(async () => {
-        console.log(token)
         if (!token) return
-        await addProductToCart(data.id, token)
-        openPopupFunc(`${data.name} is added to you cart`, 'Got it, thanks!')
+        const id = data.id
+        const oid = chosenOption.id
+        const name = data.name
+        addToCart({id, oid, name})
     })
 
     const handleAddWishList = checkAuthFunction(async () => {
         if (!token) return
-        await addProductToWishlist(data.id, token)
-        openPopupFunc(
-            `${data.name} is added to you wishlist`,
-            'Got it, thanks!'
-        )
+        const id = data.id
+        const name = data.name
+        addToWishlist({id, name})
+            
     })
 
     const handleOptionClick = (option) => {
@@ -104,7 +109,7 @@ const ProductDetailsPage = () => {
                         </div>
                         {/* name */}
                         <div className="flex flex-col justify-between w-2/3 pl-10 h-96 min-h-max">
-                            <div className="flex flex-col gap-4">
+                            <div className="flex flex-col gap-4 " >
                                 <h3 className="text-3xl uppercase">
                                     {data?.name}
                                 </h3>
@@ -116,7 +121,7 @@ const ProductDetailsPage = () => {
                                     {data?.description}
                                 </div>
                                 {/* options */}
-                                <div className="flex flex-col gap-2">
+                                <div className="flex gap-2">
                                     <span className="font-medium">
                                         Options:
                                     </span>

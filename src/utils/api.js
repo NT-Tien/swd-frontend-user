@@ -3,6 +3,7 @@ import {
     DEFAULT_API_URL,
     GET_CART_ITEMS_URL,
     GET_CATEGORIES_URL,
+    GET_ORDER_HISTORY_URL,
     GET_PRODUCTS_URL,
     GET_PRODUCT_BY_NAME_URL,
     GET_PRODUCT_OPTION_BY_ID_URL,
@@ -22,7 +23,7 @@ export async function fetchProducts(
 ) {
     const sortDirection = sortOption ? sortOption.value.direction : 'ASC'
     const sortValue = sortOption ? sortOption.value.value : 'name'
-   
+
     const { data } = await axios.get(
         DEFAULT_API_URL +
             GET_PRODUCTS_URL +
@@ -145,7 +146,7 @@ export async function verifyAppointment(code) {
 }
 
 export async function fetchCartItems(size = 9, page = 1, token) {
-    if(!token) return null
+    if (!token) return null
     const result = axios
         .get(DEFAULT_API_URL + GET_CART_ITEMS_URL + size + '/' + page, {
             headers: {
@@ -163,7 +164,7 @@ export async function fetchCartItems(size = 9, page = 1, token) {
     return result
 }
 
-export async function addProductToCart(id, oid,  token) {
+export async function addProductToCart(id, oid, token) {
     const result = axios
         .put(
             DEFAULT_API_URL + 'cart/add-to-cart/' + id + '/' + oid,
@@ -186,9 +187,17 @@ export async function addProductToCart(id, oid,  token) {
 }
 
 export async function updateCartItemQuantity(id, oid, amount, token) {
+    console.log(id)
+    console.log(oid)
     const result = axios
         .put(
-            DEFAULT_API_URL + PUT_UPDATE_CART_ITEM_QUANTITY + id + '/' + oid + '/' + amount,
+            DEFAULT_API_URL +
+                PUT_UPDATE_CART_ITEM_QUANTITY +
+                id +
+                '/' +
+                oid +
+                '/' +
+                amount,
             {},
             {
                 headers: {
@@ -206,9 +215,27 @@ export async function updateCartItemQuantity(id, oid, amount, token) {
     return result
 }
 
-export async function removeProductFromCart(id, oid,  token) {
+export async function removeProductFromCart(id, oid, token) {
     const result = axios
         .delete(DEFAULT_API_URL + 'cart/delete/' + id + '/' + oid, {
+            headers: {
+                Authorization: token,
+            },
+        })
+        .then((res) => {
+            console.log(res)
+            return res
+        })
+        .catch((error) => {
+            console.log(error)
+        })
+    return result
+}
+
+export async function clearCart(token) {
+    if (!token) return
+    const result = axios
+        .delete(DEFAULT_API_URL + 'cart/delete-all/', {
             headers: {
                 Authorization: token,
             },
@@ -269,10 +296,17 @@ export async function fetchWishList(size = 9, page = 1, token) {
             },
         }
     )
+    console.log(data)
     return data.data
 }
 
-export async function createOrder(user_id, total, products, {voucher_id = '', address, phone, email}, token) {
+export async function createOrder(
+    user_id,
+    total,
+    products,
+    { voucher_id = '', address, phone, email },
+    token
+) {
     return axios
         .post(
             DEFAULT_API_URL + POST_PAYMENT_CREATE_ORDER_URL,
@@ -283,21 +317,39 @@ export async function createOrder(user_id, total, products, {voucher_id = '', ad
                 voucher_id,
                 address,
                 phone,
-                email
+                email,
             },
             {
                 headers: {
                     'Content-Type': 'application/json',
-                    Authorization: 'Bearer ' + token,
+                    Authorization: token,
                 },
             }
         )
+        .then((res) => {
+            console.log(res)
+            return res.data.data
+        })
+        .catch((error) => {
+            console.log(error)
+            return error.response.data
+        })
+}
+
+export async function getOrderHistory(token) {
+    const result = axios
+        .get(DEFAULT_API_URL + GET_ORDER_HISTORY_URL, {
+            headers: {
+                Authorization: token
+            }
+        })
         .then((res) => {
             console.log(res)
             return res
         })
         .catch((error) => {
             console.log(error)
-            return error.response.data
+            return error
         })
+    return result
 }

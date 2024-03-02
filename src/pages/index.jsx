@@ -14,4 +14,4 @@ export {default as ScrollToTop} from './ScrollToTop'
 export {default as WishListPage} from './wishListPage/WishListPage'
 export {default as VerifyBookingPage} from './bookingPage/VerifyBookingPage'
 export {default as RequireAuth} from './auth/RequireAuth'
-
+export {default as OrderHistoryPage} from './orderHistoryPage/OrderHistoryPage'

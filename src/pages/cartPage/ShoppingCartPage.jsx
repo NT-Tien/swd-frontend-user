@@ -8,7 +8,6 @@ import {
     SimpleLoading,
 } from '../../components'
 import { useAuth } from '../../hooks/useAuth'
-import usePopup from '../../hooks/usePopup'
 import { useCartData, useRemoveCartItem } from '../../hooks/useCartData'
 
 const ShoppingCartPage = () => {
@@ -30,6 +29,7 @@ const ShoppingCartPage = () => {
     }, [])
 
     useEffect(() => {
+        if (!Array.isArray(data)) return
         const totalPrice = data?.reduce(
             (accumulator, item) =>
                 item.product.optionProducts.find(
@@ -78,7 +78,7 @@ const ShoppingCartPage = () => {
                 </>
             ) : data.length > 0 ? (
                 <div className="flex gap-4">
-                    <div className="flex flex-col flex-1 gap-2 ">
+                    <div className="flex flex-col flex-1 gap-2 min-w-fit">
                         {data.map((item) => (
                             <CartItem
                                 key={item.chooseOption}
@@ -96,23 +96,22 @@ const ShoppingCartPage = () => {
                             />
                         ))}
                     </div>
-                    <div className="flex-col gap-10 p-6 pb-10 border shadow-xl flex-center w-96 min-w-max h-96 border-secondary-theme">
+                    <div className="flex-col gap-10 p-6 pb-10 border shadow-xl flex-shrink-1 flex-center h-96 w-96 min-w-fit border-secondary-theme">
                         <div className="flex items-end justify-between w-full">
-                            Cart total: 
-                            <span className="text-5xl font-light">
-                                ${totalPrice}
-                            </span>
+                            Cart total:
+                            <div className="text-5xl font-light">
+                                {totalPrice} <span className="">VND</span>
+                            </div>
                         </div>
 
                         <div className="flex-col gap-4 mt-4 flex-center w-fit">
-                            <MainActionLink className='w-fit' to="/checkout">
+                            <MainActionLink className="w-fit" to="/checkout">
                                 proceed to checkout
                             </MainActionLink>
-                            <MainActionLink className='w-full' to="/cart">
+                            <MainActionLink className="w-full" to="/shop">
                                 continue shopping
                             </MainActionLink>
                         </div>
-                        
                     </div>
                 </div>
             ) : (

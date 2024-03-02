@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import LandingPageCard from './LandingPageCard'
 
 const LandingPageCollections = () => {
@@ -9,8 +9,9 @@ const LandingPageCollections = () => {
         <div className="w-full gap-5 p-6 flex-center h-96">
             <LandingPageCard
                 id={1}
+                title='Chair'
                 onClick={setChosenCollection}
-                activeId={chosenCollection}
+                active={chosenCollection === 1}
                 src={'./src/assets/pictures/pink-chair.jpg'}
             >
                 Chair
@@ -18,8 +19,9 @@ const LandingPageCollections = () => {
 
             <LandingPageCard
                 id={2}
+                title='Table'
                 onClick={setChosenCollection}
-                activeId={chosenCollection}
+                active={chosenCollection === 2}
                 src={'./src/assets/pictures/flow-pot-on-stool.jpg'}
             >
                 Table
@@ -27,8 +29,9 @@ const LandingPageCollections = () => {
 
             <LandingPageCard
                 id={3}
+                title='Kitchen'
                 onClick={setChosenCollection}
-                activeId={chosenCollection}
+                active={chosenCollection === 3}
                 src={'./src/assets/pictures/kitchen.jpg'}
             >
                 Kitchen

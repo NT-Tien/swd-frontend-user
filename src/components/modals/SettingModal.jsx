@@ -2,6 +2,7 @@ import React, { Fragment, useEffect, useState } from 'react'
 
 import { Popover, Transition } from '@headlessui/react'
 import {
+    ClipBoardIcon,
     HeartIcon,
     LoginIcon,
     LogoutIcon,
@@ -88,6 +89,15 @@ const SettingModal = () => {
                                     to="/cart"
                                 >
                                     <ShoppingCartIcon /> Cart
+                                </CustomLink>
+
+                                <CustomLink
+                                    className="font-normal"
+                                    active={false}
+                                    underlineWidth="h-[1px]"
+                                    to="/order-history"
+                                >
+                                    <ClipBoardIcon /> History
                                 </CustomLink>
 
                                 <CustomLink

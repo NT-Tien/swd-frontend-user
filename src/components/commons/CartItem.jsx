@@ -6,9 +6,7 @@ import MainActionButton from './buttons/MainActionButton'
 import { displayImage } from '../../utils/helper'
 import { HeartIcon } from '../../assets'
 import DropdownSelection from './DropdownSelection'
-import { updateCartItemQuantity } from '../../utils/api'
-import { useAuth } from '../../hooks/useAuth'
-import { useQueryClient } from '@tanstack/react-query'
+import { useUpdateCartQuantity } from '../../hooks/useCartData'
 
 const CartItem = ({
     removeItemFunc,
@@ -20,8 +18,6 @@ const CartItem = ({
     chooseOption,
     addWishListFunc,
 }) => {
-    const { token } = useAuth()
-    const queryClient = useQueryClient()
     const imgUrl = product?.images ? displayImage(product.images[0]) : ''
     const name = product?.name ? product.name : ''
     const category = product?.category_id ? product.category_id.name : ''
@@ -39,6 +35,8 @@ const CartItem = ({
     const [chosenQuantity, setChosenQuantity] = useState(quantity)
     const [chosenOption, setChosenOption] = useState(chooseOptionIndex)
 
+    const { mutate: updateItemQuantity } = useUpdateCartQuantity()
+
     const removeItem = () => {
         if (removeItemFunc) {
             removeItemFunc()
@@ -48,7 +46,6 @@ const CartItem = ({
     const handleOptionClick = (index) => {
         if (index === chosenOption) return
         setChosenOption(index)
-        console.log(product.optionProducts[chosenOption].id)
     }
 
     const handleOnClick = () => {
@@ -65,31 +62,18 @@ const CartItem = ({
 
     const handleAddToCart = () => {
         if (addItemFunc) {
-            console.log(product.optionProducts[chosenOption].id)
-            addItemFunc(
-                product.id,
-                product.optionProducts[chosenOption].id,
-                product.name
-            )
+            const id = product.id
+            const oid = product.optionProducts[chosenOption].id
+            addItemFunc(id, oid, name)
         }
     }
 
     const handleConfirmChange = async () => {
         if (chosenQuantity !== quantity) {
-            updateCartItemQuantity(
-                product.id,
-                product.optionProducts[chosenOption],
-                chosenQuantity,
-                token
-            )
-            await queryClient.invalidateQueries(
-                {
-                    queryKey: ['cart'],
-                    exact: true,
-                    refetchType: 'active',
-                },
-                { throwOnError, cancelRefetch }
-            )
+            const id = product.id
+            const oid = product.optionProducts[chosenOption].id
+            const amount = chosenQuantity
+            updateItemQuantity({id, oid, amount})
         }
 
         setisEditable(false)
@@ -127,7 +111,7 @@ const CartItem = ({
                         <div className="flex flex-col gap-2">
                             <h5 className="text-xl font-light">{name}</h5>{' '}
                             <div className="flex gap-2 h-max text-secondary-theme">
-                                {chooseOption 
+                                {chooseOption
                                     ? product?.optionProducts?.map(
                                           (option, i) =>
                                               option.id === chooseOption && (
@@ -216,11 +200,14 @@ const CartItem = ({
                             {/* price */}
 
                             <div className="text-3xl font-light">
-                                $
+                                
                                 {quantity
                                     ? Math.round(price * chosenQuantity * 10) /
                                       10
                                     : price}
+                                    <span className='ml-2'>
+                                    VND
+                                    </span>
                             </div>
                         </div>
                         {isItemEditable && isEditable && (
