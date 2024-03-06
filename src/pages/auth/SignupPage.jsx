@@ -89,8 +89,6 @@ const SignupPage = () => {
         }
         setErrorMsg('')
 
-        console.log('Form submitted:', formValue)
-
         const result = await registerAccount(formValue)
         console.log(result)
         setFormValue({

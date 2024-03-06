@@ -13,6 +13,7 @@ import { Link } from 'react-router-dom'
 import useCheckAuth from '../../../hooks/useCheckAuth'
 import { useAuth } from '../../../hooks/useAuth'
 import { useCartData } from '../../../hooks/useCartData'
+import CustomLink from '../CustomLink'
 
 gsap.registerPlugin(TextPlugin)
 gsap.registerPlugin(CustomEase)

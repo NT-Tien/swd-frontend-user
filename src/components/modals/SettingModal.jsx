@@ -6,6 +6,7 @@ import {
     HeartIcon,
     LoginIcon,
     LogoutIcon,
+    MoneyIcon,
     ShoppingBagIcon,
     ShoppingCartIcon,
     SignupIcon,
@@ -68,9 +69,9 @@ const SettingModal = () => {
                                     className="font-normal"
                                     active={false}
                                     underlineWidth="h-[1px]"
-                                    to="/checkout"
+                                    to="/wallet"
                                 >
-                                    <ShoppingBagIcon /> Check out
+                                    <MoneyIcon /> Wallet
                                 </CustomLink>
 
                                 <CustomLink
@@ -95,10 +96,20 @@ const SettingModal = () => {
                                     className="font-normal"
                                     active={false}
                                     underlineWidth="h-[1px]"
+                                    to="/checkout"
+                                >
+                                    <ShoppingBagIcon /> Check out
+                                </CustomLink>
+
+                                <CustomLink
+                                    className="font-normal"
+                                    active={false}
+                                    underlineWidth="h-[1px]"
                                     to="/order-history"
                                 >
                                     <ClipBoardIcon /> History
                                 </CustomLink>
+                               
 
                                 <CustomLink
                                     className="font-normal"

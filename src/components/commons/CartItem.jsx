@@ -206,7 +206,7 @@ const CartItem = ({
                                       10
                                     : price}
                                     <span className='ml-2'>
-                                    VND
+                                    ₫
                                     </span>
                             </div>
                         </div>

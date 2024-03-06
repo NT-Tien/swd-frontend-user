@@ -12,7 +12,7 @@ const usePopup = () => {
         confirmButtonMsg,
         setConfirmButtonMsg,
         setOnCloseFunc,
-        onCloseFunc
+        onCloseFunc,
     } = useContext(PopupContext)
 
     const focusRef = useRef()
@@ -20,18 +20,18 @@ const usePopup = () => {
     const openPopupFunc = (msg, cButtonMsg, onClose) => {
         setConfirmButtonMsg(cButtonMsg)
         setMessage(msg)
-        if(onClose) {
-            setOnCloseFunc(onClose)
+        if (onClose) {
+            setOnCloseFunc(() => onClose)
         }
         setIsPopupOpen(true)
     }
 
     const closePopupFunc = () => {
-        setIsPopupOpen(false)
-        if(onCloseFunc){
+        if (onCloseFunc) {
             onCloseFunc()
-            setOnCloseFunc(()=>{})
+            setOnCloseFunc(() => {})
         }
+        setIsPopupOpen(false)
     }
 
     const displayPopup = () => {

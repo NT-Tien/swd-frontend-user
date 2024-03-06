@@ -8,9 +8,13 @@ import {
     GET_PRODUCT_BY_NAME_URL,
     GET_PRODUCT_OPTION_BY_ID_URL,
     GET_WISHLIST_ITEMS_URL,
+    POST_CREATE_ORDER_CUSTOM_URL,
+    POST_DEPOSTIT_WALLET_URL,
     POST_LOGIN_GOOGLE_URL,
     POST_LOGIN_URL,
     POST_PAYMENT_CREATE_ORDER_URL,
+    POST_UPLOAD_FILE_URL,
+    POST_WALLET_URL,
     PUT_UPDATE_CART_ITEM_QUANTITY,
 } from '../config/api'
 
@@ -93,7 +97,6 @@ export async function login({ email, password }) {
             }
         )
         .then((res) => {
-            console.log(res)
             return res
         })
         .catch((error) => {
@@ -154,7 +157,6 @@ export async function fetchCartItems(size = 9, page = 1, token) {
             },
         })
         .then((res) => {
-            console.log(res)
             return res.data.data
         })
         .catch((err) => {
@@ -176,7 +178,6 @@ export async function addProductToCart(id, oid, token) {
             }
         )
         .then((res) => {
-            console.log(res)
             return res
         })
         .catch((error) => {
@@ -206,7 +207,6 @@ export async function updateCartItemQuantity(id, oid, amount, token) {
             }
         )
         .then((res) => {
-            console.log(res)
             return res
         })
         .catch((error) => {
@@ -223,7 +223,6 @@ export async function removeProductFromCart(id, oid, token) {
             },
         })
         .then((res) => {
-            console.log(res)
             return res
         })
         .catch((error) => {
@@ -241,7 +240,6 @@ export async function clearCart(token) {
             },
         })
         .then((res) => {
-            console.log(res)
             return res
         })
         .catch((error) => {
@@ -262,7 +260,6 @@ export async function addProductToWishlist(id, token) {
             }
         )
         .then((res) => {
-            console.log(res)
             return res
         })
         .catch((error) => {
@@ -278,9 +275,7 @@ export async function removeProductFromWishlist(id, token) {
                 Authorization: token,
             },
         })
-        .then((res) => {
-            console.log(res)
-        })
+        .then((res) => res)
         .catch((error) => {
             console.log(error)
         })
@@ -296,7 +291,6 @@ export async function fetchWishList(size = 9, page = 1, token) {
             },
         }
     )
-    console.log(data)
     return data.data
 }
 
@@ -327,7 +321,6 @@ export async function createOrder(
             }
         )
         .then((res) => {
-            console.log(res)
             return res.data.data
         })
         .catch((error) => {
@@ -340,12 +333,112 @@ export async function getOrderHistory(token) {
     const result = axios
         .get(DEFAULT_API_URL + GET_ORDER_HISTORY_URL, {
             headers: {
-                Authorization: token
-            }
+                Authorization: 'Bearer ' + token,
+            },
         })
         .then((res) => {
+            return res.data.data
+        })
+        .catch((error) => {
+            console.log(error)
+            return error
+        })
+    return result
+}
+
+export async function getWallet(userid, token) {
+    const result = axios
+        .post(
+            DEFAULT_API_URL + POST_WALLET_URL,
+            {
+                user_id: userid,
+            },
+            {
+                headers: {
+                    Authorization: 'Bearer ' + token,
+                },
+            }
+        )
+        .then((res) => {
+            return res.data.data
+        })
+        .catch((error) => {
+            console.log(error)
+            return error
+        })
+    return result
+}
+
+export async function depositWallet(userid, amount, token) {
+    const result = axios
+        .post(
+            DEFAULT_API_URL + POST_DEPOSTIT_WALLET_URL,
+            {
+                user_id: userid,
+                amount: amount,
+            },
+            {
+                headers: {
+                    Authorization: 'Bearer ' + token,
+                },
+            }
+        )
+        .then((res) => {
+            return res.data.data
+        })
+        .catch((error) => {
+            console.log(error)
+            return error
+        })
+    return result
+}
+
+export async function orderCustomDesign(
+    userid,
+    name, phone, address, file ,
+    token
+) {
+    console.log(userid, name, phone, address, file, token)
+    const result = axios
+        .post(
+            DEFAULT_API_URL + POST_CREATE_ORDER_CUSTOM_URL,
+            {
+                user_id: userid,
+                file: file,
+                username: name,
+                phone: phone,
+                address: address,
+            },
+            {
+                headers: {
+                    Authorization: 'Bearer ' + token,
+                },
+            }
+        )
+        .then((res) => {
             console.log(res)
-            return res
+            return res.data
+        })
+        .catch((error) => {
+            console.log(error)
+            return error
+        })
+    return result
+}
+
+export async function uploadFile(file) {
+    const result = axios
+        .post(
+            DEFAULT_API_URL + POST_UPLOAD_FILE_URL,
+            {
+                file: file,
+            },
+            {
+                headers: { 'Content-type': 'multipart/form-data' },
+            }
+        )
+        .then((res) => {
+            return res.data
         })
         .catch((error) => {
             console.log(error)

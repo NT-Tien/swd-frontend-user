@@ -6,6 +6,7 @@ import {
     BookingPage,
     CheckOutPage,
     ContactPage,
+    CustomeOrderPage,
     HomePage,
     LoginPage,
     NotFound,
@@ -17,6 +18,7 @@ import {
     SignupPage,
     UserLayout,
     VerifyBookingPage,
+    WalletPage,
     WishListPage,
 } from './pages'
 import useCheckAuth from './hooks/useCheckAuth'
@@ -27,7 +29,7 @@ function App() {
 
     return (
         <>
-            <main className="relative min-w-full min-h-full overflow-hidden app ">
+            <main className="relative flex flex-col min-w-full min-h-screen h-max app ">
                 {!isLoggedIn && displayLoginCheckMessage()}
                 {isPopupOpen && displayPopup()}
                 <Routes>
@@ -46,6 +48,8 @@ function App() {
                         <Route path="/signup" element={<SignupPage />} />
 
                         <Route element={<RequireAuth />}>
+                            <Route path='/wallet' element={<WalletPage />}/>
+                            <Route path='/custom-order' element={<CustomeOrderPage />}/>
                             <Route 
                                 path='/order-history'
                                 element={<OrderHistoryPage/>}

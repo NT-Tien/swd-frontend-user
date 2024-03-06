@@ -3,20 +3,20 @@ import React, { createContext, useEffect, useState } from 'react'
 const AuthContext = createContext({})
 
 export const AuthProvider = ({ children }) => {
-    // const initialToken = localStorage.getItem('token')
-    //     ? JSON.parse(localStorage.getItem('token'))
-    //     : null
-    // const initialUser = localStorage.getItem('user')
-    //     ? JSON.parse(localStorage.getItem('user'))
-    //     : null
+    const initialToken = localStorage.getItem('token')
+        ? JSON.parse(localStorage.getItem('token'))
+        : null
+    const initialUser = localStorage.getItem('user')
+        ? JSON.parse(localStorage.getItem('user'))
+        : null
 
-    //     console.log(initialToken)
+        console.log(initialToken)
 
-    // const initialState = initialUser && initialToken ? true : false 
-    const [user, setUser] = useState(null)   
-    const [isLoggedIn, setIsLoggedIn] = useState(false)
+    const initialState = initialUser && initialToken ? true : false 
+    const [user, setUser] = useState(initialUser)   
+    const [isLoggedIn, setIsLoggedIn] = useState(initialState)
     const [isOpenCheckModal, setIsOpenCheckModal] = useState(false)
-    const [token, setToken] = useState(null)
+    const [token, setToken] = useState(initialToken)
 
     const logoutHook = () => {
         localStorage.removeItem('user')

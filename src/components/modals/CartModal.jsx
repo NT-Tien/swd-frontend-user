@@ -96,7 +96,7 @@ const CartModal = ({ isOpen, closeModalFunction }) => {
                                             </MainActionLink>
                                         </div>
                                     </>
-                                ) : Array.isArray(data) ? (
+                                ) : Array.isArray(data) && data.length > 0 ? (
                                     <>
                                         <div className="flex flex-col w-full gap-2 overflow-y-auto">
                                             {data.map((item) => (

@@ -5,6 +5,7 @@ import {
     Carousel,
     MainActionButton,
     PageBanner,
+    ReadMore,
     SimpleLoading,
 } from '../../components'
 import {
@@ -93,10 +94,10 @@ const ProductDetailsPage = () => {
     }, [data])
 
     return (
-        <section className="flex flex-col min-h-screen px-20 text-secondary-theme">
+        <section className="flex flex-col px-20 min-h-max text-secondary-theme">
             <PageBanner title="Details" />
 
-            <div className="flex h-full ">
+            <div className="flex h-full min-h-max ">
                 {status === 'pending' ? (
                     <SimpleLoading />
                 ) : status === 'error' ? (
@@ -108,7 +109,7 @@ const ProductDetailsPage = () => {
                             <Carousel images={imgUrls} />
                         </div>
                         {/* name */}
-                        <div className="flex flex-col justify-between w-2/3 pl-10 h-96 min-h-max">
+                        <div className="flex flex-col justify-between w-2/3 pl-10 min-h-max">
                             <div className="flex flex-col gap-4 " >
                                 <h3 className="text-3xl uppercase">
                                     {data?.name}
@@ -118,7 +119,8 @@ const ProductDetailsPage = () => {
                                     <span className="font-medium">
                                         Description:{' '}
                                     </span>
-                                    {data?.description}
+                                    <ReadMore text={data?.description}/>
+                                    
                                 </div>
                                 {/* options */}
                                 <div className="flex gap-2">
@@ -159,7 +161,7 @@ const ProductDetailsPage = () => {
                             {/* price */}
                             <div className="flex flex-col gap-4">
                                 <span className="text-5xl font-light">
-                                    ${chosenOption?.price}
+                                    {chosenOption?.price}₫
                                 </span>
                                 <div className="flex gap-2">
                                     <MainActionButton

@@ -24,7 +24,7 @@ const CheckOutPage = () => {
     })
 
     const { status, data, error } = useCartData(1)
-    // const {mutate: clearCart} = useClearCart()
+    const { mutate: clearCart } = useClearCart()
 
     const handleInputChange = (e) => {
         const { name, value } = e.target
@@ -64,14 +64,15 @@ const CheckOutPage = () => {
             )
             if (result.code === '00') {
                 const checkoutUrl = result.data.checkoutUrl
+                const redirect = () => {
+                    window.open(checkoutUrl, '_blank')
+                }
                 openPopupFunc(
                     'Your order has been received!',
                     'Head to payment',
-                    () => {
-                        window.open(checkoutUrl, '_blank')
-                    }
+                    redirect
                 )
-                // clearCart()
+                clearCart()
             }
         }
 
@@ -99,7 +100,7 @@ const CheckOutPage = () => {
     return (
         <section className="px-20 min-h-svh">
             <PageBanner title="checkout" />
-            <div className="flex flex-col w-full h-full gap-4 rounded-sm min-h-max md:flex-row ">
+            <div className="flex flex-col w-full h-full gap-4 min-h-max md:flex-row ">
                 {/* items */}
                 <div className="flex flex-col flex-1 gap-4 p-6 ">
                     <div className="flex w-full gap-2 text-lg uppercase">
@@ -132,7 +133,10 @@ const CheckOutPage = () => {
                     <div className="flex-col self-end w-full gap-4 flex-center min-w-max ">
                         <div className="flex justify-between w-full">
                             <span className="text-lg uppercase">total</span>
-                            <h5 className="text-5xl ">VND{totalPrice}</h5>
+                            <h5 className="text-5xl font-light">
+                                {totalPrice}
+                                <span className="text-3xl">₫</span>
+                            </h5>
                         </div>
                         <div className="w-full gap-4 flex-center">
                             <MainActionLink to="/cart">
@@ -182,6 +186,7 @@ const CheckOutPage = () => {
                             onChange={handleInputChange}
                             value={formValue.address}
                             type="text"
+                            minLength="10"
                             placeholder="Address"
                             className="block w-full p-3 text-sm text-gray-900 border rounded-full border-secondary-theme bg-primary-bg-color ps-4 focus:ring-secondary-theme"
                             required

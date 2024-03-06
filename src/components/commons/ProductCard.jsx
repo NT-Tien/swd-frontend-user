@@ -98,8 +98,8 @@ const ProductCard = ({
                 </span>
                 <div className="flex flex-wrap items-center justify-between gap-4">
                     <div className="text-3xl w-max ">
-                        {options[chosenOption].price}{' '}
-                        <span className="">VND</span>
+                        {options[chosenOption].price}
+                        <span>₫</span>
                     </div>
                     
                 </div>

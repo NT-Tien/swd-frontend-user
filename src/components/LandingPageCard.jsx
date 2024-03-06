@@ -102,7 +102,7 @@ const LandingPageCard = ({ src, children, id, active, onClick, title }) => {
                 className={clsx(
                     'btn transition-color absolute inset-y-0 -right-10 z-[2] mx-0 my-auto size-20 overflow-hidden rounded-full p-1 duration-500',
                     active
-                        ? 'group/collectionBtn bg-secondary-theme/90 hover:scale-[3.1]'
+                        ? 'group/collectionBtn bg-secondary-theme/90'
                         : 'border-2 border-secondary-theme bg-primary-bg-color hover:scale-[1.05]'
                 )}
             >

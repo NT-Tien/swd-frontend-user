@@ -2,8 +2,12 @@ import React, { forwardRef, useRef } from 'react'
 import CustomLink from '../CustomLink'
 import { useGSAP } from '@gsap/react'
 import gsap from 'gsap'
+import { useAuth } from '../../../hooks/useAuth'
 
 const ExpandedMenu = forwardRef(({ toggle, toggleFunction }, ref) => {
+
+    const {isLoggedIn} = useAuth()
+
     const menuList = [
         {
             name: 'HOME',
@@ -13,6 +17,7 @@ const ExpandedMenu = forwardRef(({ toggle, toggleFunction }, ref) => {
             name: 'SHOP',
             to: '/shop',
         },
+        
         {
             name: 'BOOKING',
             to: '/booking',
@@ -71,6 +76,12 @@ const ExpandedMenu = forwardRef(({ toggle, toggleFunction }, ref) => {
                         <CustomLink to={link.to}> {link.name} </CustomLink>
                     </div>
                 ))}
+                {   isLoggedIn &&
+                    <div onClick={handleToggleMenu}>
+                        <CustomLink to='/custom-order'> CUSTOM ORDER </CustomLink>
+                    </div>
+                }
+                
             </div>
         </section>
     )

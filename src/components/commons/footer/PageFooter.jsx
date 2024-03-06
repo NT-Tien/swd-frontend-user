@@ -28,6 +28,14 @@ const PageFooter = () => {
                         textColor="light"
                         underlineWidth="h-px"
                         underlineColor='bg-white'
+                        to="/custom-order"
+                    >
+                        Order custom design
+                    </CustomLink>
+                    <CustomLink
+                        textColor="light"
+                        underlineWidth="h-px"
+                        underlineColor='bg-white'
                         to="/about-us"
                     >
                         About us
