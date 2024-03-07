@@ -9,11 +9,10 @@ import { depositWallet, getWallet } from '../utils/api'
 export const useWalletData = () => {
 
     const {token, user} = useAuth()
-    const id = user.accountId
 
     return useQuery({
-        queryKey: ['wallet', id, token],
-        queryFn: () => getWallet(id, token),
+        queryKey: ['wallet', user, token],
+        queryFn: () => getWallet(user, token),
         placeholderData: keepPreviousData,
         enabled: !!token,
         staleTime: 360000,
@@ -23,11 +22,10 @@ export const useWalletData = () => {
 export const useDepositWallet = () => {
     const queryClient = useQueryClient()
     const {token, user} = useAuth()
-    const userid = user.accountId
 
     const {openPopupFunc} = usePopup()
     return useMutation({
-        mutationFn: (amount) => depositWallet(userid, amount, token),
+        mutationFn: (amount) => depositWallet(user, amount, token),
         onSuccess: (data, variables, context) => {
             queryClient.invalidateQueries({ queryKey: ['wallet'] })
             if (data.code === '00') {

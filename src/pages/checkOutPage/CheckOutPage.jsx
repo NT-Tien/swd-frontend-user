@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { ShoppingCartIcon } from '../../assets'
+import { CreditCardIcon, MoneyIcon, ShoppingCartIcon } from '../../assets'
 import CartItem from '../../components/commons/CartItem'
 import {
     MainActionButton,
@@ -9,22 +9,38 @@ import {
 } from '../../components'
 import { useCartData, useClearCart } from '../../hooks/useCartData'
 import { useAuth } from '../../hooks/useAuth'
-import { createOrder } from '../../utils/api'
+import { createOrder, createOrderWithWallet } from '../../utils/api'
 import usePopup from '../../hooks/usePopup'
+import clsx from 'clsx'
 
 const CheckOutPage = () => {
     const { token, user } = useAuth()
     const { openPopupFunc } = usePopup()
     const [totalPrice, setTotalPrice] = useState(0)
+    const [paymentOption, setPaymentOption] = useState('card')
     const [formValue, setFormValue] = useState({
         phone: '',
         email: '',
         address: '',
         voucher_id: '',
     })
+    const [isLoading, setIsLoading] = useState(false)
 
     const { status, data, error } = useCartData(1)
     const { mutate: clearCart } = useClearCart()
+
+    const paymentMethods = [
+        {
+            icon: <CreditCardIcon />,
+            method: 'Online transaction',
+            value: 'card',
+        },
+        {
+            icon: <MoneyIcon />,
+            method: 'Website e-wallet',
+            value: 'wallet',
+        },
+    ]
 
     const handleInputChange = (e) => {
         const { name, value } = e.target
@@ -33,10 +49,11 @@ const CheckOutPage = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault()
-
-        if (formValue && user && data) {
+        if (formValue && user && data && !isLoading && data.length > 0) {
+            setIsLoading(true)
             const cartItems = data
             let products = []
+            const user_id = user.accountId
             cartItems.forEach((item) => {
                 const chosenOption = item.product.optionProducts.find(
                     (option) => option.id === item.chooseOption
@@ -55,33 +72,66 @@ const CheckOutPage = () => {
                 }
                 products.push(product)
             })
-            const result = await createOrder(
-                user.accountId,
-                totalPrice,
-                products,
-                formValue,
-                token
-            )
-            if (result.code === '00') {
-                const checkoutUrl = result.data.checkoutUrl
-                const redirect = () => {
-                    window.open(checkoutUrl, '_blank')
-                }
-                openPopupFunc(
-                    'Your order has been received!',
-                    'Head to payment',
-                    redirect
+            if (paymentOption === 'card') {
+                const result = await createOrder(
+                    user.accountId,
+                    totalPrice,
+                    products,
+                    formValue,
+                    token
                 )
-                clearCart()
+                if (result.code === '00') {
+                    const checkoutUrl = result.data.checkoutUrl
+                    const redirect = () => {
+                        window.open(checkoutUrl, '_blank')
+                    }
+                    openPopupFunc(
+                        'Your order has been received!',
+                        'Head to payment',
+                        redirect
+                    )
+                    clearCart()
+                }
+            } else if (paymentOption === 'wallet') {
+                console.log(products)
+                const result = await createOrderWithWallet(
+                    user_id,
+                    totalPrice,
+                    products,
+                    formValue,
+                    token
+                )
+                console.log(result)
+                if (result.code === '423') {
+                    openPopupFunc(result.desc, 'Got it, thanks')
+                }
+                if (result.code === '00') {
+                    const checkoutUrl = result.data.checkoutUrl
+                    const redirect = () => {
+                        window.open(checkoutUrl, '_blank')
+                    }
+                    openPopupFunc(
+                        'Your order has been received!',
+                        'Head to payment',
+                        redirect
+                    )
+                    clearCart()
+                }
             }
+
+            setFormValue({
+                phone: '',
+                email: '',
+                address: '',
+                voucher_id: '',
+            })
         }
 
-        setFormValue({
-            phone: '',
-            email: '',
-            address: '',
-            voucher_id: '',
-        })
+        setIsLoading(false)
+    }
+
+    const handlePaymentMethodChange = (method) => {
+        setPaymentOption(method.value)
     }
 
     useEffect(() => {
@@ -113,21 +163,21 @@ const CheckOutPage = () => {
                     ) : status === 'error' ? (
                         <div>{error.message}</div>
                     ) : (
-                        <>
+                        data && data.length > 0 ? 
                             <div className="flex max-h-[55svh] flex-col gap-2 overflow-y-auto">
                                 {data?.map((item, i) => (
-                                    <>
-                                        <CartItem
-                                            isItemEditable={false}
-                                            key={i}
-                                            quantity={item.quantity}
-                                            chooseOption={item.chooseOption}
-                                            product={item.product}
-                                        />
-                                    </>
+                                    <CartItem
+                                        isItemEditable={false}
+                                        key={i}
+                                        quantity={item.quantity}
+                                        chooseOption={item.chooseOption}
+                                        product={item.product}
+                                    />
                                 ))}
                             </div>
-                        </>
+                        : (
+                            <div className='w-full text-sm text-secondary-theme/90 flex-center'>There is currently no item in your cart</div>
+                        )
                     )}
 
                     <div className="flex-col self-end w-full gap-4 flex-center min-w-max ">
@@ -171,7 +221,7 @@ const CheckOutPage = () => {
                             value={formValue.phone}
                             id="phoneInput"
                             name="phone"
-                            placeholder="phone"
+                            placeholder="Phone number..."
                             className="block w-full p-3 text-sm text-gray-900 border rounded-full border-secondary-theme bg-primary-bg-color ps-4 focus:ring-secondary-theme"
                             required
                         />
@@ -187,7 +237,7 @@ const CheckOutPage = () => {
                             value={formValue.address}
                             type="text"
                             minLength="10"
-                            placeholder="Address"
+                            placeholder="Address..."
                             className="block w-full p-3 text-sm text-gray-900 border rounded-full border-secondary-theme bg-primary-bg-color ps-4 focus:ring-secondary-theme"
                             required
                         />
@@ -203,7 +253,7 @@ const CheckOutPage = () => {
                             onChange={handleInputChange}
                             value={formValue.email}
                             type="email"
-                            placeholder="Email"
+                            placeholder="Email..."
                             className="block w-full p-3 text-sm text-gray-900 border rounded-full border-secondary-theme bg-primary-bg-color ps-4 focus:ring-secondary-theme"
                             required
                         />
@@ -217,14 +267,33 @@ const CheckOutPage = () => {
                             onChange={handleInputChange}
                             value={formValue.voucher_id}
                             type="text"
-                            placeholder="Voucher"
+                            placeholder="Voucher..."
                             className="block w-full p-3 text-sm text-gray-900 border rounded-full border-secondary-theme bg-primary-bg-color ps-4 focus:ring-secondary-theme"
                         />
+
+                        <h5 className="font-medium">Choose payment method: </h5>
+                        {paymentMethods.map((method) => (
+                            <button
+                                type="button"
+                                key={method.value}
+                                onClick={() =>
+                                    handlePaymentMethodChange(method)
+                                }
+                                className={clsx(
+                                    'flex items-center gap-2 border border-secondary-theme p-2 px-4 transition-all duration-300 hover:scale-[1.02] hover:bg-secondary-bg-color hover:shadow-md',
+                                    paymentOption === method.value &&
+                                        'scale-[1.01] bg-secondary-bg-color shadow-xl hover:bg-neutral-300'
+                                )}
+                            >
+                                {method.icon} {method.method}
+                            </button>
+                        ))}
+                        {isLoading && <SimpleLoading />}
 
                         <MainActionButton
                             isSuffixArrow={false}
                             type="submit"
-                            className="self-center w-4/5 p-3 mt-10 bg-secondary-theme"
+                            className="self-center w-4/5 p-3 mt-4 bg-secondary-theme"
                             textColor="text-white "
                         >
                             Check out

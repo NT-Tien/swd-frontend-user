@@ -18,7 +18,7 @@ const LandingPageCard = ({ src, children, id, active, onClick, title }) => {
     const animationRef = useRef()
 
     const onClickNavigate =()=>{
-        navigate('/shop', {replace: true})
+        navigate('/shop')
     }
 
     useGSAP(

@@ -16,9 +16,12 @@ import {
 import CustomLink from '../commons/CustomLink'
 import { auth } from '../../config/firebase'
 import { useAuth } from '../../hooks/useAuth'
+import { useWalletData } from '../../hooks/useWallet'
 
 const SettingModal = () => {
     const { logoutHook, user } = useAuth()
+    const { status, data: walletData, error } = useWalletData()
+
     const handleLogout = () => {
         logoutHook()
 
@@ -37,16 +40,23 @@ const SettingModal = () => {
         <Popover>
             <Popover.Button className="relative flex-center">
                 {user ? (
-                    user.photoURL ? (
-                        <div className="w-6 h-6 overflow-hidden rounded-full aspect-square">
-                            <img
-                                src={user.photoURL}
-                                className="object-cover w-full h-full"
-                            />
-                        </div>
-                    ) : (
-                        <UserCircleIcon />
-                    )
+                    <>
+                        {user.photoURL ? (
+                            <div className="w-6 h-6 overflow-hidden rounded-full aspect-square">
+                                <img
+                                    src={user.photoURL}
+                                    className="object-cover w-full h-full"
+                                />
+                            </div>
+                        ) : (
+                            <UserCircleIcon />
+                        )}
+                        {walletData && (
+                            <span className="ml-2 text-sm">
+                                {walletData.balance}₫
+                            </span>
+                        )}
+                    </>
                 ) : (
                     <UserIcon />
                 )}
@@ -61,7 +71,7 @@ const SettingModal = () => {
                 leaveFrom="opacity-100 translate-y-0"
                 leaveTo="opacity-0 translate-y-1"
             >
-                <Popover.Panel className="absolute z-10 right-2 top-14">
+                <Popover.Panel className="absolute z-10 right-4 top-14">
                     <div className="flex flex-col items-start justify-center gap-2 px-6 py-3 text-lg border shadow-lg border-secondary-theme bg-primary-bg-color">
                         {user ? (
                             <>
@@ -69,9 +79,9 @@ const SettingModal = () => {
                                     className="font-normal"
                                     active={false}
                                     underlineWidth="h-[1px]"
-                                    to="/wallet"
+                                    to="/account-info"
                                 >
-                                    <MoneyIcon /> Wallet
+                                    <UserIcon /> Account
                                 </CustomLink>
 
                                 <CustomLink
@@ -109,7 +119,6 @@ const SettingModal = () => {
                                 >
                                     <ClipBoardIcon /> History
                                 </CustomLink>
-                               
 
                                 <CustomLink
                                     className="font-normal"

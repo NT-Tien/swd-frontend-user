@@ -8,10 +8,14 @@ import gsap from 'gsap/gsap-core'
 import { horizontalLoop } from '../../utils/GSAPUtils'
 import { registerAccount } from '../../utils/api'
 import { useNavigate } from 'react-router-dom'
+import usePopup from '../../hooks/usePopup'
+import { useAuth } from '../../hooks/useAuth'
 
 const SignupPage = () => {
 
     const navigate = useNavigate()
+    const { user } = useAuth()
+    const { openPopupFunc } = usePopup()
     // state
 
     const [showPassword, setShowPassword] = useState(false)
@@ -33,6 +37,12 @@ const SignupPage = () => {
     const passwordRedoInputRef = useRef()
 
     //
+
+    useEffect(()=>{
+        if(user){
+            navigate('/')
+        }
+    },[])
 
     useGSAP(() => {
         gsap.from(containerRef.current, {
@@ -90,16 +100,26 @@ const SignupPage = () => {
         setErrorMsg('')
 
         const result = await registerAccount(formValue)
-        console.log(result)
-        setFormValue({
-            username: '',
-            email: '',
-            password: '',
-            phone: '',
-        })
-
-        setPasswordRedoValue('')
-        navigate('/login', {replace: true})
+        if(result.statusCode === 400) {
+            setErrorMsg('This email has already been registered')
+            return
+        }
+        if(result.statusCode === 201) {
+            setFormValue({
+                username: '',
+                email: '',
+                password: '',
+                phone: '',
+            })
+            const func = () => {
+                navigate('/login')
+            }
+            setPasswordRedoValue('')
+            openPopupFunc('Register successfully', 'Got it, thanks', func)
+            
+            return
+        }
+        
     }
 
     const handleInputChange = (e) => {
@@ -133,7 +153,7 @@ const SignupPage = () => {
 
             <div
                 ref={containerRef}
-                className="flex-center relative flex min-h-fit w-1/2 min-w-[500px] flex-col  gap-2 rounded-sm border border-secondary-theme/70  bg-secondary-bg-color  p-5 shadow-lg"
+                className="flex-center relative flex min-h-fit w-1/2 min-w-[500px] flex-col mt-10 gap-2 rounded-sm border border-secondary-theme/70  bg-secondary-bg-color  p-5 shadow-lg"
             >
                 <h1 className="text-4xl font-medium">Sign Up</h1>
 

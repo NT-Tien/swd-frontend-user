@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react'
-import { MainActionButton, PageBanner } from '../../components'
+import { MainActionButton, PageBanner, SimpleLoading } from '../../components'
 import clsx from 'clsx'
 import { ArrowUpTrayIcon } from '../../assets'
 import { MAX_FILE_SIZE } from '../../config/image'
@@ -10,7 +10,7 @@ import { useAuth } from '../../hooks/useAuth'
 const CustomOrderPage = () => {
     const [dragActive, setDragActive] = useState(false)
     const [errorMsg, setErrorMsg] = useState('')
-
+    const [isLoading, setIsLoading] = useState(false)
     const [fileWithPreview, setFileWithPreview] = useState({
         file: null,
         preview: '',
@@ -123,16 +123,27 @@ const CustomOrderPage = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault()
+        if (isLoading) {
+            return
+        }
+
+        setIsLoading(true)
 
         if (!fileWithPreview.file) {
             setErrorMsg('Please upload an image first!')
+            setIsLoading(false)
             return
         }
+
         const file = await uploadFile(fileWithPreview.file)
+
         if (!file) {
             setErrorMsg('There is an unexpected error uploading your image')
+            setIsLoading(false)
+
             return
         }
+
         const userid = user.accountId
         const result = await orderCustomDesign(
             userid,
@@ -158,8 +169,8 @@ const CustomOrderPage = () => {
             openPopupFunc('Your order has been received', 'Got it, thanks')
         } else {
             setErrorMsg('There is an unexpected error submiting your order')
-            return
         }
+        setIsLoading(false)
     }
 
     return (
@@ -267,6 +278,8 @@ const CustomOrderPage = () => {
                             required
                         />
 
+                        {isLoading && <SimpleLoading />}
+
                         <MainActionButton
                             type="submit"
                             className="mt-4 max-w-96"
@@ -278,11 +291,14 @@ const CustomOrderPage = () => {
                         </div>
                     </form>
                 </div>
-                <div className='w-1/3 h-full p-2 px-4 border shadow-lg border-secondary-theme'>
-                      <h2 className='text-3xl font-light'>Upload your design, enter your contact information.</h2>
-                      <p className='font-medium'>
-                        We will contact you shortly after we have received your order.
-                      </p>
+                <div className="w-1/3 h-full p-2 px-4 border shadow-lg border-secondary-theme">
+                    <h2 className="mb-4 text-3xl font-light">
+                        Upload your design, enter your contact information.
+                    </h2>
+                    <p className="font-medium">
+                        We will contact you shortly after we have received your
+                        order.
+                    </p>
                 </div>
             </div>
         </section>

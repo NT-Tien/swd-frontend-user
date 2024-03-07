@@ -13,9 +13,11 @@ import {
     POST_LOGIN_GOOGLE_URL,
     POST_LOGIN_URL,
     POST_PAYMENT_CREATE_ORDER_URL,
+    POST_PAYMENT_CREATE_ORDER_WALLET_URL,
     POST_UPLOAD_FILE_URL,
     POST_WALLET_URL,
     PUT_UPDATE_CART_ITEM_QUANTITY,
+    PUT_UPDATE_PASSWORD_URL,
 } from '../config/api'
 
 export async function fetchProducts(
@@ -66,7 +68,7 @@ export async function fetchCategories() {
 }
 
 export async function registerAccount({ username, email, phone, password }) {
-    return await axios.post(
+    const result = await axios.post(
         DEFAULT_API_URL + 'account/register',
         {
             username,
@@ -79,7 +81,14 @@ export async function registerAccount({ username, email, phone, password }) {
                 'Content-Type': 'application/json',
             },
         }
-    )
+    ).then(res => {
+        console.log(res)
+        return res.data
+    }).catch(err => {
+        return err.response.data
+    })
+
+    return result
 }
 
 export async function login({ email, password }) {
@@ -101,7 +110,7 @@ export async function login({ email, password }) {
         })
         .catch((error) => {
             console.log(error)
-            return error.response.data
+            return error
         })
 }
 
@@ -234,7 +243,7 @@ export async function removeProductFromCart(id, oid, token) {
 export async function clearCart(token) {
     if (!token) return
     const result = axios
-        .delete(DEFAULT_API_URL + 'cart/delete-all/', {
+        .delete(DEFAULT_API_URL + 'cart/delete-all', {
             headers: {
                 Authorization: token,
             },
@@ -294,6 +303,41 @@ export async function fetchWishList(size = 9, page = 1, token) {
     return data.data
 }
 
+export async function createOrderWithWallet(
+    user_id,
+    total,
+    products,
+    { voucher_id = '', address, phone, email },
+    token
+) {
+    return axios
+        .post(
+            DEFAULT_API_URL + POST_PAYMENT_CREATE_ORDER_WALLET_URL,
+            {
+                user_id,
+                total,
+                products,
+                voucher_id,
+                address,
+                phone,
+                email,
+            },
+            {
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: 'Bearer ' + token,
+                },
+            }
+        )
+        .then((res) => {
+            return res.data.data
+        })
+        .catch((error) => {
+            console.log(error)
+            return error.response.data
+        })
+}
+
 export async function createOrder(
     user_id,
     total,
@@ -303,7 +347,7 @@ export async function createOrder(
 ) {
     return axios
         .post(
-            DEFAULT_API_URL + POST_PAYMENT_CREATE_ORDER_URL,
+            DEFAULT_API_URL + POST_PAYMENT_CREATE_ORDER_WALLET_URL,
             {
                 user_id,
                 total,
@@ -346,12 +390,16 @@ export async function getOrderHistory(token) {
     return result
 }
 
-export async function getWallet(userid, token) {
+export async function getWallet(user, token) {
+    if(!user){
+        return null
+    } 
+
     const result = axios
         .post(
             DEFAULT_API_URL + POST_WALLET_URL,
             {
-                user_id: userid,
+                user_id: user.accountId,
             },
             {
                 headers: {
@@ -369,7 +417,10 @@ export async function getWallet(userid, token) {
     return result
 }
 
-export async function depositWallet(userid, amount, token) {
+export async function depositWallet(user, amount, token) {
+    if(!user){
+        return null
+    } 
     const result = axios
         .post(
             DEFAULT_API_URL + POST_DEPOSTIT_WALLET_URL,
@@ -443,6 +494,30 @@ export async function uploadFile(file) {
         .catch((error) => {
             console.log(error)
             return error
+        })
+    return result
+}
+
+export async function changePassword({password, passwordOld}, token) {
+    const result = axios
+        .put(
+            DEFAULT_API_URL + PUT_UPDATE_PASSWORD_URL,
+            {
+                password: passwordOld,
+                new_password: password
+            },
+            {
+                headers: { 
+                    Authorization: 'Bearer ' + token
+                 },
+            }
+        )
+        .then((res) => {
+            return res.data
+        })
+        .catch((error) => {
+            console.log(error)
+            return error.response.data
         })
     return result
 }

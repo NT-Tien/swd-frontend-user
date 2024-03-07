@@ -14,8 +14,10 @@ export const POST_DEPOSTIT_WALLET_URL = 'wallet/deposit'
 
 export const POST_UPLOAD_FILE_URL = 'file/upload'
 export const POST_CREATE_ORDER_CUSTOM_URL = 'staff/order-custome-design'
+export const POST_PAYMENT_CREATE_ORDER_WALLET_URL = 'payment/pay-with-wallet'
 export const POST_PAYMENT_CREATE_ORDER_URL = 'payment/create-order'
 export const POST_LOGIN_URL = 'auth/login'
 export const POST_LOGIN_GOOGLE_URL = 'auth/login/google'
 
 export const PUT_UPDATE_CART_ITEM_QUANTITY = 'cart/update-quantity/' // pid + amount
+export const PUT_UPDATE_PASSWORD_URL = 'account/update-password' 

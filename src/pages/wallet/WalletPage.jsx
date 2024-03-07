@@ -81,7 +81,7 @@ const WalletPage = () => {
                                     Current wallet balance
                                 </span>
                                 <div className="w-full text-3xl font-light text-end">
-                                    {data && data.balance}₫
+                                    {data && `${data.balance}₫`}
                                 </div>
                             </div>
                         </div>

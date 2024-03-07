@@ -3,6 +3,7 @@ import './scrollbar.css'
 import { Route, Routes } from 'react-router-dom'
 import {
     AboutUsPage,
+    AccountInfoPage,
     BookingPage,
     CheckOutPage,
     ContactPage,
@@ -11,6 +12,7 @@ import {
     LoginPage,
     NotFound,
     OrderHistoryPage,
+    PasswordChangePage,
     ProductDetailsPage,
     RequireAuth,
     ShopPage,
@@ -29,7 +31,7 @@ function App() {
 
     return (
         <>
-            <main className="relative flex flex-col min-w-full min-h-screen h-max app ">
+            <main className="relative flex flex-col min-w-full min-h-screen overflow-x-hidden h-max app ">
                 {!isLoggedIn && displayLoginCheckMessage()}
                 {isPopupOpen && displayPopup()}
                 <Routes>
@@ -48,6 +50,8 @@ function App() {
                         <Route path="/signup" element={<SignupPage />} />
 
                         <Route element={<RequireAuth />}>
+                            <Route path='/password-change' element={<PasswordChangePage/>}/>
+                            <Route path='/account-info' element={<AccountInfoPage/>}/>
                             <Route path='/wallet' element={<WalletPage />}/>
                             <Route path='/custom-order' element={<CustomeOrderPage />}/>
                             <Route 

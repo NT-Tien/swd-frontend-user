@@ -22,4 +22,5 @@ export {default as ChevronLeft} from './ChevronLeft.jsx'
 export {default as ClipBoardIcon} from './ClipBoardIcon.jsx'
 export {default as MoneyIcon} from './MoneyIcon.jsx'
 export {default as ArrowUpTrayIcon} from './ArrowUpTrayIcon.jsx'
+export {default as CreditCardIcon} from './CreditCardIcon.jsx'
 

@@ -11,7 +11,7 @@ const ReadMore = ({ text, maxLength = 250 }) => {
     }
 
     return (
-        <p>
+        <div>
             {showFullText ? text : truncatedText}
             {text.length > maxLength && (
                 <div className="group w-fit h-fit">
@@ -25,7 +25,7 @@ const ReadMore = ({ text, maxLength = 250 }) => {
                     </span>
                 </div>
             )}
-        </p>
+        </div>
     )
 }
 

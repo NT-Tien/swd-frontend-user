@@ -10,7 +10,7 @@ export const AuthProvider = ({ children }) => {
         ? JSON.parse(localStorage.getItem('user'))
         : null
 
-        console.log(initialToken)
+        console.log(initialUser)
 
     const initialState = initialUser && initialToken ? true : false 
     const [user, setUser] = useState(initialUser)   

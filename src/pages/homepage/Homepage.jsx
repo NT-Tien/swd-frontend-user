@@ -5,7 +5,7 @@ import {
     MainActionLink,
     ProductCard,
 } from '../../components'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { useQuery, keepPreviousData } from '@tanstack/react-query'
 import { fetchProducts } from '../../utils/api'
 
@@ -20,7 +20,6 @@ const HomePage = () => {
         staleTime: 3600000,
     })
 
-
     const handleItemClick = (name) => {
         navigate(`/productDetails/${name}`)
     }
@@ -29,8 +28,7 @@ const HomePage = () => {
             <section className="flex flex-col w-full h-full gap-10 overflow-hidden bg-primary-bg-color">
                 {/* landing image */}
 
-                    <LandingPageImages />
-
+                <LandingPageImages />
 
                 {/* new product section*/}
                 <div className="flex flex-col items-center w-full gap-4 px-20 bg-transparent">
@@ -57,19 +55,13 @@ const HomePage = () => {
                         ) : (
                             <>
                                 {data[0].map((product) => (
-                                    <div
+                                    <ProductCard
                                         key={product.id}
-                                        className="flex-center"
-                                    >
-                                        <ProductCard
-                                            key={product.id}
-                                            product={product}
-                                           
-                                            onClick={() =>
-                                                handleItemClick(product.name)
-                                            }
-                                        />
-                                    </div>
+                                        product={product}
+                                        onClick={() =>
+                                            handleItemClick(product.name)
+                                        }
+                                    />
                                 ))}
                             </>
                         )}

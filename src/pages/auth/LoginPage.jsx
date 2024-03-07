@@ -60,7 +60,7 @@ const LoginPage = () => {
 
     useEffect(() => {
         if (user) {
-            navigate(-1)
+            navigate('/')
         }
     }, [])
 
@@ -104,8 +104,7 @@ const LoginPage = () => {
                 email: '',
                 password: '',
             })
-            console.log(result.data)
-            const user = result.data.data.profile
+            const user = result.data.data
             const token = result.data.data.token
 
             loginHook(user, token)
