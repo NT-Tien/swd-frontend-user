@@ -9,17 +9,25 @@ import {
 } from '../../components'
 import { useAuth } from '../../hooks/useAuth'
 import { useCartData, useRemoveCartItem } from '../../hooks/useCartData'
+import usePopup from '../../hooks/usePopup'
 
 const ShoppingCartPage = () => {
     const [page, setPage] = useState(1)
     const [totalPrice, setTotalPrice] = useState(0)
     const { token } = useAuth()
+    const { openPopupFunc } = usePopup()
 
     const { status, data, error, refetch } = useCartData(page)
     const { mutate: removeCartItem } = useRemoveCartItem()
 
     const removeItem = (id, oid, name) => {
-        removeCartItem({ id, oid, name })
+        if(!id || !oid || !name) {
+            return
+        }
+        const func = () => {
+            removeCartItem({ id, oid, name })
+        }
+        openPopupFunc('Are you sure you want to remove this item from your cart?', 'Yes', func, true)
     }
 
     useEffect(() => {

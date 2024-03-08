@@ -7,6 +7,7 @@ export const PopupProvider = ({ children }) => {
     const [message, setMessage] = useState('')
     const [confirmButtonMsg, setConfirmButtonMsg] = useState('')
     const [onCloseFunc, setOnCloseFunc] = useState(() => {})
+    const [hasCancelBtn, setHasCancelBtn] = useState(false)
 
     return (
         <PopupContext.Provider
@@ -19,6 +20,8 @@ export const PopupProvider = ({ children }) => {
                 setConfirmButtonMsg,
                 onCloseFunc,
                 setOnCloseFunc,
+                hasCancelBtn,
+                setHasCancelBtn,
             }}
         >
             {children}

@@ -10,10 +10,11 @@ import {
     useWishlistData,
 } from '../../hooks/useWishlistData'
 import { useAddCartItem } from '../../hooks/useCartData'
+import usePopup from '../../hooks/usePopup'
 
 const WishListPage = () => {
     const [page, setPage] = useState(1)
-
+    const { openPopupFunc } = usePopup()
     const { status, data, error } = useWishlistData(page)
     const { mutate: addToCart } = useAddCartItem()
     const { mutate: removeWishlistItem } = useRemoveWishlistItem()
@@ -23,7 +24,18 @@ const WishListPage = () => {
     }
 
     const removeItemFromWishlist = async (id, name) => {
-        removeWishlistItem({ id, name })
+        if (!id || !name) {
+            return
+        }
+        const func = () => {
+            removeWishlistItem({ id, name })
+        }
+        openPopupFunc(
+            'Are you sure you want to remove this item from your wishlist?',
+            'Yes',
+            func,
+            true
+        )
     }
 
     useEffect(() => {
@@ -60,12 +72,12 @@ const WishListPage = () => {
                                 />
                             ))
                         ) : (
-                            <div className="py-5 text-secondary-theme">
+                            <div className="w-full py-5 flex-center text-secondary-theme">
                                 There's currently no item in your wishlist
                             </div>
                         )
                     ) : (
-                        <div className="py-5 text-secondary-theme">
+                        <div className="w-full py-5 flex-center text-secondary-theme">
                             There's currently no item in your wishlist
                         </div>
                     )}

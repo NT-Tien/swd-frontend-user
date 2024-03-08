@@ -25,7 +25,7 @@ const CheckOutPage = () => {
         voucher_id: '',
     })
     const [isLoading, setIsLoading] = useState(false)
-
+    const [errorMsg, setErrorMsg] = useState('')
     const { status, data, error } = useCartData(1)
     const { mutate: clearCart } = useClearCart()
 
@@ -102,10 +102,10 @@ const CheckOutPage = () => {
                     token
                 )
                 console.log(result)
-                if (result.code === '423') {
-                    openPopupFunc(result.desc, 'Got it, thanks')
-                }
-                if (result.code === '00') {
+                if (result.code !== '00') {
+                    setErrorMsg(result.message)
+                    openPopupFunc(result.message, 'Got it, thanks')
+                } else {
                     const checkoutUrl = result.data.checkoutUrl
                     const redirect = () => {
                         window.open(checkoutUrl, '_blank')
@@ -162,22 +162,22 @@ const CheckOutPage = () => {
                         <SimpleLoading />
                     ) : status === 'error' ? (
                         <div>{error.message}</div>
+                    ) : data && data.length > 0 ? (
+                        <div className="flex max-h-[55svh] flex-col gap-2 overflow-y-auto">
+                            {data?.map((item, i) => (
+                                <CartItem
+                                    isItemEditable={false}
+                                    key={i}
+                                    quantity={item.quantity}
+                                    chooseOption={item.chooseOption}
+                                    product={item.product}
+                                />
+                            ))}
+                        </div>
                     ) : (
-                        data && data.length > 0 ? 
-                            <div className="flex max-h-[55svh] flex-col gap-2 overflow-y-auto">
-                                {data?.map((item, i) => (
-                                    <CartItem
-                                        isItemEditable={false}
-                                        key={i}
-                                        quantity={item.quantity}
-                                        chooseOption={item.chooseOption}
-                                        product={item.product}
-                                    />
-                                ))}
-                            </div>
-                        : (
-                            <div className='w-full text-sm text-secondary-theme/90 flex-center'>There is currently no item in your cart</div>
-                        )
+                        <div className="w-full text-sm flex-center text-secondary-theme/90">
+                            There is currently no item in your cart
+                        </div>
                     )}
 
                     <div className="flex-col self-end w-full gap-4 flex-center min-w-max ">
@@ -289,11 +289,11 @@ const CheckOutPage = () => {
                             </button>
                         ))}
                         {isLoading && <SimpleLoading />}
-
+                                    {errorMsg && <span className='text-sm font-medium text-red-600'>{errorMsg}</span>}
                         <MainActionButton
                             isSuffixArrow={false}
                             type="submit"
-                            className="self-center w-4/5 p-3 mt-4 bg-secondary-theme"
+                            className="self-center w-4/5 p-3 mt-2 bg-secondary-theme"
                             textColor="text-white "
                         >
                             Check out
