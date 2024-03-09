@@ -1,4 +1,5 @@
 import React, { createContext, useEffect, useState } from 'react'
+import { verifyToken } from '../utils/api'
 
 const AuthContext = createContext({})
 
@@ -10,10 +11,12 @@ export const AuthProvider = ({ children }) => {
         ? JSON.parse(localStorage.getItem('user'))
         : null
 
-        console.log(initialUser)
+    console.log(initialUser)
 
-    const initialState = initialUser && initialToken ? true : false 
-    const [user, setUser] = useState(initialUser)   
+    
+
+    const initialState = initialUser && initialToken ? true : false
+    const [user, setUser] = useState(initialUser)
     const [isLoggedIn, setIsLoggedIn] = useState(initialState)
     const [isOpenCheckModal, setIsOpenCheckModal] = useState(false)
     const [token, setToken] = useState(initialToken)
@@ -33,7 +36,17 @@ export const AuthProvider = ({ children }) => {
         localStorage.setItem('token', JSON.stringify(token))
         localStorage.setItem('user', JSON.stringify(user))
         setIsLoggedIn(true)
+    }
 
+    if (initialToken) {
+        const result = verifyToken(initialToken)
+        result.then((res) => {
+            console.log(res)
+            if(!res ||!res.data ){
+                logoutHook()
+                return
+            }
+        })
     }
 
     return (

@@ -1,10 +1,14 @@
 import React from 'react'
+import { formatDate } from '../../utils/helper'
 
 const OrderItem = ({ order }) => {
-    return (
-        <div className="flex flex-col w-full p-6 shadow-sm h-80 min-h-max bg-neutral-100">
+    return ( order &&
+        <div className="flex flex-col w-full p-6 shadow-sm h-max min-h-max bg-neutral-100">
             {/* head */}
-            <div className="flex items-center justify-end">
+            <div className="flex items-center justify-between">
+                <div className='text-sm font-medium'>
+                    {formatDate(order.createdAt)}
+                </div>
                 <div className="flex text-sm divide-x divide-secondary-theme/50">
                     {order.status_delivery === 'CANCELED' ? (
                         <span className="pr-1 text-red-600">
@@ -20,7 +24,7 @@ const OrderItem = ({ order }) => {
                         </span>
                     )}
 
-                    {order.payment.status === 'EXPIRED' ? (
+                    {order.payment && order.payment.status === 'EXPIRED' ? (
                         <span className="pl-2 text-red-700">
                             Payment expired
                         </span>

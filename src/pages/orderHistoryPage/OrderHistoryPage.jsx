@@ -31,7 +31,7 @@ const OrderHistoryPage = () => {
                 <SimpleLoading />
             ) : status === 'error' ? (
                 <div>{error.message}</div>
-            ) : Array.isArray(data) && data.length > 0 ? (
+            ) : data && Array.isArray(data) && data.length > 0 ? (
                 <div className='flex flex-col gap-2'>
                     {data.map((order) => (
                         <OrderItem key={order.id} order={order} />

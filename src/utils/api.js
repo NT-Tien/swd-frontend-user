@@ -69,25 +69,28 @@ export async function fetchCategories() {
 }
 
 export async function registerAccount({ username, email, phone, password }) {
-    const result = await axios.post(
-        DEFAULT_API_URL + 'account/register',
-        {
-            username,
-            email,
-            phone,
-            password,
-        },
-        {
-            headers: {
-                'Content-Type': 'application/json',
+    const result = await axios
+        .post(
+            DEFAULT_API_URL + 'account/register',
+            {
+                username,
+                email,
+                phone,
+                password,
             },
-        }
-    ).then(res => {
-        console.log(res)
-        return res.data
-    }).catch(err => {
-        return err.response.data
-    })
+            {
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            }
+        )
+        .then((res) => {
+            console.log(res)
+            return res.data
+        })
+        .catch((err) => {
+            return err.response.data
+        })
 
     return result
 }
@@ -131,26 +134,26 @@ export async function loginGoogle(token) {
 }
 
 export async function verifyToken(token) {
-    const result = await axios.post(
-        DEFAULT_API_URL + POST_VERIFY_TOKEN,
-        {
-            token: 'Bearer ' + token,
-        },
-        {
-            headers: {
-                'Content-Type': 'application/json',
-            },
-        }
-    ).then(res => {
-        console.log(res)
-        return res
-    }).catch(err => {
-        console.log(err)
-        return err.response
-    })
+    const result = await axios
+        .post(
+            DEFAULT_API_URL + POST_VERIFY_TOKEN,
+            {},
+            {
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: 'Bearer ' + token,
+                },
+            }
+        )
+        .then((res) => {
+            return res.data
+        })
+        .catch((err) => {
+            console.log(err)
+            return err.response
+        })
     return result
 }
-
 
 export async function bookAppointment({ name, email, phone, time }) {
     return await axios.post(
@@ -414,9 +417,9 @@ export async function getOrderHistory(token) {
 }
 
 export async function getWallet(user, token) {
-    if(!user){
+    if (!user) {
         return null
-    } 
+    }
 
     const result = axios
         .post(
@@ -441,9 +444,9 @@ export async function getWallet(user, token) {
 }
 
 export async function depositWallet(user, amount, token) {
-    if(!user){
+    if (!user) {
         return null
-    } 
+    }
     const result = axios
         .post(
             DEFAULT_API_URL + POST_DEPOSTIT_WALLET_URL,
@@ -469,7 +472,10 @@ export async function depositWallet(user, amount, token) {
 
 export async function orderCustomDesign(
     userid,
-    name, phone, address, file ,
+    name,
+    phone,
+    address,
+    file,
     token
 ) {
     console.log(userid, name, phone, address, file, token)
@@ -521,18 +527,18 @@ export async function uploadFile(file) {
     return result
 }
 
-export async function changePassword({password, passwordOld}, token) {
+export async function changePassword({ password, passwordOld }, token) {
     const result = axios
         .put(
             DEFAULT_API_URL + PUT_UPDATE_PASSWORD_URL,
             {
                 password: passwordOld,
-                new_password: password
+                new_password: password,
             },
             {
-                headers: { 
-                    Authorization: 'Bearer ' + token
-                 },
+                headers: {
+                    Authorization: 'Bearer ' + token,
+                },
             }
         )
         .then((res) => {
