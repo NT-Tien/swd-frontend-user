@@ -13,14 +13,6 @@ export const AuthProvider = ({ children }) => {
 
     console.log(initialUser)
 
-    
-
-    const initialState = initialUser && initialToken ? true : false
-    const [user, setUser] = useState(initialUser)
-    const [isLoggedIn, setIsLoggedIn] = useState(initialState)
-    const [isOpenCheckModal, setIsOpenCheckModal] = useState(false)
-    const [token, setToken] = useState(initialToken)
-
     const logoutHook = () => {
         localStorage.removeItem('user')
         localStorage.removeItem('token')
@@ -48,6 +40,16 @@ export const AuthProvider = ({ children }) => {
             }
         })
     }
+
+    const initialState = initialUser && initialToken ? true : false
+    const [user, setUser] = useState(initialUser)
+    const [isLoggedIn, setIsLoggedIn] = useState(initialState)
+    const [isOpenCheckModal, setIsOpenCheckModal] = useState(false)
+    const [token, setToken] = useState(initialToken)
+
+    
+
+    
 
     return (
         <AuthContext.Provider

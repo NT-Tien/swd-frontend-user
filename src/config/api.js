@@ -1,4 +1,4 @@
-export const DEFAULT_API_URL = 'https://caucalamdev.io.vn/' 
+export const DEFAULT_API_URL = 'https://api.caucalamdev.io.vn/' 
 
 export const GET_PRODUCTS_URL = 'product/get-all/' // + size/page
 export const GET_PRODUCT_BY_NAME_URL = 'product/get-by-name/' // + name
