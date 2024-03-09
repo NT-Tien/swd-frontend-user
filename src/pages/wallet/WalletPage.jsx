@@ -1,33 +1,33 @@
-import React, { useEffect, useState } from 'react'
+import React, {  useState } from 'react'
 import { MainActionButton, PageBanner, SimpleLoading } from '../../components'
 import { useDepositWallet, useWalletData } from '../../hooks/useWallet'
-import usePopup from '../../hooks/usePopup'
 
 const WalletPage = () => {
     const { status, data, error } = useWalletData()
-    const { mutate: addFunds, isLoading } = useDepositWallet()
-
+    const { mutate: addFunds, status: depositStatus } = useDepositWallet()
     const funds = [2000, 3000, 4000, 5000, 6000]
 
     const [chosenButton, setChosenButton] = useState(null)
-    const handleAddFunds = (funds, i) => {
-        if (!isLoading) {
-            setChosenButton(i)
-            addFunds(funds)
+    const handleClick = (fund, i) => {
+        if(depositStatus !== 'pending'){
+            handleAddFunds(fund,i)
         }
+        console.log(depositStatus)
+    }
+    const handleAddFunds = (fund, i) => {
+            setChosenButton(i)
+            addFunds(fund)
     }
 
     return (
-        <section className="flex flex-col px-20 min-h-svh text-secondary-theme">
+        <section className="flex min-h-svh flex-col px-20 text-secondary-theme">
             <PageBanner title="Wallet" />
-            {
-                isLoading && <SimpleLoading/>
-            }
+            {depositStatus === 'pending' && <SimpleLoading />}
             {status === 'pending' ? (
                 <SimpleLoading />
             ) : status === 'error' ? (
-                <div className="w-full flex-center">
-                    OPPS. SOMETHING HAPPENED WHEN FETCH YOUR WALLET DETAILS
+                <div className="flex-center w-full">
+                    OPPS. SOMETHING HAPPENED WHEN FETCHING YOUR WALLET DETAILS
                 </div>
             ) : (
                 <>
@@ -42,12 +42,12 @@ const WalletPage = () => {
                             it’s placed.
                         </p>
                     </div>
-                    <div className="flex flex-col w-full gap-4 mt-8 min-h-max md:flex-row">
-                        <div className="flex flex-col flex-1 gap-4">
+                    <div className="mt-8 flex min-h-max w-full flex-col gap-4 md:flex-row">
+                        <div className="flex flex-1 flex-col gap-4">
                             {funds.map((fund, i) => (
                                 <div
                                     key={i}
-                                    className="flex items-center justify-between w-full h-20 gap-2 p-2 px-4 border shadow-md border-secondary-theme/75"
+                                    className="flex h-20 w-full items-center justify-between gap-2 border border-secondary-theme/75 p-2 px-4 shadow-md"
                                 >
                                     <div className="flex flex-col">
                                         <span className="text-2xl">
@@ -62,10 +62,10 @@ const WalletPage = () => {
                                     <MainActionButton
                                         isSuffixArrow={false}
                                         textColor="text-white"
-                                        className="p-2 px-4 h-fit w-fit bg-secondary-theme"
-                                        onClick={() => handleAddFunds(fund, i)}
+                                        className="h-fit w-fit bg-secondary-theme p-2 px-4"
+                                        onClick={() => handleClick(fund, i)}
                                     >
-                                        {i === chosenButton && isLoading ? (
+                                        {i === chosenButton && depositStatus === 'pending' ? (
                                             <SimpleLoading />
                                         ) : (
                                             'Add funds'
@@ -75,12 +75,12 @@ const WalletPage = () => {
                             ))}
                         </div>
 
-                        <div className="p-6 pb-10 border shadow-xl h-max w-96 min-w-max border-secondary-theme/75">
+                        <div className="h-max w-96 min-w-max border border-secondary-theme/75 p-6 pb-10 shadow-xl">
                             <div className="w-full">
-                                <span className="flex w-full gap-2 mb-4 text-sm ">
+                                <span className="mb-4 flex w-full gap-2 text-sm ">
                                     Current wallet balance
                                 </span>
-                                <div className="w-full text-3xl font-light text-end">
+                                <div className="w-full text-end text-3xl font-light">
                                     {data && `${data.balance}₫`}
                                 </div>
                             </div>

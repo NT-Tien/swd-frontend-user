@@ -2,7 +2,7 @@ import React from 'react'
 
 const AboutUsPage = () => {
     return (
-        <section className="relative flex flex-col justify-start w-full text-lg h-fit min-h-svh text-secondary-theme scroll-smooth">
+        <section className="relative flex flex-col justify-start w-full text-lg h-fit mt-4 min-h-svh text-secondary-theme scroll-smooth">
             <div className="z-0 flex flex-col text-secondary-theme">
                 <div className="flex h-fit w-fit select-none gap-20 text-nowrap text-[40svh] font-light uppercase  ">
                     <span className="textUpper leading-none tracking-tighter [word-spacing:-100px]">

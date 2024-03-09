@@ -15,6 +15,7 @@ import {
     POST_PAYMENT_CREATE_ORDER_URL,
     POST_PAYMENT_CREATE_ORDER_WALLET_URL,
     POST_UPLOAD_FILE_URL,
+    POST_VERIFY_TOKEN,
     POST_WALLET_URL,
     PUT_UPDATE_CART_ITEM_QUANTITY,
     PUT_UPDATE_PASSWORD_URL,
@@ -128,6 +129,28 @@ export async function loginGoogle(token) {
     )
     return data.data
 }
+
+export async function verifyToken(token) {
+    const result = await axios.post(
+        DEFAULT_API_URL + POST_VERIFY_TOKEN,
+        {
+            token: 'Bearer ' + token,
+        },
+        {
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        }
+    ).then(res => {
+        console.log(res)
+        return res
+    }).catch(err => {
+        console.log(err)
+        return err.response
+    })
+    return result
+}
+
 
 export async function bookAppointment({ name, email, phone, time }) {
     return await axios.post(
@@ -347,7 +370,7 @@ export async function createOrder(
 ) {
     return axios
         .post(
-            DEFAULT_API_URL + POST_PAYMENT_CREATE_ORDER_WALLET_URL,
+            DEFAULT_API_URL + POST_PAYMENT_CREATE_ORDER_URL,
             {
                 user_id,
                 total,
@@ -425,7 +448,7 @@ export async function depositWallet(user, amount, token) {
         .post(
             DEFAULT_API_URL + POST_DEPOSTIT_WALLET_URL,
             {
-                user_id: userid,
+                user_id: user.accountId,
                 amount: amount,
             },
             {

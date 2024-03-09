@@ -18,6 +18,7 @@ export const POST_PAYMENT_CREATE_ORDER_WALLET_URL = 'payment/pay-with-wallet'
 export const POST_PAYMENT_CREATE_ORDER_URL = 'payment/create-order'
 export const POST_LOGIN_URL = 'auth/login'
 export const POST_LOGIN_GOOGLE_URL = 'auth/login/google'
+export const POST_VERIFY_TOKEN = 'auth/verify-token-user'
 
 export const PUT_UPDATE_CART_ITEM_QUANTITY = 'cart/update-quantity/' // pid + amount
 export const PUT_UPDATE_PASSWORD_URL = 'account/update-password' 

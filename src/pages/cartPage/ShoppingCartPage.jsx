@@ -88,7 +88,6 @@ const ShoppingCartPage = () => {
                 <div className="flex gap-4">
                     <div className="flex flex-col flex-1 gap-2 min-w-fit">
                         {data.map((item) => (
-                            <>
                             <CartItem
                                 key={item.chooseOption}
                                 product={item.product}
@@ -103,7 +102,6 @@ const ShoppingCartPage = () => {
                                         )
                                     }
                             />
-                        </>
                         ))}
                     </div>
                     <div className="flex-col gap-10 p-6 pb-10 border shadow-xl flex-shrink-1 flex-center h-96 w-96 min-w-fit border-secondary-theme">

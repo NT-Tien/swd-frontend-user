@@ -95,7 +95,7 @@ const LoginPage = () => {
         if (!result) return
 
         if (!result.data) {
-            setErrorMsg(result.message)
+            setErrorMsg(result.response.data.message)
             return
         }
 

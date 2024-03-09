@@ -49,7 +49,11 @@ const CheckOutPage = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault()
-        if (formValue && user && data && !isLoading && data.length > 0) {
+        if (formValue && user && !isLoading ) {
+            if(!data ||  data.length <= 0) {
+                setErrorMsg('Your cart is currently empty.')
+                return
+            }
             setIsLoading(true)
             const cartItems = data
             let products = []
