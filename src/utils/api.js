@@ -485,7 +485,6 @@ export async function orderCustomDesign(
     file,
     token
 ) {
-    console.log(userid, name, phone, address, file, token)
     const result = axios
         .post(
             DEFAULT_API_URL + POST_CREATE_ORDER_CUSTOM_URL,

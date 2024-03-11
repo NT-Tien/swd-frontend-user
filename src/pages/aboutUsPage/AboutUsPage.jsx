@@ -1,8 +1,11 @@
 import React from 'react'
+import img2 from "/src/assets/pictures/yellow-bg-stool.jpg"
+import img1 from "/src/assets/pictures/flow-pot-on-stool.jpg"
+import img3 from "/src/assets/pictures/lamps.jpg"
 
 const AboutUsPage = () => {
     return (
-        <section className="relative flex flex-col justify-start w-full text-lg h-fit mt-4 min-h-svh text-secondary-theme scroll-smooth">
+        <section className="relative flex flex-col justify-start w-full mt-4 text-lg h-fit min-h-svh text-secondary-theme scroll-smooth">
             <div className="z-0 flex flex-col text-secondary-theme">
                 <div className="flex h-fit w-fit select-none gap-20 text-nowrap text-[40svh] font-light uppercase  ">
                     <span className="textUpper leading-none tracking-tighter [word-spacing:-100px]">
@@ -14,7 +17,7 @@ const AboutUsPage = () => {
                 <div className="flex gap-4 overflow-hidden ">
                     <div className="w-1/3 overflow-hidden">
                         <img
-                            src="./src/assets/pictures/lamps.jpg"
+                            src={img3}
                             className="object-cover w-full"
                         />
                     </div>
@@ -68,12 +71,12 @@ const AboutUsPage = () => {
                         <div className="relative flex flex-col items-end ">
                             <div className="absolute overflow-hidden -bottom-6 left-16">
                                 <img
-                                    src="./src/assets/pictures/flow-pot-on-stool.jpg"
+                                    src={img1}
                                     className="object-cover w-1/3 aspect-square"
                                 />
                             </div>
                             <img
-                                src="./src/assets/pictures/yellow-bg-stool.jpg"
+                                src={img2}
                                 className="object-cover object-bottom w-2/3 aspect-square"
                             />
                         </div>
