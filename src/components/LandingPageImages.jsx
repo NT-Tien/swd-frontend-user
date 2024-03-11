@@ -1,5 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react'
 import MainActionLink from './commons/buttons/MainActionLink'
+import img3 from '/src/assets/pictures/landing-page-img-3.jpg'
+import img2 from '/src/assets/pictures/landing-page-img.jpg'
 
 const LandingPageImages = () => {
     return (
@@ -13,7 +15,7 @@ const LandingPageImages = () => {
                     </div>
                     <div className="relative w-1/2 h-full overflow-hidden shadow-[-10px_-10px_30px_4px_rgba(0,0,0,0.1),_10px_10px_30px_4px_rgba(45,78,255,0.15)] ">
                         <img
-                            src={'/src/assets/pictures/landing-page-img-3.jpg'}
+                            src={img3}
                             alt="landing page image"
                             className="absolute bottom-0 object-cover w-full h-auto "
                         />
@@ -34,7 +36,7 @@ const LandingPageImages = () => {
 
             <div className="absolute top-0 right-0 z-0 w-5/12 h-full shadow-[rgba(0,_0,_0,_0.4)_0px_30px_90px] bg-secondary-bg-color">
                 <img
-                    src={'/src/assets/pictures/landing-page-img.jpg'}
+                    src={img2}
                     alt="landing page image"
                     className="absolute bottom-0 object-cover w-full h-full -scale-x-100"
                 />

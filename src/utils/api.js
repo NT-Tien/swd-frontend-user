@@ -371,6 +371,13 @@ export async function createOrder(
     { voucher_id = '', address, phone, email },
     token
 ) {
+    console.log(user_id,
+        total,
+        products,
+        voucher_id,
+        address,
+        phone,
+        email,)
     return axios
         .post(
             DEFAULT_API_URL + POST_PAYMENT_CREATE_ORDER_URL,

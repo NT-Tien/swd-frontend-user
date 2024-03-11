@@ -1,5 +1,9 @@
 import React, { useState } from 'react'
 import LandingPageCard from './LandingPageCard'
+import img1 from '/src/assets/pictures/pink-chair.jpg'
+import img2 from '/src/assets/pictures/flow-pot-on-stool.jpg'
+
+import img3 from '/src/assets/pictures/kitchen.jpg'
 
 const LandingPageCollections = () => {
     const [chosenCollection, setChosenCollection] = useState(0)
@@ -12,7 +16,7 @@ const LandingPageCollections = () => {
                 title='Chair'
                 onClick={setChosenCollection}
                 active={chosenCollection === 1}
-                src={'/src/assets/pictures/pink-chair.jpg'}
+                src={img1}
             >
                 Chair
             </LandingPageCard>
@@ -22,7 +26,7 @@ const LandingPageCollections = () => {
                 title='Table'
                 onClick={setChosenCollection}
                 active={chosenCollection === 2}
-                src={'/src/assets/pictures/flow-pot-on-stool.jpg'}
+                src={img2}
             >
                 Table
             </LandingPageCard>
@@ -32,7 +36,7 @@ const LandingPageCollections = () => {
                 title='Kitchen'
                 onClick={setChosenCollection}
                 active={chosenCollection === 3}
-                src={'/src/assets/pictures/kitchen.jpg'}
+                src={img3}
             >
                 Kitchen
             </LandingPageCard>
