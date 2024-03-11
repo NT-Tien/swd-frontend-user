@@ -24,8 +24,9 @@ export default {
             screens: {
                 xs: '320px',
                 sm: '640px',
-
+                'max-md': {'max': '767px'},
                 md: '768px',
+                xl: '1440px'
             },
             backgroundImage: {
                 'about-us': "url('./src/assets/pictures/about-us-bg.jpg')",

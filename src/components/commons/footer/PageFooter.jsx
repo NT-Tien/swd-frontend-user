@@ -4,8 +4,8 @@ import CustomLink from '../CustomLink'
 
 const PageFooter = () => {
     return (
-        <div className="grid grid-cols-5 gap-5 px-[5svw] py-6 mt-10 text-white bg-secondary-theme">
-            <div className="flex flex-col col-span-2 gap-2 border-r border-opacity-50 border-neutral-50">
+        <div className="lg:grid lg:grid-cols-5 flex  flex-col-reverse gap-5 px-[5svw] py-6 mt-10 text-white bg-secondary-theme">
+            <div className="flex flex-col col-span-2 gap-2 border-t lg:border-r lg:border-t-0 border-primary-bg-color">
                 <h1 className="text-lg underline uppercase">Contact Us</h1>
                 <p>
                     Showroom: Lô E2a-7, Đường D1, Đ. D1, Long Thạnh Mỹ, Thành
@@ -14,7 +14,7 @@ const PageFooter = () => {
                 <p>Hotline: 0000000000</p>
                 <p>Email: efurniture.help@fakeemail.com</p>
             </div>
-            <div className="flex flex-col col-span-1 gap-2 border-r border-opacity-50 border-neutral-50">
+            <div className="flex flex-col col-span-1 gap-2 border-t lg:border-r lg:border-t-0 border-primary-bg-color">
                 <h1 className="text-lg underline ">eFurniture</h1>
                     <CustomLink
                         textColor="light"
@@ -49,7 +49,7 @@ const PageFooter = () => {
                         Contact us
                     </CustomLink>
             </div>
-            <div className="flex flex-col items-center justify-around col-span-2 gap-4 py-6 overflow-hidden shadow-md bg-secondary-bg-color text-text-light-color">
+            <div className="flex flex-col items-center justify-around col-span-2 gap-4 px-6 py-6 overflow-hidden shadow-md bg-secondary-bg-color text-text-light-color">
                 <p className="flex-col flex-center ">
                     <span className="text-xl font-semibold">
                         Feel the products yourself

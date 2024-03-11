@@ -37,7 +37,7 @@ const Carousel = ({ images }) => {
         <div className="flex flex-col w-full gap-2 ">
             {/* thumbnail */}
 
-            <div className="overflow-hidden flex-center h-96 min-h-96 min-w-96 bg-secondary-bg-color">
+            <div className="w-full overflow-hidden flex-center aspect-[5/7] bg-secondary-bg-color">
                 <img
                     src={images && images[chosenUrl]}
                     className="object-cover w-full h-full"

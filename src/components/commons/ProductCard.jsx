@@ -42,7 +42,7 @@ const ProductCard = ({
     return (
         <div
             onClick={handleClick}
-            className={`${className} relative  z-[1] flex aspect-[5/7] h-fit w-80 min-w-80 max-w-96 flex-col items-center justify-between overflow-hidden rounded-sm bg-secondary-bg-color transition-all duration-[400ms] hover:scale-[1.02] hover:shadow-2xl`}
+            className={`${className} relative  z-[1] flex aspect-[5/7] h-fit w-80 min-w-72 max-w-96 flex-col items-center justify-between overflow-hidden rounded-sm bg-secondary-bg-color transition-all duration-[400ms] hover:scale-[1.02] hover:shadow-2xl`}
         >
             <div className="relative w-full h-full group/image">
                 <div className="absolute inset-0 z-[2] h-full w-full bg-neutral-800/20 opacity-0 transition-opacity duration-[400ms] group-hover/image:opacity-100">

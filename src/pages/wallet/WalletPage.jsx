@@ -20,13 +20,13 @@ const WalletPage = () => {
     }
 
     return (
-        <section className="flex min-h-svh flex-col px-20 text-secondary-theme">
+        <section className="flex min-h-svh flex-col px-[5svw] text-secondary-theme">
             <PageBanner title="Wallet" />
             {depositStatus === 'pending' && <SimpleLoading />}
             {status === 'pending' ? (
                 <SimpleLoading />
             ) : status === 'error' ? (
-                <div className="flex-center w-full">
+                <div className="w-full flex-center">
                     OPPS. SOMETHING HAPPENED WHEN FETCHING YOUR WALLET DETAILS
                 </div>
             ) : (
@@ -42,12 +42,12 @@ const WalletPage = () => {
                             it’s placed.
                         </p>
                     </div>
-                    <div className="mt-8 flex min-h-max w-full flex-col gap-4 md:flex-row">
-                        <div className="flex flex-1 flex-col gap-4">
+                    <div className="flex flex-col w-full gap-4 mt-8 min-h-max md:flex-row">
+                        <div className="flex flex-col flex-1 gap-4">
                             {funds.map((fund, i) => (
                                 <div
                                     key={i}
-                                    className="flex h-20 w-full items-center justify-between gap-2 border border-secondary-theme/75 p-2 px-4 shadow-md"
+                                    className="flex items-center justify-between w-full h-20 gap-2 p-2 px-4 border shadow-md border-secondary-theme/75"
                                 >
                                     <div className="flex flex-col">
                                         <span className="text-2xl">
@@ -62,7 +62,7 @@ const WalletPage = () => {
                                     <MainActionButton
                                         isSuffixArrow={false}
                                         textColor="text-white"
-                                        className="h-fit w-fit bg-secondary-theme p-2 px-4"
+                                        className="p-2 px-4 h-fit w-fit bg-secondary-theme"
                                         onClick={() => handleClick(fund, i)}
                                     >
                                         {i === chosenButton && depositStatus === 'pending' ? (
@@ -75,12 +75,12 @@ const WalletPage = () => {
                             ))}
                         </div>
 
-                        <div className="h-max w-96 min-w-max border border-secondary-theme/75 p-6 pb-10 shadow-xl">
+                        <div className="w-full p-6 pb-10 border shadow-xl h-max md:w-96 min-w-max border-secondary-theme/75">
                             <div className="w-full">
-                                <span className="mb-4 flex w-full gap-2 text-sm ">
+                                <span className="flex w-full gap-2 mb-4 text-base font-medium ">
                                     Current wallet balance
                                 </span>
-                                <div className="w-full text-end text-3xl font-light">
+                                <div className="w-full text-4xl font-light text-end">
                                     {data && `${data.balance}₫`}
                                 </div>
                             </div>

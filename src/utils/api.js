@@ -7,6 +7,7 @@ import {
     GET_PRODUCTS_URL,
     GET_PRODUCT_BY_NAME_URL,
     GET_PRODUCT_OPTION_BY_ID_URL,
+    GET_VOUCHER_WITH_CODE_URL,
     GET_WISHLIST_ITEMS_URL,
     POST_CREATE_ORDER_CUSTOM_URL,
     POST_DEPOSTIT_WALLET_URL,
@@ -149,7 +150,6 @@ export async function verifyToken(token) {
             return res.data
         })
         .catch((err) => {
-            console.log(err)
             return err.response
         })
     return result
@@ -398,11 +398,12 @@ export async function createOrder(
             }
         )
         .then((res) => {
+            console.log(res)
             return res.data.data
         })
         .catch((error) => {
             console.log(error)
-            return error.response.data
+            return error
         })
 }
 
@@ -553,6 +554,24 @@ export async function changePassword({ password, passwordOld }, token) {
         .catch((error) => {
             console.log(error)
             return error.response.data
+        })
+    return result
+}
+
+
+export async function getVoucherwithCode(code) {
+    const result = axios
+        .get(
+            DEFAULT_API_URL + GET_VOUCHER_WITH_CODE_URL + code,
+
+        )
+        .then((res) => {
+            console.log(res)
+            return res.data
+        })
+        .catch((error) => {
+            console.log(error)
+            return error.response
         })
     return result
 }

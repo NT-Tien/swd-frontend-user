@@ -77,7 +77,7 @@ const PasswordChangePage = () => {
     }
 
     return (
-        <section className="flex flex-col px-20 min-h-svh text-secondary-theme">
+        <section className="flex flex-col px-[5svw] min-h-svh text-secondary-theme">
             <PageBanner title="Password change" />
 
             <form

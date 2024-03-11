@@ -34,7 +34,7 @@ export const AuthProvider = ({ children }) => {
         const result = verifyToken(initialToken)
         result.then((res) => {
             console.log(res)
-            if(!res ||!res.data || res.data.statusCode === 500 ){
+            if(!res ||!res.data || res.data.statusCode === 403 ){
                 logoutHook()
                 return
             }

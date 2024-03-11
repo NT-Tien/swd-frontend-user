@@ -51,7 +51,7 @@ const ShoppingCartPage = () => {
     }, [data])
 
     return (
-        <section className="px-20 min-h-svh">
+        <section className="px-[5svw] min-h-svh">
             <PageBanner
                 title="cart"
                 suffix={data?.length ? data.length : '0'}
@@ -84,7 +84,7 @@ const ShoppingCartPage = () => {
                         </MainActionLink>
                     </div>
                 </>
-            ) : data.length > 0 ? (
+            ) : data && Array.isArray(data) && data.length > 0 ? (
                 <div className="flex gap-4">
                     <div className="flex flex-col flex-1 gap-2 min-w-fit">
                         {data.map((item) => (

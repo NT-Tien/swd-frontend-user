@@ -8,6 +8,7 @@ export const GET_PRODUCT_IMAGE = 'file/show/' // + id
 export const GET_CATEGORIES_URL = 'category/get-all' // NO PRAM
 export const GET_WISHLIST_ITEMS_URL = 'wishlist/get-all/' // + size/page
 export const GET_ORDER_HISTORY_URL = 'payment/get-by-user'
+export const GET_VOUCHER_WITH_CODE_URL = 'voucher/get-one-with-code/' // + code
 
 export const POST_WALLET_URL = 'wallet/check'
 export const POST_DEPOSTIT_WALLET_URL = 'wallet/deposit'

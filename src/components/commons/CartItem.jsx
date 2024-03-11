@@ -98,7 +98,7 @@ const CartItem = ({
             <div
                 onClick={handleOnClick}
                 className={clsx(
-                    'flex h-48 min-h-fit w-full gap-2 border-y border-y-secondary-theme/50 px-2 py-4 transition-all',
+                    'flex md:h-48 flex-col md:flex-row min-h-fit w-full gap-2 border-y border-y-secondary-theme/50 px-2 py-4 transition-all',
                     onClick && 'hover:scale-[1.01] hover:shadow-lg'
                 )}
             >

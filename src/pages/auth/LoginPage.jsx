@@ -157,9 +157,9 @@ const LoginPage = () => {
             </div>
             <div
                 ref={containerRef}
-                className="relative flex w-2/3 overflow-hidden border rounded-sm shadow-lg h-3/4 min-w-max border-secondary-theme/70 bg-secondary-bg-color"
+                className="relative flex flex-col lg:flex-row w-full lg:w-2/3 overflow-hidden border rounded-sm shadow-lg h-max lg:h-3/4 min-w-min border-secondary-theme/70 bg-secondary-bg-color"
             >
-                <div className="relative flex-col w-2/3 h-full gap-2 p-5 flex-center">
+                <div className="relative flex-col w-full lg:w-2/3 h-full gap-2 p-5 flex-center">
                     <h1 className="text-4xl font-medium text-secondary-theme">
                         Login to Your Account
                     </h1>
@@ -235,7 +235,7 @@ const LoginPage = () => {
                         </span>
                     </button>
                 </div>
-                <div className="flex-col w-1/3 h-full gap-4 flex-center bg-secondary-theme">
+                <div className="flex-col w-full py-4 lg:py-0 lg:w-1/3 h-full gap-4 flex-center bg-secondary-theme">
                     <h1 className="text-4xl font-medium text-white">
                         New Here?
                     </h1>

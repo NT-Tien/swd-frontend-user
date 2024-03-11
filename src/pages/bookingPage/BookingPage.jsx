@@ -105,12 +105,11 @@ const BookingPage = () => {
     const times = chosenDate && getTimes()
 
     return (
-        <>
-            <section className="mt-4 flex min-h-[90svh] flex-col gap-4 md:px-20">
+            <section className="mt-4 flex min-h-[90svh] flex-col gap-4 px-[5svw]">
                 <PageBanner title="Booking" />
-                <div className="flex gap-10">
+                <div className="flex flex-col gap-10 md:flex-row">
                     <Calendar
-                        className="flex-1 h-max min-w-min"
+                        className="flex-1 w-full h-max min-w-min"
                         value={chosenDate}
                         onChange={onClickDay}
                         // onClickDay={(date) => onClickDay(date)}
@@ -218,7 +217,7 @@ const BookingPage = () => {
                                     name="email"
                                     value={formValue.email}
                                     placeholder="Email"
-                                    className="block p-3 text-sm text-gray-900 border rounded-full min-w-96 border-secondary-theme bg-primary-bg-color ps-4 focus:ring-secondary-theme"
+                                    className="block w-full p-3 text-sm text-gray-900 border rounded-full max-w-96 border-secondary-theme bg-primary-bg-color ps-4 focus:ring-secondary-theme"
                                     required
                                 />
                                 {/* phone */}
@@ -233,7 +232,7 @@ const BookingPage = () => {
                                     name="phone"
                                     value={formValue.phone}
                                     placeholder="Phone number"
-                                    className="block p-3 text-sm text-gray-900 border rounded-full min-w-96 border-secondary-theme bg-primary-bg-color ps-4 focus:ring-secondary-theme"
+                                    className="block w-full p-3 text-sm text-gray-900 border rounded-full max-w-96 border-secondary-theme bg-primary-bg-color ps-4 focus:ring-secondary-theme"
                                     required
                                 />
                                 {/* Name */}
@@ -246,7 +245,7 @@ const BookingPage = () => {
                                     value={formValue.name}
                                     placeholder="Name"
                                     required
-                                    className="block p-3 text-sm text-gray-900 border rounded-full min-w-96 border-secondary-theme bg-primary-bg-color ps-4 focus:ring-secondary-theme"
+                                    className="block w-full p-3 text-sm text-gray-900 border rounded-full max-w-96 border-secondary-theme bg-primary-bg-color ps-4 focus:ring-secondary-theme"
                                 />
 
                                 <MainActionButton
@@ -263,7 +262,6 @@ const BookingPage = () => {
                     </div>
                 </div>
             </section>
-        </>
     )
 }
 

@@ -174,10 +174,12 @@ const CustomOrderPage = () => {
     }
 
     return (
-        <section className="flex flex-col px-20 min-h-svh text-secondary-theme">
+        <section className="flex flex-col px-[5svw] min-h-svh text-secondary-theme">
             <PageBanner title="Custom order" />
             <div className="flex w-full h-full gap-10">
-                <div className="h-full w-1/3  max-w-[33%]">
+                <div className='flex flex-col w-full h-full gap-10 lg:flex-row'>
+
+                <div className="h-full lg:w-1/3  w-full lg:max-w-[33%]">
                     <h5 className="mb-2 font-medium">
                         Upload your furniture design here
                     </h5>
@@ -233,7 +235,7 @@ const CustomOrderPage = () => {
                     </div>
                 </div>
 
-                <div className="flex flex-col w-1/3 h-full gap-2">
+                <div className="flex flex-col w-full h-full gap-2 lg:w-1/3">
                     <h5 className="underline uppercase texl-xl">
                         Enter your contact information
                     </h5>
@@ -290,6 +292,7 @@ const CustomOrderPage = () => {
                             {errorMsg}
                         </div>
                     </form>
+                </div>
                 </div>
                 <div className="w-1/3 h-full p-2 px-4 border shadow-lg border-secondary-theme">
                     <h2 className="mb-4 text-3xl font-light">

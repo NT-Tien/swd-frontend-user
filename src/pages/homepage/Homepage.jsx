@@ -5,12 +5,11 @@ import {
     MainActionLink,
     ProductCard,
 } from '../../components'
-import { Link, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { useQuery, keepPreviousData } from '@tanstack/react-query'
 import { fetchProducts } from '../../utils/api'
 
 const HomePage = () => {
-    const page = 1
     const navigate = useNavigate()
 
     const { status, data, error } = useQuery({
@@ -31,7 +30,7 @@ const HomePage = () => {
                 <LandingPageImages />
 
                 {/* new product section*/}
-                <div className="flex flex-col items-center w-full gap-4 px-20 bg-transparent">
+                <div className="flex flex-col items-center w-full h-max gap-4 px-[5svw] bg-transparent">
                     <p className="text-lg uppercase">
                         &#11834; Our Collections &#11834;
                     </p>
@@ -43,11 +42,11 @@ const HomePage = () => {
                         Explore collection
                     </MainActionLink>
                 </div>
-                <div className="flex flex-col items-center w-full gap-4 px-20 bg-transparent">
+                <div className="flex flex-col items-center w-full gap-4 px-[5svw] bg-transparent">
                     <p className="text-lg uppercase">
                         &#11834; Our Products &#11834;
                     </p>
-                    <div className="grid items-center w-full grid-cols-1 gap-5 py-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+                    <div className="flex flex-wrap items-center w-full gap-4">
                         {status === 'pending' ? (
                             <div>Loading...</div>
                         ) : status === 'error' ? (

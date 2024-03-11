@@ -9,13 +9,13 @@ const AccountInfoPage = () => {
 
     const { data, status } = useWalletData()
     return (
-        <section className="flex flex-col px-20 min-h-svh text-secondary-theme">
+        <section className="flex flex-col px-[5svw] min-h-svh text-secondary-theme">
             {user ? (
                 <PageBanner title={user.profile.profile.name} />
             ) : (
                 <PageBanner title="Account info" />
             )}
-            <div className="flex justify-between gap-2 drop-shadow-lg">
+            <div className="flex flex-col justify-between gap-2 md:flex-row drop-shadow-lg">
                 <div className='flex flex-col gap-1'>
                     <div className="font-medium">
                         Joined in:{' '}
@@ -39,12 +39,12 @@ const AccountInfoPage = () => {
                         Change password
                     </MainActionLink>
                 </div>
-                <div className="flex flex-col justify-between w-1/3 p-2 px-4 border shadow-lg border-secondary-theme">
+                <div className="flex flex-col justify-between w-full p-2 px-4 border shadow-lg md:w-1/3 border-secondary-theme">
                     <h5 className="text-lg font-medium">Balance:</h5>
                     {status === 'pending' ? (
                         <SimpleLoading />
                     ) : (
-                        <span className='flex justify-end w-full text-3xl font-light'>{data.balance}₫</span>
+                        <span className='flex justify-end w-full text-4xl font-light'>{data.balance}₫</span>
                     )}
 
                         <div className='w-full flex-center'>

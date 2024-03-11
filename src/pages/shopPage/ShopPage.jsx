@@ -123,10 +123,10 @@ const ShopPage = () => {
     }
 
     return (
-        <div className="flex flex-col px-20 min-h-svh ">
+        <div className="flex flex-col px-[5svw] min-h-svh ">
             <PageBanner title="Shop" />
 
-            <section className="flex gap-4 min-h-max">
+            <section className="flex flex-col-reverse gap-4 md:flex-row min-h-max">
                 {/* dsplay */}
                 <div className="flex flex-col flex-1 h-full gap-5">
                     {/* buttons */}
@@ -235,7 +235,7 @@ const ShopPage = () => {
                 </div>
 
                 {/* right category bar */}
-                <div className="flex flex-col h-full px-1 min-w-80 max-w-80 ">
+                <div className="flex flex-col w-full h-full px-1 min-w-80 md:max-w-80">
                     <div className="w-full mb-4">
                         <SearchBar
                             ref={searchBarRef}

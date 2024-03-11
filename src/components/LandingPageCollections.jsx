@@ -10,7 +10,7 @@ const LandingPageCollections = () => {
 
 
     return (
-        <div className="w-full gap-5 p-6 flex-center h-96">
+        <div className="flex-col w-full h-full gap-5 p-6 flex-center md:flex-row md:h-96">
             <LandingPageCard
                 id={1}
                 title='Chair'

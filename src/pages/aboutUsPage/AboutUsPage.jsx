@@ -13,7 +13,7 @@ const AboutUsPage = () => {
                     </span>
                 </div>
             </div>
-            <div className="flex flex-col items-center w-full h-full gap-4 px-20">
+            <div className="flex flex-col items-center w-full h-full gap-4 px-[5svw]">
                 <div className="flex gap-4 overflow-hidden ">
                     <div className="w-1/3 overflow-hidden">
                         <img
@@ -39,7 +39,7 @@ const AboutUsPage = () => {
                 
                 <div className="bg-about-us relative flex h-[120svh] w-full justify-end overflow-hidden bg-cover bg-fixed bg-center bg-no-repeat ">
                     <div className='absolute inset-0 w-full h-full bg-black backdrop-blur-[2px] bg-opacity-15'></div>
-                    <div className="z-10 flex flex-col justify-around px-20 w-min text-secondary-bg-color">
+                    <div className="z-10 flex flex-col justify-around px-[5svw] w-min text-secondary-bg-color">
                         <p className="flex flex-col w-min">
                             <span className='text-xl'>Since </span>
                             <h1 className="text-9xl">1985 </h1>

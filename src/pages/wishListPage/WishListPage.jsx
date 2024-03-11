@@ -43,7 +43,7 @@ const WishListPage = () => {
     }, [data])
 
     return (
-        <section className="px-20 min-h-svh">
+        <section className="px-[5svw] min-h-svh">
             <PageBanner
                 title="Wishlist"
                 suffix={data && Array.isArray(data) ? data.length : '0'}

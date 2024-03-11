@@ -94,10 +94,10 @@ const ProductDetailsPage = () => {
     }, [data])
 
     return (
-        <section className="flex flex-col px-20 min-h-max text-secondary-theme">
+        <section className="flex flex-col px-[5svw] min-h-max text-secondary-theme">
             <PageBanner title="Details" />
 
-            <div className="flex h-full min-h-max ">
+            <div className="flex flex-col w-full h-full gap-10 max-md:items-center md:flex-row min-h-max ">
                 {status === 'pending' ? (
                     <SimpleLoading />
                 ) : status === 'error' ? (
@@ -105,11 +105,11 @@ const ProductDetailsPage = () => {
                 ) : (
                     <>
                         {/* image */}
-                        <div className="relative w-1/3 h-full ">
+                        <div className="relative flex-shrink-0 w-1/2 h-full md:w-1/3 min-w-72 ">
                             <Carousel images={imgUrls} />
                         </div>
                         {/* name */}
-                        <div className="flex flex-col justify-between w-2/3 pl-10 min-h-max">
+                        <div className="flex flex-col justify-between min-h-max">
                             <div className="flex flex-col gap-4 " >
                                 <h3 className="text-3xl uppercase">
                                     {data?.name}

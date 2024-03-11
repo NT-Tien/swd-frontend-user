@@ -38,7 +38,7 @@ const ContactPage = () => {
 
     return (
         <>
-            <section className="w-full h-[90svh] flex-center min-h-min">
+            <section className="w-full md:h-[90svh] flex-center ">
                 <div
                     ref={textLoopRef}
                     className="absolute inset-0 z-0 flex flex-col text-secondary-theme"
@@ -65,15 +65,15 @@ const ContactPage = () => {
                 </div>
                 <div
                     ref={containerRef}
-                    className="relative flex w-5/6 bg-transparent border rounded-sm shadow-lg h-3/4 min-h-max min-w-min border-secondary-theme/70"
+                    className="relative flex flex-col w-full bg-transparent border rounded-sm shadow-lg md:min-w-min min-h-max md:w-5/6 max-md:mt-16 md:flex-row md:h-3/4 border-secondary-theme/70"
                 >
-                    <div className="relative flex flex-col w-1/2 h-full gap-10 p-5 bg-transparent border-[20px] border-secondary-bg-color overflow-hidden">
+                    <div className="relative flex flex-col h-1/2 md:h-full w-full md:w-1/2  gap-10 p-5 bg-transparent border-[20px] border-secondary-bg-color overflow-hidden">
                         <div className='absolute inset-0 w-full h-full bg-black/40 backdrop-blur-md'></div>
-                        <p className='z-10 flex w-full h-full leading-none uppercase text-secondary-bg-color flex-center text-9xl'>
+                        <p className='z-10 flex w-full h-full leading-none uppercase text-secondary-bg-color flex-center text-[10vw]'>
                             get in touch
                         </p>
                     </div>
-                    <div className="relative flex flex-col w-1/2 h-full gap-6 p-4 bg-secondary-bg-color">
+                    <div className="relative flex flex-col w-full gap-6 p-4 h-1/2 md:h-full md:w-1/2 bg-secondary-bg-color">
                         <div className="flex flex-col gap-2">
                             <h5 className="text-xl font-medium">
                                 Contact Info
