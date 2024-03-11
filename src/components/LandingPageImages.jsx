@@ -13,7 +13,7 @@ const LandingPageImages = () => {
                     </div>
                     <div className="relative w-1/2 h-full overflow-hidden shadow-[-10px_-10px_30px_4px_rgba(0,0,0,0.1),_10px_10px_30px_4px_rgba(45,78,255,0.15)] ">
                         <img
-                            src={'./src/assets/pictures/landing-page-img-3.jpg'}
+                            src={'/src/assets/pictures/landing-page-img-3.jpg'}
                             alt="landing page image"
                             className="absolute bottom-0 object-cover w-full h-auto "
                         />
@@ -34,7 +34,7 @@ const LandingPageImages = () => {
 
             <div className="absolute top-0 right-0 z-0 w-5/12 h-full shadow-[rgba(0,_0,_0,_0.4)_0px_30px_90px] bg-secondary-bg-color">
                 <img
-                    src={'./src/assets/pictures/landing-page-img.jpg'}
+                    src={'/src/assets/pictures/landing-page-img.jpg'}
                     alt="landing page image"
                     className="absolute bottom-0 object-cover w-full h-full -scale-x-100"
                 />

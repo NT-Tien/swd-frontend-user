@@ -12,7 +12,7 @@ const LandingPageCollections = () => {
                 title='Chair'
                 onClick={setChosenCollection}
                 active={chosenCollection === 1}
-                src={'./src/assets/pictures/pink-chair.jpg'}
+                src={'/src/assets/pictures/pink-chair.jpg'}
             >
                 Chair
             </LandingPageCard>
@@ -22,7 +22,7 @@ const LandingPageCollections = () => {
                 title='Table'
                 onClick={setChosenCollection}
                 active={chosenCollection === 2}
-                src={'./src/assets/pictures/flow-pot-on-stool.jpg'}
+                src={'/src/assets/pictures/flow-pot-on-stool.jpg'}
             >
                 Table
             </LandingPageCard>
@@ -32,7 +32,7 @@ const LandingPageCollections = () => {
                 title='Kitchen'
                 onClick={setChosenCollection}
                 active={chosenCollection === 3}
-                src={'./src/assets/pictures/kitchen.jpg'}
+                src={'/src/assets/pictures/kitchen.jpg'}
             >
                 Kitchen
             </LandingPageCard>

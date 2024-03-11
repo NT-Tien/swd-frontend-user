@@ -235,7 +235,7 @@ const ShopPage = () => {
                 </div>
 
                 {/* right category bar */}
-                <div className="flex flex-col h-full px-1 min-w-80 ">
+                <div className="flex flex-col h-full px-1 min-w-80 max-w-80 ">
                     <div className="w-full mb-4">
                         <SearchBar
                             ref={searchBarRef}
