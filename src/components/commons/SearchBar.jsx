@@ -8,8 +8,13 @@ const SearchBar = forwardRef(({ placeholder, onChange }, ref) => {
         onChange(e.target.value)
     }, 500)
 
+    const handleSubmit = (e) => {
+       e.preventDefault()
+       onChange(e.target.value) 
+    }
+
     return (
-        <form onSubmit={handleChangeDebounce}>
+        <form onSubmit={handleSubmit}>
             <label
                 htmlFor="default-search"
                 className="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white"
