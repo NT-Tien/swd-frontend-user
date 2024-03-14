@@ -30,6 +30,7 @@ import { useAuth } from '../../hooks/useAuth'
 import { useAddCartItem } from '../../hooks/useCartData'
 import { useAddWishlistItem } from '../../hooks/useWishlistData'
 import { useOrderHistoryData } from '../../hooks/useOrderHistoryData'
+import usePopup from '../../hooks/usePopup'
 
 const ProductDetailsPage = () => {
     const queryClient = useQueryClient()
@@ -83,7 +84,7 @@ const ProductDetailsPage = () => {
         data: userRateData,
         error: userRateError,
     } = useQuery({
-        queryKey: ['userRate', user.accountId, token],
+        queryKey: ['userRate', token],
         queryFn: () => getRatingByUser(user.accountId, token),
         placeholderData: keepPreviousData,
         enabled: !!user,
@@ -95,8 +96,11 @@ const ProductDetailsPage = () => {
     const { mutate: addToCart } = useAddCartItem()
     const { mutate: addToWishlist } = useAddWishlistItem()
 
+    const { openPopupFunc } = usePopup()
     const [ratingValue, setRatingValue] = useState(0)
     const [openRateButton, setOpenRateButton] = useState(false)
+
+    const handleOnClickRating = () => {}
 
     const handleRating = (rate) => {
         setRatingValue(rate)
@@ -105,25 +109,33 @@ const ProductDetailsPage = () => {
 
     const handleRatingUpdate = (id) => {
         setOpenRateButton(false)
-            if(user){
-
-            toast.promise(
-                () => {
-                    return postRating(id, ratingValue, user.accountId, token)
-                },
-                {
-                    pending: 'Loading',
-                    success: 'Rate item successfully',
-                    error: 'An error occur trying to rate the product',
-                }
-            ).then(async res => {
-                console.log(res)
-                if(res && productId)
-                setTimeout(()=>{
-                    queryClient.invalidateQueries({queryKey:['productRating']})
-                },500)
-                return
-            })
+        if (user) {
+            toast
+                .promise(
+                    () => {
+                        return postRating(
+                            id,
+                            ratingValue,
+                            user.accountId,
+                            token
+                        )
+                    },
+                    {
+                        pending: 'Loading',
+                        success: 'Thank you for your feedback',
+                        error: 'An error occur trying to rate the product',
+                    }
+                )
+                .then(async (res) => {
+                    console.log(res)
+                    if (res && productId)
+                        setTimeout(() => {
+                            queryClient.invalidateQueries({
+                                queryKey: ['productRating'],
+                            })
+                        }, 500)
+                    return
+                })
         }
     }
 
@@ -272,11 +284,29 @@ const ProductDetailsPage = () => {
                             {/* price */}
                             <div className="flex flex-col gap-4">
                                 {user && ableToRate && (
-                                    <>
+                                    <div className="flex flex-col mt-10">
+                                        {rateUpdate ? (
+                                            <span className="text-sm leading-tight">
+                                                Seems like you've rated this
+                                                piece before.
+                                            </span>
+                                        ) : (
+                                            <span className="text-sm leading-tight">
+                                                Seems like you've bought this
+                                                piece before.
+                                            </span>
+                                        )}
                                         <div className="flex items-center gap-4">
-                                            <h5 className="font-medium">
-                                                Rate this piece:
-                                            </h5>
+                                            {rateUpdate ? (
+                                                <h5 className="font-medium">
+                                                    Wanna rate it again?
+                                                </h5>
+                                            ) : (
+                                                <h5 className="font-medium">
+                                                    Rate this piece?
+                                                </h5>
+                                            )}
+
                                             <Rating
                                                 onClick={handleRating}
                                                 initialValue={
@@ -295,11 +325,15 @@ const ProductDetailsPage = () => {
                                                         )
                                                     }
                                                 >
-                                                    Confirm Rate
+                                                     {rateUpdate ? (
+                                                'Update your rating'
+                                            ) : (
+                                                'Confirm your rating'
+                                            )}
                                                 </ActionButton>
                                             )}
                                         </div>
-                                    </>
+                                    </div>
                                 )}
 
                                 <div className="flex items-center gap-2 ">
@@ -326,7 +360,7 @@ const ProductDetailsPage = () => {
                                             ratingData.data.numberOfRates
                                         ) && (
                                             <div className="font-medium">
-                                                ({ratingData.data.numberOfRates} {' '}
+                                                ({ratingData.data.numberOfRates}{' '}
                                                 ratings)
                                             </div>
                                         )}

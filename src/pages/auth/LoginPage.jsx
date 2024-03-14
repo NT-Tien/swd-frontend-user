@@ -11,10 +11,12 @@ import gsap from 'gsap/gsap-core'
 import { horizontalLoop } from '../../utils/GSAPUtils'
 import { login, loginGoogle } from '../../utils/api'
 import { useAuth } from '../../hooks/useAuth'
+import usePopup from '../../hooks/usePopup'
 
 const LoginPage = () => {
     const navigate = useNavigate()
     const { loginHook, user } = useAuth()
+    const { openPopupFunc } = usePopup()
 
     // state
 
@@ -75,6 +77,7 @@ const LoginPage = () => {
                 console.log(loginData)
                 if (!loginData.data) {
                     setErrorMsg(loginData.response.data.message)
+                    openPopupFunc('You have to register an account with this email first to login')
                     return
                 }
         
