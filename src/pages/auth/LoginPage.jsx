@@ -77,7 +77,7 @@ const LoginPage = () => {
                 console.log(loginData)
                 if (!loginData.data) {
                     setErrorMsg(loginData.response.data.message)
-                    openPopupFunc('You have to register an account with this email first to login')
+                    openPopupFunc('You have to register an account with this email first to login', 'Got it, thanks!')
                     return
                 }
         
