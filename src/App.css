@@ -18,3 +18,7 @@
     display: flex;
     align-items: center;
   }
+
+  svg.star-svg {
+    display: inline;
+}

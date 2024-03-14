@@ -255,20 +255,10 @@ const SignupPage = () => {
                     >
                         Sign up
                     </MainActionButton>
-                    <span className="w-full divider text-secondary-theme/70">
-                        or
-                    </span>
+                  
                 </form>
 
-                <button
-                    type="button"
-                    className="flex items-center justify-center gap-4 px-4 py-2 font-semibold transition-colors rounded-full shadow-md bg-neutral-50 text-secondary-theme hover:bg-primary-bg-color focus:bg-neutral-200"
-                >
-                    Sign Up with Google
-                    <span className="text-xl">
-                        <GoogleIcon />
-                    </span>
-                </button>
+                
             </div>
         </section>
     )

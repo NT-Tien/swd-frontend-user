@@ -30,11 +30,11 @@ const usePopup = () => {
     }
 
     const closePopupFunc = () => {
+        setIsPopupOpen(false)
         if (onCloseFunc) {
             onCloseFunc()
             setOnCloseFunc(() => {})
         }
-        setIsPopupOpen(false)
     }
 
     const cancelPopupFunc = () => {
@@ -98,7 +98,6 @@ const usePopup = () => {
                                             <ActionButton
                                                 ref={focusRef}
                                                 type="button"
-                                                active
                                                 className="p-2 px-4 rounded-full"
                                                 onClick={cancelPopupFunc}
                                             >

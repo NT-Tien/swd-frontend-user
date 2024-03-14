@@ -2,16 +2,23 @@ import React, { Fragment, useState } from 'react'
 import { useAuth } from './useAuth'
 import { Dialog, Transition } from '@headlessui/react'
 import { ActionButton } from '../components'
+import {useNavigate} from 'react-router-dom'
 
 const useCheckAuth = () => {
     const { isLoggedIn, isOpenCheckModal, setIsOpenCheckModal } = useAuth()
-
+    const navigate = useNavigate()
     const openCheckModal = () => {
         setIsOpenCheckModal(true)
     }
 
     const closeModal = () => {
         setIsOpenCheckModal(false)
+    }
+
+    const headToLogin = () => {
+        
+        setIsOpenCheckModal(false)
+        navigate('/login')
     }
 
     const checkAuthFunction = (callback) => {
@@ -59,14 +66,22 @@ const useCheckAuth = () => {
                                         You need to log in to use this function
                                     </Dialog.Title>
 
-                                    <div className="w-full mt-4 flex-center">
+                                    <div className="w-full gap-4 mt-4 flex-center">
+                                        <ActionButton
+                                            type="button"
+                                            active
+                                            className="p-2 px-4 rounded-full"
+                                            onClick={headToLogin}
+                                        >
+                                            Head to log in
+                                        </ActionButton>
                                         <ActionButton
                                             type="button"
                                             active
                                             className="p-2 px-4 rounded-full"
                                             onClick={closeModal}
                                         >
-                                            Got it, thanks!
+                                            Cancel
                                         </ActionButton>
                                     </div>
                                 </Dialog.Panel>

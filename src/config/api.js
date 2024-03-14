@@ -2,6 +2,7 @@ export const DEFAULT_API_URL = 'https://api.caucalamdev.io.vn/'
 
 export const GET_PRODUCTS_URL = 'product/get-all/' // + size/page
 export const GET_PRODUCT_BY_NAME_URL = 'product/get-by-name/' // + name
+export const GET_PRODUCT_BY_ID_URL = 'product/get-one/' // + id
 export const GET_PRODUCT_OPTION_BY_ID_URL = 'option-products/get-all/' // + product_id
 export const GET_CART_ITEMS_URL = 'cart/get-all/' // + size/page
 export const GET_PRODUCT_IMAGE = 'file/show/' // + id
@@ -9,10 +10,13 @@ export const GET_CATEGORIES_URL = 'category/get-all' // NO PRAM
 export const GET_WISHLIST_ITEMS_URL = 'wishlist/get-all/' // + size/page
 export const GET_ORDER_HISTORY_URL = 'payment/get-by-user'
 export const GET_VOUCHER_WITH_CODE_URL = 'voucher/get-one-with-code/' // + code
+export const GET_RATING_URL = 'rate/product/abs/' // + id
+export const GET_RATING_BY_USER_URL = 'rate/status-rate-with-user-id' 
 
 export const POST_WALLET_URL = 'wallet/check'
 export const POST_DEPOSTIT_WALLET_URL = 'wallet/deposit'
 
+export const POST_RATING_URL = 'rate/rating'
 export const POST_UPLOAD_FILE_URL = 'file/upload'
 export const POST_CREATE_ORDER_CUSTOM_URL = 'staff/order-custome-design'
 export const POST_PAYMENT_CREATE_ORDER_WALLET_URL = 'payment/pay-with-wallet'

@@ -5,19 +5,10 @@ import {
     PageBanner,
     SimpleLoading,
 } from '../../components'
-import { useQuery, keepPreviousData } from '@tanstack/react-query'
-import { getOrderHistory } from '../../utils/api'
-import { useAuth } from '../../hooks/useAuth'
+import { useOrderHistoryData } from '../../hooks/useOrderHistoryData'
 
 const OrderHistoryPage = () => {
-    const { token } = useAuth()
-
-    const { status, data, error } = useQuery({
-        queryKey: ['order', token],
-        queryFn: () => getOrderHistory(token),
-        placeholderData: keepPreviousData,
-        staleTime: 3600000,
-    })
+    const { status, data, error } = useOrderHistoryData()
 
     useEffect(() => {
         console.log(data)
@@ -33,7 +24,7 @@ const OrderHistoryPage = () => {
                 <div>{error.message}</div>
             ) : data && Array.isArray(data) && data.length > 0 ? (
                 <div className='flex flex-col gap-2'>
-                    {data.map((order) => (
+                    {data.toReversed().map((order) => (
                         <OrderItem key={order.id} order={order} />
                     ))}
                 </div>

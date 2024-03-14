@@ -72,11 +72,21 @@ const LoginPage = () => {
             .then(async (result) => {
                 const userGoogle = result.user
                 const loginData = await loginGoogle(result.user.accessToken)
-                const token = loginData.token
-                const user = { ...loginData, photoURL: userGoogle.photoURL }
-                loginHook(user, token)
-                navigate(-1)
-                return
+                console.log(loginData)
+                if (!loginData.data) {
+                    setErrorMsg(loginData.response.data.message)
+                    return
+                }
+        
+                if (loginData.message === 'Success') {
+                    
+                    const token = loginData.data.token
+                    const user = { ...loginData.data, photoURL: userGoogle.photoURL }
+                    loginHook(user, token)
+                    navigate(-1)
+                    return
+                }
+                
             })
             .catch((error) => {
                 const errorCode = error.code
@@ -157,9 +167,9 @@ const LoginPage = () => {
             </div>
             <div
                 ref={containerRef}
-                className="relative flex flex-col lg:flex-row w-full lg:w-2/3 overflow-hidden border rounded-sm shadow-lg h-max lg:h-3/4 min-w-min border-secondary-theme/70 bg-secondary-bg-color"
+                className="relative flex flex-col w-full overflow-hidden border rounded-sm shadow-lg lg:flex-row lg:w-2/3 h-max lg:h-3/4 min-w-min border-secondary-theme/70 bg-secondary-bg-color"
             >
-                <div className="relative flex-col w-full lg:w-2/3 h-full gap-2 p-5 flex-center">
+                <div className="relative flex-col w-full h-full gap-2 p-5 lg:w-2/3 flex-center">
                     <h1 className="text-4xl font-medium text-secondary-theme">
                         Login to Your Account
                     </h1>
@@ -235,7 +245,7 @@ const LoginPage = () => {
                         </span>
                     </button>
                 </div>
-                <div className="flex-col w-full py-4 lg:py-0 lg:w-1/3 h-full gap-4 flex-center bg-secondary-theme">
+                <div className="flex-col w-full h-full gap-4 py-4 lg:py-0 lg:w-1/3 flex-center bg-secondary-theme">
                     <h1 className="text-4xl font-medium text-white">
                         New Here?
                     </h1>

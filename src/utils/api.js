@@ -5,8 +5,11 @@ import {
     GET_CATEGORIES_URL,
     GET_ORDER_HISTORY_URL,
     GET_PRODUCTS_URL,
+    GET_PRODUCT_BY_ID_URL,
     GET_PRODUCT_BY_NAME_URL,
     GET_PRODUCT_OPTION_BY_ID_URL,
+    GET_RATING_BY_USER_URL,
+    GET_RATING_URL,
     GET_VOUCHER_WITH_CODE_URL,
     GET_WISHLIST_ITEMS_URL,
     POST_CREATE_ORDER_CUSTOM_URL,
@@ -15,6 +18,7 @@ import {
     POST_LOGIN_URL,
     POST_PAYMENT_CREATE_ORDER_URL,
     POST_PAYMENT_CREATE_ORDER_WALLET_URL,
+    POST_RATING_URL,
     POST_UPLOAD_FILE_URL,
     POST_VERIFY_TOKEN,
     POST_WALLET_URL,
@@ -53,6 +57,13 @@ export async function fetchProducts(
 export async function fetchProductByName(name) {
     const { data } = await axios.get(
         DEFAULT_API_URL + GET_PRODUCT_BY_NAME_URL + name
+    )
+    return data.data
+}
+
+export async function fetchProductByid(id) {
+    const { data } = await axios.get(
+        DEFAULT_API_URL + GET_PRODUCT_BY_ID_URL + id
     )
     return data.data
 }
@@ -120,7 +131,7 @@ export async function login({ email, password }) {
 }
 
 export async function loginGoogle(token) {
-    const { data } = await axios.post(
+    const result = await axios.post(
         DEFAULT_API_URL + POST_LOGIN_GOOGLE_URL,
         {
             token: token,
@@ -130,8 +141,14 @@ export async function loginGoogle(token) {
                 'Content-Type': 'application/json',
             },
         }
-    )
-    return data.data
+    ).then((res) => {
+        return res.data
+    })
+    .catch((error) => {
+        console.log(error)
+        return error
+    })
+    return result
 }
 
 export async function verifyToken(token) {
@@ -336,6 +353,7 @@ export async function createOrderWithWallet(
     { voucher_id = '', address, phone, email },
     token
 ) {
+    console.log(user_id, total, products, voucher_id, address, phone, email)
     return axios
         .post(
             DEFAULT_API_URL + POST_PAYMENT_CREATE_ORDER_WALLET_URL,
@@ -371,13 +389,7 @@ export async function createOrder(
     { voucher_id = '', address, phone, email },
     token
 ) {
-    console.log(user_id,
-        total,
-        products,
-        voucher_id,
-        address,
-        phone,
-        email,)
+    console.log(user_id, total, products, voucher_id, address, phone, email)
     return axios
         .post(
             DEFAULT_API_URL + POST_PAYMENT_CREATE_ORDER_URL,
@@ -525,6 +537,7 @@ export async function uploadFile(file) {
             }
         )
         .then((res) => {
+            console.log(res)
             return res.data
         })
         .catch((error) => {
@@ -558,13 +571,9 @@ export async function changePassword({ password, passwordOld }, token) {
     return result
 }
 
-
 export async function getVoucherwithCode(code) {
     const result = axios
-        .get(
-            DEFAULT_API_URL + GET_VOUCHER_WITH_CODE_URL + code,
-
-        )
+        .get(DEFAULT_API_URL + GET_VOUCHER_WITH_CODE_URL + code)
         .then((res) => {
             console.log(res)
             return res.data
@@ -573,5 +582,49 @@ export async function getVoucherwithCode(code) {
             console.log(error)
             return error.response
         })
+    return result
+}
+
+export async function getRating(id) {
+    const result = axios
+        .get(DEFAULT_API_URL + GET_RATING_URL + id)
+        .then((res) => {
+            console.log(res)
+            return res.data
+        })
+        .catch((error) => {
+            console.log(error)
+            return error.response
+        })
+    return result
+}
+
+export async function getRatingByUser(userId, token) {
+    const result = axios
+        .post(DEFAULT_API_URL + GET_RATING_BY_USER_URL, {
+            user_id: userId
+        }, {
+            headers: {Authorization: 'Bearer ' + token}
+        })
+        .then((res) => {
+            console.log(res)
+            return res.data
+        })
+        .catch((error) => {
+            console.log(error)
+            return error.response
+        })
+    return result
+}
+
+export async function postRating(id, rating, userId, token) {
+    const result = axios.post(
+        DEFAULT_API_URL + POST_RATING_URL,
+        { rate: rating, user_id: userId, product_id: id },
+        {
+            headers: { Authorization: 'Bearer ' + token },
+        }
+    )
+    console.log( result)
     return result
 }

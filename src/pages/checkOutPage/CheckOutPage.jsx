@@ -2,6 +2,9 @@ import React, { useCallback, useEffect, useState } from 'react'
 import { CreditCardIcon, MoneyIcon, ShoppingCartIcon } from '../../assets'
 import CartItem from '../../components/commons/CartItem'
 import {
+    useQueryClient,
+} from '@tanstack/react-query'
+import {
     MainActionButton,
     MainActionLink,
     PageBanner,
@@ -9,6 +12,7 @@ import {
 } from '../../components'
 import { useCartData, useClearCart } from '../../hooks/useCartData'
 import { useAuth } from '../../hooks/useAuth'
+import {useNavigate} from 'react-router-dom'
 import {
     createOrder,
     createOrderWithWallet,
@@ -19,7 +23,9 @@ import clsx from 'clsx'
 import UseDebounce from '../../hooks/UseDebounce'
 
 const CheckOutPage = () => {
+    const queryClient = useQueryClient()
     const { token, user } = useAuth()
+    const navigate = useNavigate()
     const { openPopupFunc } = usePopup()
     const [totalPrice, setTotalPrice] = useState(0)
     const [discountedPrice, setDiscountedPrice] = useState(0)
@@ -140,19 +146,19 @@ const CheckOutPage = () => {
                     formValue,
                     token
                 )
-                if (result.code !== '00') {
+                console.log(result)
+                if (result.code && result.code !== '00') {
                     setErrorMsg(result.message)
-                    openPopupFunc(result.message, 'Got it, thanks')
-                } else {
-                    const checkoutUrl = result.data.checkoutUrl
-                    const redirect = () => {
-                        window.open(checkoutUrl, '_blank')
+                    if(result.message && result.message === 'Balance is not enough'){
+
+                        openPopupFunc(result.message, 'Add funds to your wallet', ()=>{navigate('/wallet') },true)
                     }
+                } else if (result.status === 'PAID') {
                     openPopupFunc(
                         'Your order has been received!',
-                        'Head to payment',
-                        redirect
+                        'Got it, thanks!'
                     )
+                    queryClient.invalidateQueries({ queryKey: ['wallet'] })
                     clearCart()
 
                 }

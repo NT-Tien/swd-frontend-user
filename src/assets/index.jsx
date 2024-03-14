@@ -23,4 +23,6 @@ export {default as ClipBoardIcon} from './ClipBoardIcon.jsx'
 export {default as MoneyIcon} from './MoneyIcon.jsx'
 export {default as ArrowUpTrayIcon} from './ArrowUpTrayIcon.jsx'
 export {default as CreditCardIcon} from './CreditCardIcon.jsx'
+export {default as DocumentIcon} from './DocumentIcon.jsx'
+
 

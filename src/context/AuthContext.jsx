@@ -4,14 +4,18 @@ import { verifyToken } from '../utils/api'
 const AuthContext = createContext({})
 
 export const AuthProvider = ({ children }) => {
-    const initialToken = localStorage.getItem('token')
+    const initialToken = localStorage.getItem('token') && typeof localStorage.getItem('token') !== 'undefined'
         ? JSON.parse(localStorage.getItem('token'))
         : null
-    const initialUser = localStorage.getItem('user')
+    const initialUser = localStorage.getItem('user') && typeof localStorage.getItem('user') !== 'undefined'
         ? JSON.parse(localStorage.getItem('user'))
         : null
 
-    console.log(initialUser)
+    const initialState = initialUser && initialToken ? true : false
+    const [user, setUser] = useState(initialUser)
+    const [isLoggedIn, setIsLoggedIn] = useState(initialState)
+    const [isOpenCheckModal, setIsOpenCheckModal] = useState(false)
+    const [token, setToken] = useState(initialToken)
 
     const logoutHook = () => {
         localStorage.removeItem('user')
@@ -34,22 +38,12 @@ export const AuthProvider = ({ children }) => {
         const result = verifyToken(initialToken)
         result.then((res) => {
             console.log(res)
-            if(!res ||!res.data || res.data.statusCode === 403 ){
+            if (!res || !res.data || res.data.statusCode === 403) {
                 logoutHook()
                 return
             }
         })
     }
-
-    const initialState = initialUser && initialToken ? true : false
-    const [user, setUser] = useState(initialUser)
-    const [isLoggedIn, setIsLoggedIn] = useState(initialState)
-    const [isOpenCheckModal, setIsOpenCheckModal] = useState(false)
-    const [token, setToken] = useState(initialToken)
-
-    
-
-    
 
     return (
         <AuthContext.Provider
