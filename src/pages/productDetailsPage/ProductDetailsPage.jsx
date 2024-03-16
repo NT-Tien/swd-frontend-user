@@ -96,11 +96,8 @@ const ProductDetailsPage = () => {
     const { mutate: addToCart } = useAddCartItem()
     const { mutate: addToWishlist } = useAddWishlistItem()
 
-    const { openPopupFunc } = usePopup()
     const [ratingValue, setRatingValue] = useState(0)
     const [openRateButton, setOpenRateButton] = useState(false)
-
-    const handleOnClickRating = () => {}
 
     const handleRating = (rate) => {
         setRatingValue(rate)

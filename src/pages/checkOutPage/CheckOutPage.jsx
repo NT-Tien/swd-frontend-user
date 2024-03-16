@@ -136,6 +136,9 @@ const CheckOutPage = () => {
                         'Head to payment',
                         redirect
                     )
+                    setTimeout(()=>{
+                        queryClient.invalidateQueries({ queryKey: ['order'] })
+                    },500)
                     clearCart()
                 }
             } else if (paymentOption === 'wallet') {
@@ -158,7 +161,10 @@ const CheckOutPage = () => {
                         'Your order has been received!',
                         'Got it, thanks!'
                     )
+                    setTimeout(()=>{
                     queryClient.invalidateQueries({ queryKey: ['wallet'] })
+                    queryClient.invalidateQueries({ queryKey: ['order'] })
+                    },500)
                     clearCart()
 
                 }
